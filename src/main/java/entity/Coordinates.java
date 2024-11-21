@@ -8,6 +8,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name="coordinates")
 public class Coordinates {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

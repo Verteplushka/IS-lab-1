@@ -18,8 +18,13 @@ public class ProductController {
     private ProductService productService;
 
     private Product product = new Product();
+    private Coordinates coordinates = new Coordinates();
+    private Organization organization = new Organization();
+    private Person owner = new Person();
+    private Address address = new Address();
+    private Location location = new Location();
     public String saveProduct() {
-        productService.save(product);
+        productService.save(product, coordinates, organization, owner, address, location);
         return "product-list.xhtml"; // Перенаправление на страницу с перечнем продуктов
     }
 

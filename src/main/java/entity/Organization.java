@@ -8,10 +8,11 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name="organization")
 public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
+//    @NotNull
     @Positive
     private Long id;
 
@@ -21,6 +22,7 @@ public class Organization {
 
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "official_address_id")
     private Address officialAddress;
 
     @NotNull

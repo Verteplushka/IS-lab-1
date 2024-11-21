@@ -10,10 +10,11 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@Table(name="product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
+//    @NotNull
     @Positive
     private Long id;
 
@@ -28,6 +29,11 @@ public class Product {
     @NotNull
     @Column(name = "creation_date", updatable = false)
     private LocalDate creationDate;
+
+    @PrePersist
+    private void setCreationDate() {
+        this.creationDate = LocalDate.now();
+    }
 
     @Column(name = "unit_of_measure")
     @Enumerated(EnumType.STRING)

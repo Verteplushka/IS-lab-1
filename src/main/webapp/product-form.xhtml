@@ -6,86 +6,168 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:body>
-   <h:form>
-      <h:panelGrid columns="2">
+    <h:form>
 
-         <!-- Название продукта -->
-         <h:outputLabel for="name" value="Name" />
-         <h:inputText id="name" value="#{productController.product.name}" />
-         <h:message for="name" />
+        <p>
+            <!-- Блок Product -->
+            <h:outputText value="Product Details" styleClass="section-header"/>
+            <br/>
+            <h:outputLabel for="name" value="Product Name"/>
+            <h:inputText id="name" value="#{productController.product.name}" required="true"/>
+            <h:message for="name"/>
 
-         <!-- Координаты -->
-         <h:outputLabel for="coordinates" value="Coordinates" />
-         <h:inputText id="coordinates" value="#{productController.product.coordinates}" />
-         <h:message for="coordinates" />
+            <h:outputLabel for="price" value="Price"/>
+            <h:inputText id="price" value="#{productController.product.price}" required="true"/>
+            <h:message for="price"/>
 
-         <!-- Дата создания -->
-         <h:outputLabel for="creationDate" value="Creation Date" />
-         <h:inputText id="creationDate" value="#{productController.product.creationDate}" />
-         <h:message for="creationDate" />
+            <h:outputLabel for="manufactureCost" value="Manufacture Cost"/>
+            <h:inputText id="manufactureCost" value="#{productController.product.manufactureCost}"/>
+            <h:message for="manufactureCost"/>
 
-         <!-- Единица измерения -->
-         <h:outputLabel for="unitOfMeasure" value="Unit of Measure" />
-         <h:selectOneMenu id="unitOfMeasure" value="#{productController.product.unitOfMeasure}">
-            <f:selectItems value="#{productController.unitOfMeasureValues}" var="unit"
-                           itemValue="#{unit}" itemLabel="#{unit}" />
-         </h:selectOneMenu>
-         <h:message for="unitOfMeasure" />
+            <h:outputLabel for="rating" value="Rating"/>
+            <h:inputText id="rating" value="#{productController.product.rating}" required="true"/>
+            <h:message for="rating"/>
 
-         <!-- Тип организации -->
-         <h:outputLabel for="organizationType" value="Organization Type" />
-         <h:selectOneMenu id="organizationType" value="#{productController.product.manufacturer.type}">
-            <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
-                           itemValue="#{orgType}" itemLabel="#{orgType}" />
-         </h:selectOneMenu>
-         <h:message for="organizationType" />
+            <h:outputLabel for="partNumber" value="Part Number"/>
+            <h:inputText id="partNumber" value="#{productController.product.partNumber}" required="true"/>
+            <h:message for="partNumber"/>
+        </p>
 
-         <!-- Цвет глаз -->
-         <h:outputLabel for="eyeColor" value="Owner's Eye Color" />
-         <h:selectOneMenu id="eyeColor" value="#{productController.product.owner.eyeColor}">
-            <f:selectItems value="#{productController.colorValues}" var="color"
-                           itemValue="#{color}" itemLabel="#{color}" />
-         </h:selectOneMenu>
-         <h:message for="eyeColor" />
+        <!-- Блок Coordinates -->
+        <p>
+            <h:outputText value="Coordinates" styleClass="section-header"/>
+            <br/>
+            <h:outputLabel for="coordinatesX" value="X Coordinate"/>
+            <h:inputText id="coordinatesX" value="#{productController.coordinates.x}" required="true"/>
+            <h:message for="coordinatesX"/>
 
-         <!-- Цвет волос -->
-         <h:outputLabel for="hairColor" value="Owner's Hair Color" />
-         <h:selectOneMenu id="hairColor" value="#{productController.product.owner.hairColor}">
-            <f:selectItems value="#{productController.colorValues}" var="color"
-                           itemValue="#{color}" itemLabel="#{color}" />
-         </h:selectOneMenu>
-         <h:message for="hairColor" />
+            <h:outputLabel for="coordinatesY" value="Y Coordinate"/>
+            <h:inputText id="coordinatesY" value="#{productController.coordinates.y}" required="true"/>
+            <h:message for="coordinatesY"/>
+        </p>
 
-         <!-- Национальность -->
-         <h:outputLabel for="nationality" value="Owner's Nationality" />
-         <h:selectOneMenu id="nationality" value="#{productController.product.owner.nationality}">
-            <f:selectItems value="#{productController.countryValues}" var="country"
-                           itemValue="#{country}" itemLabel="#{country}" />
-         </h:selectOneMenu>
-         <h:message for="nationality" />
+        <!-- Блок UnitOfMeasure -->
+        <p>
+            <h:outputLabel for="unitOfMeasure" value="Unit of Measure"/>
+            <h:selectOneMenu id="unitOfMeasure" value="#{productController.product.unitOfMeasure}">
+                <f:selectItems value="#{productController.unitOfMeasureValues}" var="unit"
+                               itemValue="#{unit}" itemLabel="#{unit}"/>
+            </h:selectOneMenu>
+            <h:message for="unitOfMeasure"/>
+        </p>
 
-         <!-- Цена -->
-         <h:outputLabel for="price" value="Price" />
-         <h:inputText id="price" value="#{productController.product.price}" />
-         <h:message for="price" />
+        <!-- Блок Organization -->
+        <p>
+            <h:outputText value="Organization Details" styleClass="section-header"/>
+            <br/>
+            <h:outputLabel for="organizationName" value="Organization Name"/>
+            <h:inputText id="organizationName" value="#{productController.organization.name}" required="true"/>
+            <h:message for="organizationName"/>
 
-         <!-- Стоимость производства -->
-         <h:outputLabel for="manufactureCost" value="Manufacture Cost" />
-         <h:inputText id="manufactureCost" value="#{productController.product.manufactureCost}" />
-         <h:message for="manufactureCost" />
+            <h:outputLabel for="organizationType" value="Organization Type"/>
+            <h:selectOneMenu id="organizationType" value="#{productController.organization.type}">
+                <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
+                               itemValue="#{orgType}" itemLabel="#{orgType}"/>
+            </h:selectOneMenu>
+            <h:message for="organizationType"/>
 
-         <!-- Рейтинг -->
-         <h:outputLabel for="rating" value="Rating" />
-         <h:inputText id="rating" value="#{productController.product.rating}" />
-         <h:message for="rating" />
+            <h:outputLabel for="annualTurnover" value="Annual Turnover"/>
+            <h:inputText id="annualTurnover" value="#{productController.organization.annualTurnover}" required="true"/>
+            <h:message for="annualTurnover"/>
 
-         <!-- Номер детали -->
-         <h:outputLabel for="partNumber" value="Part Number" />
-         <h:inputText id="partNumber" value="#{productController.product.partNumber}" />
-         <h:message for="partNumber" />
+            <h:outputLabel for="employeesCount" value="Employees Count"/>
+            <h:inputText id="employeesCount" value="#{productController.organization.employeesCount}" required="true"/>
+            <h:message for="employeesCount"/>
 
-         <h:commandButton value="Save Product" action="#{productController.saveProduct}" />
-      </h:panelGrid>
-   </h:form>
+            <h:outputLabel for="fullName" value="Full Name"/>
+            <h:inputText id="fullName" value="#{productController.organization.fullName}" required="true"/>
+            <h:message for="fullName"/>
+        </p>
+
+        <!-- Блок Address -->
+        <p>
+            <h:outputText value="Address Details" styleClass="section-header"/>
+            <br/>
+            <h:outputLabel for="street" value="Street"/>
+            <h:inputText id="street" value="#{productController.address.street}" required="true"/>
+            <h:message for="street"/>
+
+            <h:outputLabel for="zipCode" value="Zip Code"/>
+            <h:inputText id="zipCode" value="#{productController.address.zipCode}" required="true"/>
+            <h:message for="zipCode"/>
+        </p>
+
+        <!-- Блок Person (Owner) -->
+        <p>
+            <h:outputText value="Owner Details" styleClass="section-header"/>
+            <br/>
+            <h:outputLabel for="ownerName" value="Owner Name"/>
+            <h:inputText id="ownerName" value="#{productController.owner.name}" required="true"/>
+            <h:message for="ownerName"/>
+
+            <h:outputLabel for="eyeColor" value="Owner's Eye Color"/>
+            <h:selectOneMenu id="eyeColor" value="#{productController.owner.eyeColor}">
+                <f:selectItems value="#{productController.colorValues}" var="color"
+                               itemValue="#{color}" itemLabel="#{color}"/>
+            </h:selectOneMenu>
+            <h:message for="eyeColor"/>
+
+            <h:outputLabel for="hairColor" value="Owner's Hair Color"/>
+            <h:selectOneMenu id="hairColor" value="#{productController.owner.hairColor}">
+                <f:selectItems value="#{productController.colorValues}" var="color"
+                               itemValue="#{color}" itemLabel="#{color}"/>
+            </h:selectOneMenu>
+            <h:message for="hairColor"/>
+
+            <h:outputLabel for="nationality" value="Owner's Nationality"/>
+            <h:selectOneMenu id="nationality" value="#{productController.owner.nationality}">
+                <f:selectItems value="#{productController.countryValues}" var="country"
+                               itemValue="#{country}" itemLabel="#{country}"/>
+            </h:selectOneMenu>
+            <h:message for="nationality"/>
+
+            <h:outputLabel for="weight" value="Owner's Weight"/>
+            <h:inputText id="weight" value="#{productController.owner.weight}" required="true"/>
+            <h:message for="weight"/>
+        </p>
+
+        <!-- Блок Location -->
+        <p>
+            <h:outputText value="Owner's Location" styleClass="section-header"/>
+            <br/>
+            <h:outputLabel for="locationX" value="X"/>
+            <h:inputText id="locationX" value="#{productController.location.x}" required="true"/>
+            <h:message for="locationX"/>
+
+            <h:outputLabel for="locationY" value="Y"/>
+            <h:inputText id="locationY" value="#{productController.location.y}" required="true"/>
+            <h:message for="locationY"/>
+
+            <h:outputLabel for="locationZ" value="Z"/>
+            <h:inputText id="locationZ" value="#{productController.location.z}" required="true"/>
+            <h:message for="locationZ"/>
+
+            <h:outputLabel for="locationName" value="Location Name"/>
+            <h:inputText id="locationName" value="#{productController.location.name}"/>
+            <h:message for="locationName"/>
+        </p>
+
+        <h:commandButton value="Save Product" action="#{productController.saveProduct}"/>
+    </h:form>
+
+    <!-- Стиль для визуального разделения блоков -->
+    <style>
+        .section-header {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        h:panelGrid {
+            margin-top: 10px;
+        }
+    </style>
 </h:body>
 </html>

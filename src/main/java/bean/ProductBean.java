@@ -28,7 +28,7 @@ public class ProductBean implements Serializable {
     }
 
     public void save() {
-        productService.save(product);
+//        productService.save(product);
         product = new Product(); // Сброс объекта после сохранения
     }
 
