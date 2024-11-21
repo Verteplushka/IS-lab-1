@@ -1,4 +1,4 @@
-package source;
+package entity;
 
 public enum OrganizationType {
     COMMERCIAL,

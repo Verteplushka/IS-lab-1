@@ -1,4 +1,4 @@
-package source;
+package entity;
 
 public enum Country {
     SPAIN,
