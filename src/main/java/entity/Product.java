@@ -26,9 +26,10 @@ public class Product {
     private Coordinates coordinates;
 
     @NotNull
-    @Column(updatable = false)
+    @Column(name = "creation_date", updatable = false)
     private LocalDate creationDate;
 
+    @Column(name = "unit_of_measure")
     @Enumerated(EnumType.STRING)
     private UnitOfMeasure unitOfMeasure;
 
@@ -39,6 +40,7 @@ public class Product {
     @Positive
     private Long price;
 
+    @Column(name = "manufacture_cost")
     private int manufactureCost;
 
     @Positive
@@ -46,6 +48,7 @@ public class Product {
 
     @Size(min = 25, max = 44)
     @NotEmpty
+    @Column(name = "part_number")
     private String partNumber;
 
     @NotNull

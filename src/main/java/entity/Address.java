@@ -17,5 +17,6 @@ public class Address {
     private String street;
 
     @NotNull
+    @Column(name = "zip_code")
     private String zipCode;
 }

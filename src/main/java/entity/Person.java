@@ -19,9 +19,11 @@ public class Person {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "eye_color")
     private Color eyeColor;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "hair_color")
     private Color hairColor;
 
     @NotNull

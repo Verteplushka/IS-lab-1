@@ -21,18 +21,21 @@ public class Organization {
 
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
+    @Column(name = "official_address")
     private Address officialAddress;
 
     @NotNull
     @Positive
+    @Column(name = "annual_turnover")
     private Float annualTurnover;
 
     @Positive
+    @Column(name = "employees_count")
     private int employeesCount;
 
     @Size(max = 1668)
     @NotNull
-    @Column(unique = true)
+    @Column(name = "full_name", unique = true)
     private String fullName;
 
     @NotNull
