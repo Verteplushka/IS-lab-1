@@ -21,7 +21,6 @@ public class Organization {
 
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
-    @Column(name = "official_address")
     private Address officialAddress;
 
     @NotNull
