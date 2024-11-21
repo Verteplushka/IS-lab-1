@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Product List</title>
+</h:head>
+<h:body>
+    <h1>Product List</h1>
+    <h:dataTable value="#{productBean.products}" var="product">
+        <h:column>
+            <f:facet name="header">ID</f:facet>
+            #{product.id}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Name</f:facet>
+            #{product.name}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Price</f:facet>
+            #{product.price}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Actions</f:facet>
+            <h:form>
+                <h:commandButton value="Delete" action="#{productBean.delete}">
+                    <f:setPropertyActionListener target="#{productBean.idToDelete}" value="#{product.id}"/>
+                </h:commandButton>
+                <h:button value="Edit" outcome="product-form.xhtml">
+                    <f:param name="id" value="#{product.id}" />
+                </h:button>
+            </h:form>
+        </h:column>
+    </h:dataTable>
+    <h:form>
+        <h:button value="Add Product" outcome="product-form.xhtml" />
+    </h:form>
+</h:body>
+</html>
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:body>
+   <h:form>
+      <h:panelGrid columns="2">
+
+         <!-- Логин -->
+         <h:outputLabel for="login" value="Login" />
+         <h:inputText id="login" value="#{userController.user.login}" required="true" requiredMessage="Login is required" />
+         <h:message for="login" />
+
+         <!-- Пароль -->
+         <h:outputLabel for="password" value="Password" />
+         <h:inputSecret id="password" value="#{userController.user.password}" required="true" requiredMessage="Password is required" />
+         <h:message for="password" />
+
+         <!-- Роль -->
+         <h:outputLabel for="role" value="Role" />
+         <h:selectOneMenu id="role" value="#{userController.user.role}" required="true" requiredMessage="Role is required">
+            <f:selectItem itemValue="ADMIN" itemLabel="Admin" />
+            <f:selectItem itemValue="USER" itemLabel="User" />
+         </h:selectOneMenu>
+         <h:message for="role" />
+
+         <!-- Кнопка отправки формы -->
+         <h:commandButton value="Create User" action="#{userController.createUser}" />
+      </h:panelGrid>
+   </h:form>
+
+   <!-- Отображение списка пользователей -->
+   <h:outputText value="Existing Users:" style="font-weight:bold;" />
+   <h:dataTable value="#{userController.users}" var="user" border="1" style="margin-top:20px;">
+      <h:column>
+         <f:facet name="header">ID</f:facet>
+         #{user.id}
+      </h:column>
+      <h:column>
+         <f:facet name="header">Login</f:facet>
+         #{user.login}
+      </h:column>
+      <h:column>
+         <f:facet name="header">Role</f:facet>
+         #{user.role}
+      </h:column>
+   </h:dataTable>
+</h:body>
+</html>

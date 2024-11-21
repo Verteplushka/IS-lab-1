@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:body>
+   <h:form>
+      <h:panelGrid columns="2">
+
+         <!-- Название продукта -->
+         <h:outputLabel for="name" value="Name" />
+         <h:inputText id="name" value="#{productController.product.name}" />
+         <h:message for="name" />
+
+         <!-- Координаты -->
+         <h:outputLabel for="coordinates" value="Coordinates" />
+         <h:inputText id="coordinates" value="#{productController.product.coordinates}" />
+         <h:message for="coordinates" />
+
+         <!-- Дата создания -->
+         <h:outputLabel for="creationDate" value="Creation Date" />
+         <h:inputText id="creationDate" value="#{productController.product.creationDate}" />
+         <h:message for="creationDate" />
+
+         <!-- Единица измерения -->
+         <h:outputLabel for="unitOfMeasure" value="Unit of Measure" />
+         <h:selectOneMenu id="unitOfMeasure" value="#{productController.product.unitOfMeasure}">
+            <f:selectItems value="#{productController.unitOfMeasureValues}" var="unit"
+                           itemValue="#{unit}" itemLabel="#{unit}" />
+         </h:selectOneMenu>
+         <h:message for="unitOfMeasure" />
+
+         <!-- Тип организации -->
+         <h:outputLabel for="organizationType" value="Organization Type" />
+         <h:selectOneMenu id="organizationType" value="#{productController.product.manufacturer.type}">
+            <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
+                           itemValue="#{orgType}" itemLabel="#{orgType}" />
+         </h:selectOneMenu>
+         <h:message for="organizationType" />
+
+         <!-- Цвет глаз -->
+         <h:outputLabel for="eyeColor" value="Owner's Eye Color" />
+         <h:selectOneMenu id="eyeColor" value="#{productController.product.owner.eyeColor}">
+            <f:selectItems value="#{productController.colorValues}" var="color"
+                           itemValue="#{color}" itemLabel="#{color}" />
+         </h:selectOneMenu>
+         <h:message for="eyeColor" />
+
+         <!-- Цвет волос -->
+         <h:outputLabel for="hairColor" value="Owner's Hair Color" />
+         <h:selectOneMenu id="hairColor" value="#{productController.product.owner.hairColor}">
+            <f:selectItems value="#{productController.colorValues}" var="color"
+                           itemValue="#{color}" itemLabel="#{color}" />
+         </h:selectOneMenu>
+         <h:message for="hairColor" />
+
+         <!-- Национальность -->
+         <h:outputLabel for="nationality" value="Owner's Nationality" />
+         <h:selectOneMenu id="nationality" value="#{productController.product.owner.nationality}">
+            <f:selectItems value="#{productController.countryValues}" var="country"
+                           itemValue="#{country}" itemLabel="#{country}" />
+         </h:selectOneMenu>
+         <h:message for="nationality" />
+
+         <!-- Цена -->
+         <h:outputLabel for="price" value="Price" />
+         <h:inputText id="price" value="#{productController.product.price}" />
+         <h:message for="price" />
+
+         <!-- Стоимость производства -->
+         <h:outputLabel for="manufactureCost" value="Manufacture Cost" />
+         <h:inputText id="manufactureCost" value="#{productController.product.manufactureCost}" />
+         <h:message for="manufactureCost" />
+
+         <!-- Рейтинг -->
+         <h:outputLabel for="rating" value="Rating" />
+         <h:inputText id="rating" value="#{productController.product.rating}" />
+         <h:message for="rating" />
+
+         <!-- Номер детали -->
+         <h:outputLabel for="partNumber" value="Part Number" />
+         <h:inputText id="partNumber" value="#{productController.product.partNumber}" />
+         <h:message for="partNumber" />
+
+         <h:commandButton value="Save Product" action="#{productController.saveProduct}" />
+      </h:panelGrid>
+   </h:form>
+</h:body>
+</html>
