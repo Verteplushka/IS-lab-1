@@ -1,5 +1,6 @@
 package controller;
 
+import bean.UserBean;
 import entity.User;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -20,6 +21,8 @@ import java.util.List;
 public class UserController {
     @Inject
     private UserService userService;
+    @Inject
+    private UserBean userBean;
 
     private User user = new User();
 
@@ -43,7 +46,8 @@ public class UserController {
         User authenticated = userService.authenticate(user);
 
         if (authenticated != null) {
-            return "main_page.xhtml";  // Перенаправление после успешного входа
+            userBean.setUser(authenticated);
+            return "main_page.xhtml?faces-redirect=true";  // Перенаправление после успешного входа
         } else {
             // Добавляем сообщение об ошибке, если аутентификация не удалась
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -66,7 +70,8 @@ public class UserController {
         // Если все хорошо, сохраняем нового пользователя
         user.setRole(User.Role.USER);
         userService.save(user);
-        return "main_page.xhtml";  // Перенаправление после успешной регистрации
+        userBean.setUser(user);
+        return "main_page.xhtml?faces-redirect=true";  // Перенаправление после успешной регистрации
     }
 
     public List<User> getUsers() {

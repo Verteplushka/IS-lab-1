@@ -26,7 +26,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void save(Product product, Coordinates inputCoordinates, Organization inputOrganization, Person inputPerson, Address inputAddress, Location inputLocation) {
+    public void save(Product product, Coordinates inputCoordinates, Organization inputOrganization, Person inputPerson, Address inputAddress, Location inputLocation, User user) {
 
         // Сохранение координат
         Coordinates coordinates = findOrCreateCoordinates(inputCoordinates);
@@ -47,6 +47,7 @@ public class ProductService {
         Person owner = findOrCreatePerson(inputPerson);
         product.setOwner(owner);
 
+        product.setUser(user);
         // Сохранение самого продукта
         if (product.getId() == null) {
             entityManager.persist(product);

@@ -13,46 +13,58 @@
     <style>
         /* Горизонтальный скролл для таблицы */
         .table-container {
-            overflow-x: auto;
+            overflow-x: auto; /* Включаем прокрутку */
+            -webkit-overflow-scrolling: touch; /* Для поддержки на мобильных устройствах */
         }
 
         table {
-            table-layout: auto; /* Гибкое распределение колонок */
-            width: 100%;        /* Заполнение контейнера */
+            width: 100%; /* Таблица должна заполнять весь доступный контейнер */
+            min-width: 1200px; /* Устанавливаем минимальную ширину, чтобы убедиться, что таблица достаточно широкая для прокрутки */
+            table-layout: auto; /* Автоматическое распределение колонок */
         }
 
         th, td {
-            white-space: nowrap; /* Запрет переноса текста */
+            white-space: nowrap; /* Запрещаем перенос строк в ячейках */
         }
     </style>
+
 </h:head>
 <h:body class="bg-light">
-    <div class="container mt-4">
+    <div class="mt-4">
 
         <!-- Header Section -->
-        <header class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="text-primary">Product List</h1>
-            <div>
-                <!-- Add Product Button -->
-                <h:form styleClass="d-inline">
-                    <p:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-success btn-sm"/>
-                </h:form>
-                <!-- Request Admin Rights Button -->
-                <h:form styleClass="d-inline">
-                    <p:commandButton value="Request Admin Rights" action="#{userBean.requestAdminRights}"
-                                     styleClass="btn btn-warning btn-sm"/>
-                </h:form>
-                <!-- Logout Link -->
-                <h:form styleClass="d-inline">
-                    <p:commandButton value="Log Out" action="#{userBean.logout}" styleClass="btn btn-danger btn-sm"/>
-                </h:form>
-            </div>
-        </header>
+        <div class="container">
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="text-primary">Product List</h1>
+                <!-- Centered Buttons -->
+                <div class="d-flex justify-content-center flex-grow-1">
+                    <h:form styleClass="mx-2">
+                        <h:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-dark btn-sm"/>
+                    </h:form>
+                    <h:form styleClass="mx-2">
+                        <h:commandButton value="Request Admin Rights" action="#{userBean.requestAdminRights}"
+                                         styleClass="btn btn-dark btn-sm"/>
+                    </h:form>
+                </div>
+                <!-- User Info and Log In/Out -->
+                <div class="d-flex align-items-center">
+                    <!-- Display Username if Logged In -->
+                    <h:outputText value="#{userBean.loggedIn ? userBean.user.login : ''}"
+                                  rendered="#{userBean.loggedIn}"
+                                  styleClass="me-2 text-secondary"/>
+                    <h:form>
+                        <h:commandButton value="#{userBean.loggedIn ? 'Log Out' : 'Log In'}"
+                                         action="#{userBean.loginRedirect}"
+                                         styleClass="btn btn-dark btn-sm"/>
+                    </h:form>
+                </div>
+            </header>
+        </div>
 
-        <div class="table-container card shadow-sm p-3">
+        <div class="table shadow-sm">
             <!-- Data Table -->
             <p:dataTable value="#{productBean.products}" var="product" paginator="true" rows="10"
-                         rowsPerPageTemplate="5,10,15" editable="true" styleClass="table table-bordered table-hover">
+                         rowsPerPageTemplate="5,10,15" editable="true" styleClass="table table-bordered table-hover" style="table-layout: auto">
 
                 <!-- Колонки с атрибутами сущности Product -->
                 <p:column headerText="ID" sortBy="#{product.id}" filterBy="#{product.id}">
@@ -88,16 +100,25 @@
                 <p:column headerText="Owner" sortBy="#{product.owner.name}">
                     #{product.owner.name}
                 </p:column>
+                <p:column headerText="CreatedBy">
+                    #{product.user.login}
+                </p:column>
 
                 <!-- Actions -->
                 <p:column headerText="Actions">
                     <h:form>
-                        <p:commandButton value="Delete" action="#{productBean.delete}" styleClass="btn btn-danger btn-sm">
+                        <!-- Удаление доступно только для владельца продукта -->
+                        <h:commandButton value="Delete" action="#{productBean.delete}"
+                                         styleClass="btn btn-danger btn-sm"
+                                         rendered="#{product.user.id eq userBean.user.id}">
                             <f:setPropertyActionListener target="#{productBean.idToDelete}" value="#{product.id}"/>
-                        </p:commandButton>
-                        <p:button value="Edit" outcome="product-form.xhtml" styleClass="btn btn-primary btn-sm">
+                        </h:commandButton>
+
+                        <!-- Редактирование доступно только для владельца продукта -->
+                        <h:button value="Edit" outcome="product-form.xhtml" styleClass="btn btn-primary btn-sm"
+                                  rendered="#{product.user.id eq userBean.user.id}">
                             <f:param name="id" value="#{product.id}"/>
-                        </p:button>
+                        </h:button>
                     </h:form>
                 </p:column>
             </p:dataTable>

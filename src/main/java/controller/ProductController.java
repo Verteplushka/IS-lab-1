@@ -1,5 +1,6 @@
 package controller;
 
+import bean.UserBean;
 import entity.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,8 @@ public class ProductController {
 
     @Inject
     private ProductService productService;
+    @Inject
+    private UserBean userBean;
 
     private Product product = new Product();
     private Coordinates coordinates = new Coordinates();
@@ -24,8 +27,8 @@ public class ProductController {
     private Address address = new Address();
     private Location location = new Location();
     public String saveProduct() {
-        productService.save(product, coordinates, organization, owner, address, location);
-        return "main_page.xhtml"; // Перенаправление на страницу с перечнем продуктов
+        productService.save(product, coordinates, organization, owner, address, location, userBean.getUser());
+        return "main_page.xhtml?faces-redirect=true"; // Перенаправление на страницу с перечнем продуктов
     }
 
     // Динамические списки для enum

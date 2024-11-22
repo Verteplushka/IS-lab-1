@@ -11,7 +11,6 @@ import java.util.List;
 
 @RequestScoped
 public class UserService {
-
     private final EntityManager entityManager;
 
     public UserService() {
