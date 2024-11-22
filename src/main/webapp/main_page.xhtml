@@ -64,7 +64,8 @@
         <div class="table shadow-sm">
             <!-- Data Table -->
             <p:dataTable value="#{productBean.products}" var="product" paginator="true" rows="10"
-                         rowsPerPageTemplate="5,10,15" editable="true" styleClass="table table-bordered table-hover" style="table-layout: auto">
+                         rowsPerPageTemplate="5,10,15" editable="true" styleClass="table table-bordered table-hover"
+                         style="table-layout: auto">
 
                 <!-- Колонки с атрибутами сущности Product -->
                 <p:column headerText="ID" sortBy="#{product.id}" filterBy="#{product.id}">
@@ -115,10 +116,13 @@
                         </h:commandButton>
 
                         <!-- Редактирование доступно только для владельца продукта -->
-                        <h:button value="Edit" outcome="product-form.xhtml" styleClass="btn btn-primary btn-sm"
-                                  rendered="#{product.user.id eq userBean.user.id}">
-                            <f:param name="id" value="#{product.id}"/>
-                        </h:button>
+                        <h:commandButton value="Edit" action="#{productController.loadProductFromRequest}"
+                                         styleClass="btn btn-primary btn-sm"
+                                         rendered="#{product.user.id eq userBean.user.id}">
+                            <f:setPropertyActionListener target="#{productController.idToDelete}" value="#{product.id}"/>
+                        </h:commandButton>
+
+
                     </h:form>
                 </p:column>
             </p:dataTable>

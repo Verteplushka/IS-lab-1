@@ -74,6 +74,10 @@ public class ProductService {
         }
     }
 
+    public Product findProductById(Long id) {
+        return entityManager.find(Product.class, id);
+    }
+
     private Coordinates findOrCreateCoordinates(Coordinates coordinates) {
         if (coordinates == null) {
             throw new IllegalArgumentException("Coordinates cannot be null");
