@@ -82,13 +82,7 @@ public class ProductService {
         if (coordinates == null) {
             throw new IllegalArgumentException("Coordinates cannot be null");
         }
-        Coordinates existing = entityManager.createQuery(
-                        "SELECT c FROM Coordinates c WHERE c.x = :x AND c.y = :y", Coordinates.class)
-                .setParameter("x", coordinates.getX())
-                .setParameter("y", coordinates.getY())
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+        Coordinates existing = entityManager.createQuery("SELECT c FROM Coordinates c WHERE c.x = :x AND c.y = :y", Coordinates.class).setParameter("x", coordinates.getX()).setParameter("y", coordinates.getY()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -102,13 +96,7 @@ public class ProductService {
         if (address == null) {
             throw new IllegalArgumentException("Address cannot be null");
         }
-        Address existing = entityManager.createQuery(
-                        "SELECT a FROM Address a WHERE a.street = :street AND a.zipCode = :zipCode", Address.class)
-                .setParameter("street", address.getStreet())
-                .setParameter("zipCode", address.getZipCode())
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+        Address existing = entityManager.createQuery("SELECT a FROM Address a WHERE a.street = :street AND a.zipCode = :zipCode", Address.class).setParameter("street", address.getStreet()).setParameter("zipCode", address.getZipCode()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -121,13 +109,7 @@ public class ProductService {
         if (organization == null) {
             return null; // Организация может быть null
         }
-        Organization existing = entityManager.createQuery(
-                        "SELECT o FROM Organization o WHERE o.name = :name AND o.fullName = :fullName", Organization.class)
-                .setParameter("name", organization.getName())
-                .setParameter("fullName", organization.getFullName())
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+        Organization existing = entityManager.createQuery("SELECT o FROM Organization o WHERE o.name = :name AND o.fullName = :fullName", Organization.class).setParameter("name", organization.getName()).setParameter("fullName", organization.getFullName()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -140,15 +122,7 @@ public class ProductService {
         if (location == null) {
             throw new IllegalArgumentException("Location cannot be null");
         }
-        Location existing = entityManager.createQuery(
-                        "SELECT l FROM Location l WHERE l.x = :x AND l.y = :y AND l.z = :z AND l.name = :name", Location.class)
-                .setParameter("x", location.getX())
-                .setParameter("y", location.getY())
-                .setParameter("z", location.getZ())
-                .setParameter("name", location.getName())
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+        Location existing = entityManager.createQuery("SELECT l FROM Location l WHERE l.x = :x AND l.y = :y AND l.z = :z AND l.name = :name", Location.class).setParameter("x", location.getX()).setParameter("y", location.getY()).setParameter("z", location.getZ()).setParameter("name", location.getName()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -161,14 +135,7 @@ public class ProductService {
         if (person == null) {
             throw new IllegalArgumentException("Person cannot be null");
         }
-        Person existing = entityManager.createQuery(
-                        "SELECT p FROM Person p WHERE p.name = :name AND p.eyeColor = :eyeColor AND p.nationality = :nationality", Person.class)
-                .setParameter("name", person.getName())
-                .setParameter("eyeColor", person.getEyeColor())
-                .setParameter("nationality", person.getNationality())
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+        Person existing = entityManager.createQuery("SELECT p FROM Person p WHERE p.name = :name AND p.eyeColor = :eyeColor AND p.nationality = :nationality", Person.class).setParameter("name", person.getName()).setParameter("eyeColor", person.getEyeColor()).setParameter("nationality", person.getNationality()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -177,4 +144,31 @@ public class ProductService {
         return person;
     }
 
+    @Transactional
+    public Product getProductWithMinName() {
+        return entityManager.createQuery("SELECT p FROM Product p ORDER BY LENGTH(p.name) ASC", Product.class).setMaxResults(1).getSingleResult();
+    }
+
+    @Transactional
+    public Long countByPartNumber(String partNumber) {
+        return entityManager.createQuery("SELECT COUNT(p) FROM Product p WHERE p.partNumber = :partNumber", Long.class).setParameter("partNumber", partNumber).getSingleResult();
+    }
+
+    @Transactional
+    public List<Product> getProductsByPartNumberSubstring(String substring) {
+        return entityManager.createQuery("SELECT p FROM Product p WHERE p.partNumber LIKE :substring", Product.class).setParameter("substring", "%" + substring + "%").getResultList();
+    }
+
+    @Transactional
+    public List<Product> getProductsByPriceRange(Long minPrice, Long maxPrice) {
+        return entityManager.createQuery("SELECT p FROM Product p WHERE p.price BETWEEN :minPrice AND :maxPrice", Product.class).setParameter("minPrice", minPrice).setParameter("maxPrice", maxPrice).getResultList();
+    }
+
+    @Transactional
+    public void increasePrices(Double percentage) {
+        entityManager.createQuery(
+                        "UPDATE Product p SET p.price = FUNCTION('ROUND', p.price * (1 + :percentage / 100.0))")
+                .setParameter("percentage", percentage)
+                .executeUpdate();
+    }
 }

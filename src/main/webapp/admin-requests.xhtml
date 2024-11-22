@@ -15,75 +15,78 @@
 <h:body class="bg-light">
     <div class="mt-4">
 
-    <div class="container">
-        <header class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="text-dark">IS lab 1</h1>
-            <!-- Centered Buttons -->
-            <div class="d-flex justify-content-center flex-grow-1">
-                <h:form styleClass="mx-2">
-                    <h:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-dark btn-sm"
-                              rendered="#{userBean.user != null}"/>
-                </h:form>
+        <div class="container">
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <h:link outcome="main_page.xhtml" class="text-dark">
+                    <h1>IS lab 1</h1>
+                </h:link>
+                <!-- Centered Buttons -->
+                <div class="d-flex justify-content-center flex-grow-1">
+                    <h:form styleClass="mx-2">
+                        <h:button value="Do operations" outcome="operations.xhtml" styleClass="btn btn-dark btn-sm"/>
+                    </h:form>
+                    <h:form styleClass="mx-2">
+                        <h:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-dark btn-sm"
+                                  rendered="#{userBean.user != null}"/>
+                    </h:form>
 
-                <!-- Отображение кнопки только если у пользователя нет роли ADMIN -->
-                <h:form styleClass="mx-2">
-                    <h:commandButton value="Request Admin Rights" action="#{userBean.requestAdminRights}"
-                                     styleClass="btn btn-dark btn-sm" rendered="#{userBean.user.role eq 'USER'}"/>
-                </h:form>
+                    <!-- Отображение кнопки только если у пользователя нет роли ADMIN -->
+                    <h:form styleClass="mx-2">
+                        <h:commandButton value="Request Admin Rights" action="#{userBean.requestAdminRights}"
+                                         styleClass="btn btn-dark btn-sm" rendered="#{userBean.user.role eq 'USER'}"/>
+                    </h:form>
 
-                <!-- Add Admin button for ADMIN role -->
-                <h:form rendered="#{userBean.user.role eq 'ADMIN'}">
-                    <h:button value="Add Admin" outcome="admin-requests.xhtml" styleClass="btn btn-warning btn-sm" />
-                </h:form>
-            </div>
+                    <!-- Add Admin button for ADMIN role -->
+                    <h:form rendered="#{userBean.user.role eq 'ADMIN'}">
+                        <h:button value="Add Admin" outcome="admin-requests.xhtml" styleClass="btn btn-warning btn-sm"/>
+                    </h:form>
+                </div>
 
-            <!-- User Info and Log In/Out -->
-            <div class="d-flex align-items-center">
-                <!-- Display Username if Logged In -->
-                <h:outputText value="#{userBean.loggedIn ? userBean.user.login : ''}"
-                              rendered="#{userBean.loggedIn}"
-                              styleClass="me-2 text-secondary"/>
+                <!-- User Info and Log In/Out -->
+                <div class="d-flex align-items-center">
+                    <!-- Display Username if Logged In -->
+                    <h:outputText value="#{userBean.loggedIn ? userBean.user.login : ''}"
+                                  rendered="#{userBean.loggedIn}"
+                                  styleClass="me-2 text-secondary"/>
 
-                <!-- Отображаем роль пользователя, если он ADMIN -->
-                <h:outputText value=" (ADMIN) " rendered="#{userBean.user.role eq 'ADMIN'}"
-                              styleClass="text-warning ms-2"/>
+                    <!-- Отображаем роль пользователя, если он ADMIN -->
+                    <h:outputText value=" (ADMIN) " rendered="#{userBean.user.role eq 'ADMIN'}"
+                                  styleClass="me-2 text-warning"/>
 
-                <h:form>
-                    <h:commandButton value="#{userBean.loggedIn ? 'Log Out' : 'Log In'}"
-                                     action="#{userBean.loginRedirect}"
-                                     styleClass="btn btn-dark btn-sm"/>
-                </h:form>
-            </div>
-        </header>
-    </div>
-    <div class="container mt-4">
+                    <h:form>
+                        <h:commandButton value="#{userBean.loggedIn ? 'Log Out' : 'Log In'}"
+                                         action="#{userBean.loginRedirect}"
+                                         styleClass="btn btn-dark btn-sm"/>
+                    </h:form>
+                </div>
+            </header>
+        </div>
+
+        <div class="container mt-4">
             <h1 class="text-dark">Admin Requests</h1>
             <p>Here you can view user requests for admin rights and assign them as admins.</p>
 
-        <!-- Table of Requests -->
-        <div class="table-container shadow-sm">
-            <p:dataTable value="#{adminController.adminRequests}" var="user"
-                         paginator="true" rows="10" styleClass="table table-bordered table-hover">
-                <p:column headerText="User ID">
-                    #{user.id}
-                </p:column>
-                <p:column headerText="Username">
-                    #{user.login}
-                </p:column>
-                <p:column headerText="Password">
-                    #{user.password}
-                </p:column>
-                <p:column headerText="Actions">
-                    <h:form>
-                        <h:commandButton value="Grant Admin Rights"
-                                         action="#{adminController.grantAdminRights(user)}"
-                                         styleClass="btn btn-warning btn-sm">
-                        </h:commandButton>
-                    </h:form>
-                </p:column>
-            </p:dataTable>
+            <!-- Table of Requests -->
+            <div class="table-container shadow-sm">
+                <p:dataTable value="#{adminController.adminRequests}" var="user"
+                             paginator="true" rows="10" styleClass="table table-bordered table-hover">
+                    <p:column headerText="User ID">
+                        #{user.id}
+                    </p:column>
+                    <p:column headerText="Username">
+                        #{user.login}
+                    </p:column>
+                    <p:column headerText="Actions">
+                        <h:form>
+                            <h:commandButton value="Grant Admin Rights"
+                                             action="#{adminController.grantAdminRights(user)}"
+                                             styleClass="btn btn-warning btn-sm">
+                            </h:commandButton>
+                        </h:form>
+                    </p:column>
+                </p:dataTable>
+            </div>
         </div>
-    </div>
     </div>
 </h:body>
 </html>

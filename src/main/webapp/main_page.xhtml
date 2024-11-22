@@ -34,11 +34,13 @@
         <!-- Header Section -->
         <div class="container">
             <header class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="text-dark">IS lab 1</h1>
+                <h:link outcome="main_page.xhtml" class="text-dark">
+                    <h1>IS lab 1</h1>
+                </h:link>
                 <!-- Centered Buttons -->
                 <div class="d-flex justify-content-center flex-grow-1">
                     <h:form styleClass="mx-2">
-                        <h:button value="Do operations" outcome="special-operations.xhtml" styleClass="btn btn-dark btn-sm"/>
+                        <h:button value="Do operations" outcome="operations.xhtml" styleClass="btn btn-dark btn-sm"/>
                     </h:form>
                     <h:form styleClass="mx-2">
                         <h:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-dark btn-sm"
@@ -66,7 +68,7 @@
 
                     <!-- Отображаем роль пользователя, если он ADMIN -->
                     <h:outputText value=" (ADMIN) " rendered="#{userBean.user.role eq 'ADMIN'}"
-                                  styleClass="text-warning ms-2"/>
+                                  styleClass="me-2 text-warning"/>
 
                     <h:form>
                         <h:commandButton value="#{userBean.loggedIn ? 'Log Out' : 'Log In'}"

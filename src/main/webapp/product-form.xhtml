@@ -11,268 +11,277 @@
 </h:head>
 <h:body class="bg-light">
     <div class="mt-4">
-    <div class="container">
-        <header class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="text-dark">IS lab 1</h1>
-            <!-- Centered Buttons -->
-            <div class="d-flex justify-content-center flex-grow-1">
-                <h:form styleClass="mx-2">
-                    <h:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-dark btn-sm"
-                              rendered="#{userBean.user != null}"/>
-                </h:form>
+        <div class="container">
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <h:link outcome="main_page.xhtml" class="text-dark">
+                    <h1>IS lab 1</h1>
+                </h:link>
+                <!-- Centered Buttons -->
+                <div class="d-flex justify-content-center flex-grow-1">
+                    <h:form styleClass="mx-2">
+                        <h:button value="Do operations" outcome="operations.xhtml"
+                                  styleClass="btn btn-dark btn-sm"/>
+                    </h:form>
+                    <h:form styleClass="mx-2">
+                        <h:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-dark btn-sm"
+                                  rendered="#{userBean.user != null}"/>
+                    </h:form>
 
-                <!-- Отображение кнопки только если у пользователя нет роли ADMIN -->
-                <h:form styleClass="mx-2">
-                    <h:commandButton value="Request Admin Rights" action="#{userBean.requestAdminRights}"
-                                     styleClass="btn btn-dark btn-sm" rendered="#{userBean.user.role eq 'USER'}"/>
-                </h:form>
+                    <!-- Отображение кнопки только если у пользователя нет роли ADMIN -->
+                    <h:form styleClass="mx-2">
+                        <h:commandButton value="Request Admin Rights" action="#{userBean.requestAdminRights}"
+                                         styleClass="btn btn-dark btn-sm" rendered="#{userBean.user.role eq 'USER'}"/>
+                    </h:form>
 
-                <!-- Add Admin button for ADMIN role -->
-                <h:form rendered="#{userBean.user.role eq 'ADMIN'}">
-                    <h:button value="Add Admin" outcome="admin-requests.xhtml" styleClass="btn btn-warning btn-sm" />
-                </h:form>
-            </div>
-
-            <!-- User Info and Log In/Out -->
-            <div class="d-flex align-items-center">
-                <!-- Display Username if Logged In -->
-                <h:outputText value="#{userBean.loggedIn ? userBean.user.login : ''}"
-                              rendered="#{userBean.loggedIn}"
-                              styleClass="me-2 text-secondary"/>
-
-                <!-- Отображаем роль пользователя, если он ADMIN -->
-                <h:outputText value=" (ADMIN) " rendered="#{userBean.user.role eq 'ADMIN'}"
-                              styleClass="text-warning ms-2"/>
-
-                <h:form>
-                    <h:commandButton value="#{userBean.loggedIn ? 'Log Out' : 'Log In'}"
-                                     action="#{userBean.loginRedirect}"
-                                     styleClass="btn btn-dark btn-sm"/>
-                </h:form>
-            </div>
-        </header>
-    </div>
-    <h:form>
-        <div class="container containerd-flex justify-content-between align-items-center mb-4" style="width: 500px">
-
-            <div class="card shadow p-4">
-                <!-- Блок Product -->
-                <h:outputText value="Product Details" styleClass="section-header"/>
-                <br/>
-                <div class="mb-3">
-                    <h:outputLabel for="name" value="Product Name" class="form-label"/>
-                    <h:inputText id="name" value="#{productController.product.name}" required="true"
-                                 class="form-control"/>
-                    <h:message for="name" class="text-danger"/>
+                    <!-- Add Admin button for ADMIN role -->
+                    <h:form rendered="#{userBean.user.role eq 'ADMIN'}">
+                        <h:button value="Add Admin" outcome="admin-requests.xhtml" styleClass="btn btn-warning btn-sm"/>
+                    </h:form>
                 </div>
 
-                <div class="mb-3">
-                    <h:outputLabel for="price" value="Price" class="form-label"/>
-                    <h:inputText id="price" value="#{productController.product.price}" required="true"
-                                 class="form-control"/>
-                    <h:message for="price" class="text-danger"/>
-                </div>
+                <!-- User Info and Log In/Out -->
+                <div class="d-flex align-items-center">
+                    <!-- Display Username if Logged In -->
+                    <h:outputText value="#{userBean.loggedIn ? userBean.user.login : ''}"
+                                  rendered="#{userBean.loggedIn}"
+                                  styleClass="me-2 text-secondary"/>
 
-                <div class="mb-3">
-                    <h:outputLabel for="manufactureCost" value="Manufacture Cost" class="form-label"/>
-                    <h:inputText id="manufactureCost" value="#{productController.product.manufactureCost}"
-                                 class="form-control"/>
-                    <h:message for="manufactureCost" class="text-danger"/>
-                </div>
+                    <!-- Отображаем роль пользователя, если он ADMIN -->
+                    <h:outputText value=" (ADMIN) " rendered="#{userBean.user.role eq 'ADMIN'}"
+                                  styleClass="me-2 text-warning"/>
 
-                <div class="mb-3">
-                    <h:outputLabel for="rating" value="Rating" class="form-label"/>
-                    <h:inputText id="rating" value="#{productController.product.rating}" required="true"
-                                 class="form-control"/>
-                    <h:message for="rating" class="text-danger"/>
+                    <h:form>
+                        <h:commandButton value="#{userBean.loggedIn ? 'Log Out' : 'Log In'}"
+                                         action="#{userBean.loginRedirect}"
+                                         styleClass="btn btn-dark btn-sm"/>
+                    </h:form>
                 </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="partNumber" value="Part Number" class="form-label"/>
-                    <h:inputText id="partNumber" value="#{productController.product.partNumber}" required="true"
-                                 class="form-control"/>
-                    <h:message for="partNumber" class="text-danger"/>
-                </div>
-            </div>
-
-            <div class="card shadow p-4">
-                <!-- Блок Coordinates -->
-                <h:outputText value="Coordinates" styleClass="section-header"/>
-                <br/>
-                <div class="mb-3">
-                    <h:outputLabel for="coordinatesX" value="X Coordinate" class="form-label"/>
-                    <h:inputText id="coordinatesX" value="#{productController.coordinates.x}" required="true"
-                                 class="form-control"/>
-                    <h:message for="coordinatesX" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="coordinatesY" value="Y Coordinate" class="form-label"/>
-                    <h:inputText id="coordinatesY" value="#{productController.coordinates.y}" required="true"
-                                 class="form-control"/>
-                    <h:message for="coordinatesY" class="text-danger"/>
-                </div>
-            </div>
-
-            <div class="card shadow p-4">
-                <!-- Блок UnitOfMeasure -->
-                <div class="mb-3">
-                    <h:outputLabel for="unitOfMeasure" value="Unit of Measure" class="form-label"/>
-                    <h:selectOneMenu id="unitOfMeasure" value="#{productController.product.unitOfMeasure}"
-                                     class="form-select">
-                        <f:selectItems value="#{productController.unitOfMeasureValues}" var="unit"
-                                       itemValue="#{unit}" itemLabel="#{unit}"/>
-                    </h:selectOneMenu>
-                    <h:message for="unitOfMeasure" class="text-danger"/>
-                </div>
-            </div>
-
-            <div class="card shadow p-4">
-                <!-- Блок Organization -->
-                <h:outputText value="Organization Details" styleClass="section-header"/>
-                <br/>
-                <div class="mb-3">
-                    <h:outputLabel for="organizationName" value="Organization Name" class="form-label"/>
-                    <h:inputText id="organizationName" value="#{productController.organization.name}" required="true"
-                                 class="form-control"/>
-                    <h:message for="organizationName" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="organizationType" value="Organization Type" class="form-label"/>
-                    <h:selectOneMenu id="organizationType" value="#{productController.organization.type}"
-                                     class="form-select">
-                        <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
-                                       itemValue="#{orgType}" itemLabel="#{orgType}"/>
-                    </h:selectOneMenu>
-                    <h:message for="organizationType" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="annualTurnover" value="Annual Turnover" class="form-label"/>
-                    <h:inputText id="annualTurnover" value="#{productController.organization.annualTurnover}"
-                                 required="true" class="form-control"/>
-                    <h:message for="annualTurnover" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="employeesCount" value="Employees Count" class="form-label"/>
-                    <h:inputText id="employeesCount" value="#{productController.organization.employeesCount}"
-                                 required="true" class="form-control"/>
-                    <h:message for="employeesCount" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="fullName" value="Full Name" class="form-label"/>
-                    <h:inputText id="fullName" value="#{productController.organization.fullName}" required="true"
-                                 class="form-control">
-                    </h:inputText>
-                    <h:message for="fullName" class="text-danger"/>
-                </div>
-            </div>
-
-            <div class="card shadow p-4">
-                <!-- Блок Address -->
-                <h:outputText value="Address Details" styleClass="section-header"/>
-                <br/>
-                <div class="mb-3">
-                    <h:outputLabel for="street" value="Street" class="form-label"/>
-                    <h:inputText id="street" value="#{productController.address.street}" required="true"
-                                 class="form-control"/>
-                    <h:message for="street" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="zipCode" value="Zip Code" class="form-label"/>
-                    <h:inputText id="zipCode" value="#{productController.address.zipCode}" required="true"
-                                 class="form-control"/>
-                    <h:message for="zipCode" class="text-danger"/>
-                </div>
-            </div>
-
-            <div class="card shadow p-4">
-                <!-- Блок Person (Owner) -->
-                <h:outputText value="Owner Details" styleClass="section-header"/>
-                <br/>
-                <div class="mb-3">
-                    <h:outputLabel for="ownerName" value="Owner Name" class="form-label"/>
-                    <h:inputText id="ownerName" value="#{productController.owner.name}" required="true"
-                                 class="form-control"/>
-                    <h:message for="ownerName" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="eyeColor" value="Owner's Eye Color" class="form-label"/>
-                    <h:selectOneMenu id="eyeColor" value="#{productController.owner.eyeColor}" class="form-select">
-                        <f:selectItems value="#{productController.colorValues}" var="color"
-                                       itemValue="#{color}" itemLabel="#{color}"/>
-                    </h:selectOneMenu>
-                    <h:message for="eyeColor" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="hairColor" value="Owner's Hair Color" class="form-label"/>
-                    <h:selectOneMenu id="hairColor" value="#{productController.owner.hairColor}" class="form-select">
-                        <f:selectItems value="#{productController.colorValues}" var="color"
-                                       itemValue="#{color}" itemLabel="#{color}"/>
-                    </h:selectOneMenu>
-                    <h:message for="hairColor" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="nationality" value="Owner's Nationality" class="form-label"/>
-                    <h:selectOneMenu id="nationality" value="#{productController.owner.nationality}"
-                                     class="form-select">
-                        <f:selectItems value="#{productController.countryValues}" var="country"
-                                       itemValue="#{country}" itemLabel="#{country}"/>
-                    </h:selectOneMenu>
-                    <h:message for="nationality" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="weight" value="Owner's Weight" class="form-label"/>
-                    <h:inputText id="weight" value="#{productController.owner.weight}" required="true"
-                                 class="form-control"/>
-                    <h:message for="weight" class="text-danger"/>
-                </div>
-            </div>
-
-            <div class="card shadow p-4">
-                <!-- Блок Location -->
-                <h:outputText value="Owner's Location" styleClass="section-header"/>
-                <br/>
-                <div class="mb-3">
-                    <h:outputLabel for="locationX" value="X" class="form-label"/>
-                    <h:inputText id="locationX" value="#{productController.location.x}" required="true"
-                                 class="form-control"/>
-                    <h:message for="locationX" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="locationY" value="Y" class="form-label"/>
-                    <h:inputText id="locationY" value="#{productController.location.y}" required="true"
-                                 class="form-control"/>
-                    <h:message for="locationY" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="locationZ" value="Z" class="form-label"/>
-                    <h:inputText id="locationZ" value="#{productController.location.z}" required="true"
-                                 class="form-control"/>
-                    <h:message for="locationZ" class="text-danger"/>
-                </div>
-
-                <div class="mb-3">
-                    <h:outputLabel for="locationName" value="Location Name" class="form-label"/>
-                    <h:inputText id="locationName" value="#{productController.location.name}" class="form-control"/>
-                    <h:message for="locationName" class="text-danger"/>
-                </div>
-            </div>
-
-            <h:commandButton value="Save Product" action="#{productController.saveProduct}" class="btn btn-dark"/>
+            </header>
         </div>
-    </h:form>
 
-</div>
+        <h:form>
+            <div class="container containerd-flex justify-content-between align-items-center mb-4" style="width: 500px">
+
+                <div class="card shadow p-4">
+                    <!-- Блок Product -->
+                    <h:outputText value="Product Details" styleClass="section-header"/>
+                    <br/>
+                    <div class="mb-3">
+                        <h:outputLabel for="name" value="Product Name" class="form-label"/>
+                        <h:inputText id="name" value="#{productController.product.name}" required="true"
+                                     class="form-control"/>
+                        <h:message for="name" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="price" value="Price" class="form-label"/>
+                        <h:inputText id="price" value="#{productController.product.price}" required="true"
+                                     class="form-control"/>
+                        <h:message for="price" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="manufactureCost" value="Manufacture Cost" class="form-label"/>
+                        <h:inputText id="manufactureCost" value="#{productController.product.manufactureCost}"
+                                     class="form-control"/>
+                        <h:message for="manufactureCost" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="rating" value="Rating" class="form-label"/>
+                        <h:inputText id="rating" value="#{productController.product.rating}" required="true"
+                                     class="form-control"/>
+                        <h:message for="rating" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="partNumber" value="Part Number" class="form-label"/>
+                        <h:inputText id="partNumber" value="#{productController.product.partNumber}" required="true"
+                                     class="form-control"/>
+                        <h:message for="partNumber" class="text-danger"/>
+                    </div>
+                </div>
+
+                <div class="card shadow p-4">
+                    <!-- Блок Coordinates -->
+                    <h:outputText value="Coordinates" styleClass="section-header"/>
+                    <br/>
+                    <div class="mb-3">
+                        <h:outputLabel for="coordinatesX" value="X Coordinate" class="form-label"/>
+                        <h:inputText id="coordinatesX" value="#{productController.coordinates.x}" required="true"
+                                     class="form-control"/>
+                        <h:message for="coordinatesX" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="coordinatesY" value="Y Coordinate" class="form-label"/>
+                        <h:inputText id="coordinatesY" value="#{productController.coordinates.y}" required="true"
+                                     class="form-control"/>
+                        <h:message for="coordinatesY" class="text-danger"/>
+                    </div>
+                </div>
+
+                <div class="card shadow p-4">
+                    <!-- Блок UnitOfMeasure -->
+                    <div class="mb-3">
+                        <h:outputLabel for="unitOfMeasure" value="Unit of Measure" class="form-label"/>
+                        <h:selectOneMenu id="unitOfMeasure" value="#{productController.product.unitOfMeasure}"
+                                         class="form-select">
+                            <f:selectItems value="#{productController.unitOfMeasureValues}" var="unit"
+                                           itemValue="#{unit}" itemLabel="#{unit}"/>
+                        </h:selectOneMenu>
+                        <h:message for="unitOfMeasure" class="text-danger"/>
+                    </div>
+                </div>
+
+                <div class="card shadow p-4">
+                    <!-- Блок Organization -->
+                    <h:outputText value="Organization Details" styleClass="section-header"/>
+                    <br/>
+                    <div class="mb-3">
+                        <h:outputLabel for="organizationName" value="Organization Name" class="form-label"/>
+                        <h:inputText id="organizationName" value="#{productController.organization.name}"
+                                     required="true"
+                                     class="form-control"/>
+                        <h:message for="organizationName" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="organizationType" value="Organization Type" class="form-label"/>
+                        <h:selectOneMenu id="organizationType" value="#{productController.organization.type}"
+                                         class="form-select">
+                            <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
+                                           itemValue="#{orgType}" itemLabel="#{orgType}"/>
+                        </h:selectOneMenu>
+                        <h:message for="organizationType" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="annualTurnover" value="Annual Turnover" class="form-label"/>
+                        <h:inputText id="annualTurnover" value="#{productController.organization.annualTurnover}"
+                                     required="true" class="form-control"/>
+                        <h:message for="annualTurnover" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="employeesCount" value="Employees Count" class="form-label"/>
+                        <h:inputText id="employeesCount" value="#{productController.organization.employeesCount}"
+                                     required="true" class="form-control"/>
+                        <h:message for="employeesCount" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="fullName" value="Full Name" class="form-label"/>
+                        <h:inputText id="fullName" value="#{productController.organization.fullName}" required="true"
+                                     class="form-control">
+                        </h:inputText>
+                        <h:message for="fullName" class="text-danger"/>
+                    </div>
+                </div>
+
+                <div class="card shadow p-4">
+                    <!-- Блок Address -->
+                    <h:outputText value="Address Details" styleClass="section-header"/>
+                    <br/>
+                    <div class="mb-3">
+                        <h:outputLabel for="street" value="Street" class="form-label"/>
+                        <h:inputText id="street" value="#{productController.address.street}" required="true"
+                                     class="form-control"/>
+                        <h:message for="street" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="zipCode" value="Zip Code" class="form-label"/>
+                        <h:inputText id="zipCode" value="#{productController.address.zipCode}" required="true"
+                                     class="form-control"/>
+                        <h:message for="zipCode" class="text-danger"/>
+                    </div>
+                </div>
+
+                <div class="card shadow p-4">
+                    <!-- Блок Person (Owner) -->
+                    <h:outputText value="Owner Details" styleClass="section-header"/>
+                    <br/>
+                    <div class="mb-3">
+                        <h:outputLabel for="ownerName" value="Owner Name" class="form-label"/>
+                        <h:inputText id="ownerName" value="#{productController.owner.name}" required="true"
+                                     class="form-control"/>
+                        <h:message for="ownerName" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="eyeColor" value="Owner's Eye Color" class="form-label"/>
+                        <h:selectOneMenu id="eyeColor" value="#{productController.owner.eyeColor}" class="form-select">
+                            <f:selectItems value="#{productController.colorValues}" var="color"
+                                           itemValue="#{color}" itemLabel="#{color}"/>
+                        </h:selectOneMenu>
+                        <h:message for="eyeColor" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="hairColor" value="Owner's Hair Color" class="form-label"/>
+                        <h:selectOneMenu id="hairColor" value="#{productController.owner.hairColor}"
+                                         class="form-select">
+                            <f:selectItems value="#{productController.colorValues}" var="color"
+                                           itemValue="#{color}" itemLabel="#{color}"/>
+                        </h:selectOneMenu>
+                        <h:message for="hairColor" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="nationality" value="Owner's Nationality" class="form-label"/>
+                        <h:selectOneMenu id="nationality" value="#{productController.owner.nationality}"
+                                         class="form-select">
+                            <f:selectItems value="#{productController.countryValues}" var="country"
+                                           itemValue="#{country}" itemLabel="#{country}"/>
+                        </h:selectOneMenu>
+                        <h:message for="nationality" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="weight" value="Owner's Weight" class="form-label"/>
+                        <h:inputText id="weight" value="#{productController.owner.weight}" required="true"
+                                     class="form-control"/>
+                        <h:message for="weight" class="text-danger"/>
+                    </div>
+                </div>
+
+                <div class="card shadow p-4">
+                    <!-- Блок Location -->
+                    <h:outputText value="Owner's Location" styleClass="section-header"/>
+                    <br/>
+                    <div class="mb-3">
+                        <h:outputLabel for="locationX" value="X" class="form-label"/>
+                        <h:inputText id="locationX" value="#{productController.location.x}" required="true"
+                                     class="form-control"/>
+                        <h:message for="locationX" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="locationY" value="Y" class="form-label"/>
+                        <h:inputText id="locationY" value="#{productController.location.y}" required="true"
+                                     class="form-control"/>
+                        <h:message for="locationY" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="locationZ" value="Z" class="form-label"/>
+                        <h:inputText id="locationZ" value="#{productController.location.z}" required="true"
+                                     class="form-control"/>
+                        <h:message for="locationZ" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="locationName" value="Location Name" class="form-label"/>
+                        <h:inputText id="locationName" value="#{productController.location.name}" class="form-control"/>
+                        <h:message for="locationName" class="text-danger"/>
+                    </div>
+                </div>
+
+                <h:commandButton value="Save Product" action="#{productController.saveProduct}" class="btn btn-dark"/>
+            </div>
+        </h:form>
+
+    </div>
 </h:body>
 </html>
