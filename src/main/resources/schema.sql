@@ -57,13 +57,15 @@ CREATE TABLE Product (
                          manufacture_cost INTEGER,
                          rating BIGINT CHECK (rating > 0),
                          part_number VARCHAR(44) CHECK (length(part_number) >= 25 AND length(part_number) <= 44),
-                         owner_id INTEGER NOT NULL REFERENCES Person(id)
+                         owner_id INTEGER NOT NULL REFERENCES Person(id),
+                         user_id BIGINT NOT NULL REFERENCES users_is(id) -- Внешний ключ для пользователя
 );
+
 
 -- Создание таблицы users_is
 CREATE TABLE users_is (
                           id SERIAL PRIMARY KEY,        -- Автоинкрементируемый идентификатор
                           login VARCHAR(255) NOT NULL UNIQUE, -- Уникальный логин
-                          password VARCHAR(255) NOT NULL,     -- Пароль
+                          password VARCHAR(255) NOT NULL UNIQUE,     -- Пароль
                           role VARCHAR(20) NOT NULL
 );

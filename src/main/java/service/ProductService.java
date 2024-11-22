@@ -77,32 +77,36 @@ public class ProductService {
         if (coordinates == null) {
             throw new IllegalArgumentException("Coordinates cannot be null");
         }
-//        List<Coordinates> existing = entityManager.createQuery(
-//                        "SELECT c FROM Coordinates c WHERE c.x = :x AND c.y = :y", Coordinates.class)
-//                .setParameter("x", coordinates.getX())
-//                .setParameter("y", coordinates.getY())
-//                .getResultList();
-//
-//        if (!existing.isEmpty()) {
-//            return existing.get(0); // Возвращаем существующую запись
-//        }
+        Coordinates existing = entityManager.createQuery(
+                        "SELECT c FROM Coordinates c WHERE c.x = :x AND c.y = :y", Coordinates.class)
+                .setParameter("x", coordinates.getX())
+                .setParameter("y", coordinates.getY())
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (existing != null) {
+            return existing; // Возвращаем существующую запись
+        }
         entityManager.persist(coordinates); // Сохраняем новую запись
         return coordinates;
     }
 
     private Address findOrCreateAddress(Address address) {
         if (address == null) {
-            throw new IllegalArgumentException("Coordinates cannot be null");
+            throw new IllegalArgumentException("Address cannot be null");
         }
-//        List<Coordinates> existing = entityManager.createQuery(
-//                        "SELECT c FROM Coordinates c WHERE c.x = :x AND c.y = :y", Coordinates.class)
-//                .setParameter("x", coordinates.getX())
-//                .setParameter("y", coordinates.getY())
-//                .getResultList();
-//
-//        if (!existing.isEmpty()) {
-//            return existing.get(0); // Возвращаем существующую запись
-//        }
+        Address existing = entityManager.createQuery(
+                        "SELECT a FROM Address a WHERE a.street = :street AND a.zipCode = :zipCode", Address.class)
+                .setParameter("street", address.getStreet())
+                .setParameter("zipCode", address.getZipCode())
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (existing != null) {
+            return existing; // Возвращаем существующую запись
+        }
         entityManager.persist(address); // Сохраняем новую запись
         return address;
     }
@@ -111,33 +115,38 @@ public class ProductService {
         if (organization == null) {
             return null; // Организация может быть null
         }
-//        List<Organization> existing = entityManager.createQuery(
-//                        "SELECT o FROM Organization o WHERE o.name = :name AND o.fullName = :fullName", Organization.class)
-//                .setParameter("name", organization.getName())
-//                .setParameter("fullName", organization.getFullName())
-//                .getResultList();
-//
-//        if (!existing.isEmpty()) {
-//            return existing.get(0); // Возвращаем существующую запись
-//        }
+        Organization existing = entityManager.createQuery(
+                        "SELECT o FROM Organization o WHERE o.name = :name AND o.fullName = :fullName", Organization.class)
+                .setParameter("name", organization.getName())
+                .setParameter("fullName", organization.getFullName())
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (existing != null) {
+            return existing; // Возвращаем существующую запись
+        }
         entityManager.persist(organization); // Сохраняем новую запись
         return organization;
     }
 
     private Location findOrCreateLocation(Location location) {
         if (location == null) {
-            throw new IllegalArgumentException("Person cannot be null");
+            throw new IllegalArgumentException("Location cannot be null");
         }
-//        List<Person> existing = entityManager.createQuery(
-//                        "SELECT p FROM Person p WHERE p.name = :name AND p.eyeColor = :eyeColor AND p.nationality = :nationality", Person.class)
-//                .setParameter("name", person.getName())
-//                .setParameter("eyeColor", person.getEyeColor())
-//                .setParameter("nationality", person.getNationality())
-//                .getResultList();
-//
-//        if (!existing.isEmpty()) {
-//            return existing.get(0); // Возвращаем существующую запись
-//        }
+        Location existing = entityManager.createQuery(
+                        "SELECT l FROM Location l WHERE l.x = :x AND l.y = :y AND l.z = :z AND l.name = :name", Location.class)
+                .setParameter("x", location.getX())
+                .setParameter("y", location.getY())
+                .setParameter("z", location.getZ())
+                .setParameter("name", location.getName())
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (existing != null) {
+            return existing; // Возвращаем существующую запись
+        }
         entityManager.persist(location); // Сохраняем новую запись
         return location;
     }
@@ -146,17 +155,20 @@ public class ProductService {
         if (person == null) {
             throw new IllegalArgumentException("Person cannot be null");
         }
-//        List<Person> existing = entityManager.createQuery(
-//                        "SELECT p FROM Person p WHERE p.name = :name AND p.eyeColor = :eyeColor AND p.nationality = :nationality", Person.class)
-//                .setParameter("name", person.getName())
-//                .setParameter("eyeColor", person.getEyeColor())
-//                .setParameter("nationality", person.getNationality())
-//                .getResultList();
-//
-//        if (!existing.isEmpty()) {
-//            return existing.get(0); // Возвращаем существующую запись
-//        }
+        Person existing = entityManager.createQuery(
+                        "SELECT p FROM Person p WHERE p.name = :name AND p.eyeColor = :eyeColor AND p.nationality = :nationality", Person.class)
+                .setParameter("name", person.getName())
+                .setParameter("eyeColor", person.getEyeColor())
+                .setParameter("nationality", person.getNationality())
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (existing != null) {
+            return existing; // Возвращаем существующую запись
+        }
         entityManager.persist(person); // Сохраняем новую запись
         return person;
     }
+
 }

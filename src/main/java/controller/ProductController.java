@@ -25,7 +25,7 @@ public class ProductController {
     private Location location = new Location();
     public String saveProduct() {
         productService.save(product, coordinates, organization, owner, address, location);
-        return "product-list.xhtml"; // Перенаправление на страницу с перечнем продуктов
+        return "main_page.xhtml"; // Перенаправление на страницу с перечнем продуктов
     }
 
     // Динамические списки для enum

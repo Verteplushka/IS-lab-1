@@ -60,4 +60,9 @@ public class Product {
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     private Person owner;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
