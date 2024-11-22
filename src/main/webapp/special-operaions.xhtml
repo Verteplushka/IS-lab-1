@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+   <title>Special Operations</title>
+</h:head>
+<h:body class="bg-light">
+   <!-- Header Section -->
+   <div class="container">
+      <header class="d-flex justify-content-between align-items-center mb-4">
+         <h1 class="text-primary">Special Operations</h1>
+         <div class="d-flex justify-content-center flex-grow-1">
+            <h:form styleClass="mx-2">
+               <h:button value="Back to Home" outcome="index.xhtml" styleClass="btn btn-dark btn-sm"/>
+            </h:form>
+         </div>
+      </header>
+   </div>
+
+   <!-- Operations Form -->
+   <div class="container">
+      <h:form>
+         <p:panel header="Special Operations" styleClass="shadow-sm">
+            <!-- Operation 1: Return Object with Min Name -->
+            <p:commandButton value="Get Object with Min Name" action="#{specialOperationsBean.getMinNameObject}" styleClass="btn btn-info"/>
+            <h:outputText value="Result: #{specialOperationsBean.minNameObject}" rendered="#{not empty specialOperationsBean.minNameObject}" />
+            <br />
+
+            <!-- Operation 2: Count Objects by Part Number -->
+            <h:outputLabel for="partNumber" value="Part Number"/>
+            <h:inputText id="partNumber" value="#{specialOperationsBean.partNumber}" class="form-control"/>
+            <p:commandButton value="Get Count of Objects by Part Number" action="#{specialOperationsBean.countObjectsByPartNumber}" styleClass="btn btn-info"/>
+            <h:outputText value="Count: #{specialOperationsBean.countByPartNumber}" rendered="#{specialOperationsBean.countByPartNumber != null}" />
+            <br />
+
+            <!-- Operation 3: Search Objects by Substring in Part Number -->
+            <h:outputLabel for="substring" value="Substring in Part Number"/>
+            <h:inputText id="substring" value="#{specialOperationsBean.substring}" class="form-control"/>
+            <p:commandButton value="Get Objects by Part Number Substring" action="#{specialOperationsBean.getObjectsByPartNumberSubstring}" styleClass="btn btn-info"/>
+            <h:outputText value="Results: #{specialOperationsBean.objectsByPartNumberSubstring}" rendered="#{not empty specialOperationsBean.objectsByPartNumberSubstring}" />
+            <br />
+
+            <!-- Operation 4: Get Objects by Price Range -->
+            <h:outputLabel for="minPrice" value="Min Price"/>
+            <h:inputText id="minPrice" value="#{specialOperationsBean.minPrice}" class="form-control"/>
+            <h:outputLabel for="maxPrice" value="Max Price"/>
+            <h:inputText id="maxPrice" value="#{specialOperationsBean.maxPrice}" class="form-control"/>
+            <p:commandButton value="Get Objects by Price Range" action="#{specialOperationsBean.getObjectsByPriceRange}" styleClass="btn btn-info"/>
+            <h:outputText value="Results: #{specialOperationsBean.objectsByPriceRange}" rendered="#{not empty specialOperationsBean.objectsByPriceRange}" />
+            <br />
+
+            <!-- Operation 5: Increase Price by Percentage -->
+            <h:outputLabel for="percentage" value="Increase Price by (%)"/>
+            <h:inputText id="percentage" value="#{specialOperationsBean.percentage}" class="form-control"/>
+            <p:commandButton value="Increase Price" action="#{specialOperationsBean.increasePriceByPercentage}" styleClass="btn btn-info"/>
+            <h:outputText value="Prices updated successfully." rendered="#{specialOperationsBean.priceUpdated}" />
+         </p:panel>
+      </h:form>
+   </div>
+
+</h:body>
+</html>

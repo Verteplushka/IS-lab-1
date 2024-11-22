@@ -9,7 +9,49 @@
     <!-- Подключаем Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 </h:head>
-<h:body>
+<h:body class="bg-light">
+    <div class="mt-4">
+    <div class="container">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="text-dark">IS lab 1</h1>
+            <!-- Centered Buttons -->
+            <div class="d-flex justify-content-center flex-grow-1">
+                <h:form styleClass="mx-2">
+                    <h:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-dark btn-sm"
+                              rendered="#{userBean.user != null}"/>
+                </h:form>
+
+                <!-- Отображение кнопки только если у пользователя нет роли ADMIN -->
+                <h:form styleClass="mx-2">
+                    <h:commandButton value="Request Admin Rights" action="#{userBean.requestAdminRights}"
+                                     styleClass="btn btn-dark btn-sm" rendered="#{userBean.user.role eq 'USER'}"/>
+                </h:form>
+
+                <!-- Add Admin button for ADMIN role -->
+                <h:form rendered="#{userBean.user.role eq 'ADMIN'}">
+                    <h:button value="Add Admin" outcome="admin-requests.xhtml" styleClass="btn btn-warning btn-sm" />
+                </h:form>
+            </div>
+
+            <!-- User Info and Log In/Out -->
+            <div class="d-flex align-items-center">
+                <!-- Display Username if Logged In -->
+                <h:outputText value="#{userBean.loggedIn ? userBean.user.login : ''}"
+                              rendered="#{userBean.loggedIn}"
+                              styleClass="me-2 text-secondary"/>
+
+                <!-- Отображаем роль пользователя, если он ADMIN -->
+                <h:outputText value=" (ADMIN) " rendered="#{userBean.user.role eq 'ADMIN'}"
+                              styleClass="text-warning ms-2"/>
+
+                <h:form>
+                    <h:commandButton value="#{userBean.loggedIn ? 'Log Out' : 'Log In'}"
+                                     action="#{userBean.loginRedirect}"
+                                     styleClass="btn btn-dark btn-sm"/>
+                </h:form>
+            </div>
+        </header>
+    </div>
     <h:form>
         <div class="container containerd-flex justify-content-between align-items-center mb-4" style="width: 500px">
 
@@ -123,7 +165,8 @@
                 <div class="mb-3">
                     <h:outputLabel for="fullName" value="Full Name" class="form-label"/>
                     <h:inputText id="fullName" value="#{productController.organization.fullName}" required="true"
-                                 class="form-control"/>
+                                 class="form-control">
+                    </h:inputText>
                     <h:message for="fullName" class="text-danger"/>
                 </div>
             </div>
@@ -226,9 +269,10 @@
                 </div>
             </div>
 
-            <h:commandButton value="Save Product" action="#{productController.saveProduct}" class="btn btn-primary"/>
+            <h:commandButton value="Save Product" action="#{productController.saveProduct}" class="btn btn-dark"/>
         </div>
     </h:form>
 
+</div>
 </h:body>
 </html>

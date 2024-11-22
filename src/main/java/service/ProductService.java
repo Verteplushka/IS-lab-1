@@ -93,6 +93,7 @@ public class ProductService {
         if (existing != null) {
             return existing; // Возвращаем существующую запись
         }
+        coordinates.setId(null);
         entityManager.persist(coordinates); // Сохраняем новую запись
         return coordinates;
     }

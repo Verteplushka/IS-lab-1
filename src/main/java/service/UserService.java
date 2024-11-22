@@ -48,6 +48,15 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public void update(User user) {
+        if (user.getId() == null) {
+            entityManager.persist(user);
+        } else {
+            entityManager.merge(user);
+        }
+    }
+
     // Удалить пользователя по ID
     @Transactional
     public void delete(Long id) {
@@ -57,6 +66,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public User authenticate(User user) {
         // Проверка, что login и password не пустые
         if (user.getLogin() == null || user.getPassword() == null) {
@@ -80,6 +90,18 @@ public class UserService {
         } else {
             return null; // Неверный пароль
         }
+    }
+
+    @Transactional
+    public List<User> getAdminRequests() {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.requestAdminRights = true", User.class)
+                .getResultList();
+    }
+    @Transactional
+    public void assignAdminRole(User user) {
+        user.setRole(User.Role.ADMIN); // Предполагается, что Role — это Enum
+        user.setRequestAdminRights(false); // Удалить запрос после назначения
+        entityManager.merge(user); // Обновление в базе данных
     }
 }
 

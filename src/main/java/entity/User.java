@@ -31,5 +31,9 @@ public class User {
         ADMIN,
         USER
     }
+
+    @Column(name="request_admin_rights", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean requestAdminRights;
+
 }
 

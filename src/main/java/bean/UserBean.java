@@ -4,10 +4,13 @@ import controller.ProductController;
 import entity.User;
 import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import service.UserService;
 
 import java.io.Serializable;
 
@@ -16,6 +19,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserBean implements Serializable {
+    @Inject
+    private UserService userService;
 
     private User user;
 
@@ -40,12 +45,33 @@ public class UserBean implements Serializable {
 
     // Метод запроса прав администратора
     public String requestAdminRights() {
-        // Здесь можно реализовать логику отправки запроса на сервер
-        // Например, отправка уведомления в систему
         if (user != null) {
-            System.out.println("Запрос прав администратора отправлен для пользователя: " + user.getId());
+            try {
+                // Установить поле requestAdminRights в true для текущего пользователя
+                user.setRequestAdminRights(true);
+
+                // Сохранить изменения через UserService
+                userService.update(user);
+
+                // Вывести подтверждение в консоль (или заменить логированием)
+                System.out.println("Запрос прав администратора отправлен для пользователя: " + user.getId());
+
+                // Возврат сообщения для отображения в интерфейсе (опционально)
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Запрос на права администратора отправлен", null));
+            } catch (Exception e) {
+                // Обработка ошибок
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ошибка при отправке запроса на права администратора", null));
+                e.printStackTrace();
+            }
+        } else {
+            // Обработка случая, если пользователь не авторизован
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Вы должны быть авторизованы, чтобы запросить права администратора", null));
         }
         return null; // Остаёмся на текущей странице
     }
+
 
 }
