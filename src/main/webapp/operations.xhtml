@@ -68,13 +68,22 @@
                 <!-- Operation 1: Get Object with Min Name -->
                 <div class="mb-3">
                     <label class="form-label">Object with Minimum Name:</label>
-                    <div class="d-flex align-items-center">
-                        <h:commandButton value="Find" action="#{operationsBean.getMinNameObject}"
-                                         styleClass="btn btn-dark me-3"/>
-                        <h:outputText value="#{operationsBean.minNameObject.id}"
-                                      styleClass="text-success"
-                                      rendered="#{not empty operationsBean.minNameObject}"/>
-                    </div>
+                    <h:dataTable value="#{operationsBean.minNameObject}" var="obj"
+                                 rendered="#{not empty operationsBean.minNameObject}"
+                                 styleClass="table mt-3">
+                        <h:column>
+                            <f:facet name="header">
+                                <span class="fw-bold">Id</span>
+                            </f:facet>
+                            #{obj.id}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <span class="fw-bold">Name</span>
+                            </f:facet>
+                            #{obj.name}
+                        </h:column>
+                    </h:dataTable>
                 </div>
 
                 <!-- Operation 2: Count Objects by Part Number -->
@@ -99,8 +108,15 @@
                         <h:commandButton value="Search" action="#{operationsBean.getObjectsByPartNumberSubstring}"
                                          styleClass="btn btn-dark"/>
                     </div>
-                    <h:dataTable value="#{operationsBean.objectsByPartNumberSubstring}" var="obj" rendered="#{operationsBean.substring != '' and operationsBean.substring != null}"
+                    <h:dataTable value="#{operationsBean.objectsByPartNumberSubstring}" var="obj"
+                                 rendered="#{operationsBean.substring != '' and operationsBean.substring != null}"
                                  styleClass="table mt-3">
+                        <h:column>
+                            <f:facet name="header">
+                                <span class="fw-bold">Id</span>
+                            </f:facet>
+                            #{obj.id}
+                        </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <span class="fw-bold">Name</span>
@@ -129,7 +145,14 @@
                         <h:commandButton value="Find" action="#{operationsBean.getObjectsByPriceRange}"
                                          styleClass="btn btn-dark"/>
                     </div>
-                    <h:dataTable value="#{operationsBean.objectsByPriceRange}" var="obj" styleClass="table mt-3" rendered="#{operationsBean.substring != '' and operationsBean.substring != null}">
+                    <h:dataTable value="#{operationsBean.objectsByPriceRange}" var="obj" styleClass="table mt-3"
+                                 rendered="#{operationsBean.minPrice != '' and operationsBean.minPrice != null and operationsBean.maxPrice != '' and operationsBean.maxPrice != null}">
+                        <h:column>
+                            <f:facet name="header">
+                                <span class="fw-bold">Id</span>
+                            </f:facet>
+                            #{obj.id}
+                        </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <span class="fw-bold">Name</span>
