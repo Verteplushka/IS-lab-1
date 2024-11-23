@@ -34,9 +34,22 @@ public class ProductController implements Serializable {
     private Address address = new Address();
     private Location location = new Location();
 
+    private Long coordinatesId;
+    private Long organizationId;
+    private Long ownerId;
+    private Long addressId;
+    private Long locationId;
+
     private Long idToDelete;
 
+    private boolean setIdMode;
+
     public String saveProduct() {
+        coordinates.setId(coordinatesId);
+        organization.setId(organizationId);
+        owner.setId(ownerId);
+        address.setId(addressId);
+        location.setId(locationId);
         productService.save(product, coordinates, organization, owner, address, location, userBean.getUser());
         return "main_page.xhtml?faces-redirect=true"; // Перенаправление на страницу с перечнем продуктов
     }
@@ -54,6 +67,13 @@ public class ProductController implements Serializable {
             owner = product.getOwner();
             address = product.getManufacturer().getOfficialAddress();
             location = product.getOwner().getLocation();
+
+            coordinatesId = coordinates.getId();
+            organizationId = organization.getId();
+            ownerId = owner.getId();
+            addressId = address.getId();
+            locationId = location.getId();
+
             product.setCoordinates(null);
             product.setManufacturer(null);
             product.setOwner(null);
@@ -73,6 +93,13 @@ public class ProductController implements Serializable {
             loadProduct(idToDelete);
         }
         return "product-form.xhtml?faces-redirect=true";
+    }
+
+    public void onCheckboxToggle() {
+        if (!setIdMode) {
+            // Если чекбокс снят, сбрасываем значение coordinatesId
+            coordinatesId = null;
+        }
     }
 
     // Динамические списки для enum

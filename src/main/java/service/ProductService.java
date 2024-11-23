@@ -82,6 +82,11 @@ public class ProductService {
         if (coordinates == null) {
             throw new IllegalArgumentException("Coordinates cannot be null");
         }
+
+        if(coordinates.getId() != null){
+            return entityManager.find(Coordinates.class, coordinates.getId());
+        }
+
         Coordinates existing = entityManager.createQuery("SELECT c FROM Coordinates c WHERE c.x = :x AND c.y = :y", Coordinates.class).setParameter("x", coordinates.getX()).setParameter("y", coordinates.getY()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
@@ -96,6 +101,11 @@ public class ProductService {
         if (address == null) {
             throw new IllegalArgumentException("Address cannot be null");
         }
+
+        if(address.getId() != null){
+            return entityManager.find(Address.class, address.getId());
+        }
+
         Address existing = entityManager.createQuery("SELECT a FROM Address a WHERE a.street = :street AND a.zipCode = :zipCode", Address.class).setParameter("street", address.getStreet()).setParameter("zipCode", address.getZipCode()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
@@ -109,6 +119,11 @@ public class ProductService {
         if (organization == null) {
             return null; // Организация может быть null
         }
+
+        if(organization.getId() != null){
+            return entityManager.find(Organization.class, organization.getId());
+        }
+
         Organization existing = entityManager.createQuery("SELECT o FROM Organization o WHERE o.name = :name AND o.fullName = :fullName", Organization.class).setParameter("name", organization.getName()).setParameter("fullName", organization.getFullName()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
@@ -122,6 +137,11 @@ public class ProductService {
         if (location == null) {
             throw new IllegalArgumentException("Location cannot be null");
         }
+
+        if(location.getId() != null){
+            return entityManager.find(Location.class, location.getId());
+        }
+
         Location existing = entityManager.createQuery("SELECT l FROM Location l WHERE l.x = :x AND l.y = :y AND l.z = :z AND l.name = :name", Location.class).setParameter("x", location.getX()).setParameter("y", location.getY()).setParameter("z", location.getZ()).setParameter("name", location.getName()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
@@ -135,6 +155,11 @@ public class ProductService {
         if (person == null) {
             throw new IllegalArgumentException("Person cannot be null");
         }
+
+        if(person.getId() != null){
+            return entityManager.find(Person.class, person.getId());
+        }
+
         Person existing = entityManager.createQuery("SELECT p FROM Person p WHERE p.name = :name AND p.eyeColor = :eyeColor AND p.nationality = :nationality", Person.class).setParameter("name", person.getName()).setParameter("eyeColor", person.getEyeColor()).setParameter("nationality", person.getNationality()).getResultStream().findFirst().orElse(null);
 
         if (existing != null) {

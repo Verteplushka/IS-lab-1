@@ -64,7 +64,7 @@
 
                 <div class="card shadow p-4">
                     <!-- Блок Product -->
-                    <h:outputText value="Product Details" styleClass="section-header"/>
+                    <h:outputText value="Product" styleClass="section-header"/>
                     <br/>
                     <div class="mb-3">
                         <h:outputLabel for="name" value="Product Name" class="form-label"/>
@@ -100,29 +100,7 @@
                                      class="form-control"/>
                         <h:message for="partNumber" class="text-danger"/>
                     </div>
-                </div>
 
-                <div class="card shadow p-4">
-                    <!-- Блок Coordinates -->
-                    <h:outputText value="Coordinates" styleClass="section-header"/>
-                    <br/>
-                    <div class="mb-3">
-                        <h:outputLabel for="coordinatesX" value="X Coordinate" class="form-label"/>
-                        <h:inputText id="coordinatesX" value="#{productController.coordinates.x}" required="true"
-                                     class="form-control"/>
-                        <h:message for="coordinatesX" class="text-danger"/>
-                    </div>
-
-                    <div class="mb-3">
-                        <h:outputLabel for="coordinatesY" value="Y Coordinate" class="form-label"/>
-                        <h:inputText id="coordinatesY" value="#{productController.coordinates.y}" required="true"
-                                     class="form-control"/>
-                        <h:message for="coordinatesY" class="text-danger"/>
-                    </div>
-                </div>
-
-                <div class="card shadow p-4">
-                    <!-- Блок UnitOfMeasure -->
                     <div class="mb-3">
                         <h:outputLabel for="unitOfMeasure" value="Unit of Measure" class="form-label"/>
                         <h:selectOneMenu id="unitOfMeasure" value="#{productController.product.unitOfMeasure}"
@@ -135,151 +113,334 @@
                 </div>
 
                 <div class="card shadow p-4">
-                    <!-- Блок Organization -->
-                    <h:outputText value="Organization Details" styleClass="section-header"/>
+                    <!-- Блок Coordinates -->
+                    <h:outputText value="Product:Coordinates" styleClass="section-header"/>
                     <br/>
-                    <div class="mb-3">
-                        <h:outputLabel for="organizationName" value="Organization Name" class="form-label"/>
-                        <h:inputText id="organizationName" value="#{productController.organization.name}"
-                                     required="true"
+
+                    <!-- Чекбокс для переключения режима -->
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="setIdCoordinatesCheckbox" class="form-check-input"
+                               onchange="toggleFieldsCoordinates()"/>
+                        <label for="setIdCoordinatesCheckbox" class="form-check-label">Set ID instead</label>
+                    </div>
+
+                    <!-- Поле для ввода ID -->
+                    <div class="mb-3" id="idCoordinatesFiled" style="display: none;">
+                        <h:outputLabel for="coordinatesId" value="Id" class="form-label"/>
+                        <h:inputText id="coordinatesId" value="#{productController.coordinatesId}"
                                      class="form-control"/>
-                        <h:message for="organizationName" class="text-danger"/>
+                        <h:message for="coordinatesId" class="text-danger"/>
                     </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="organizationType" value="Organization Type" class="form-label"/>
-                        <h:selectOneMenu id="organizationType" value="#{productController.organization.type}"
-                                         class="form-select">
-                            <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
-                                           itemValue="#{orgType}" itemLabel="#{orgType}"/>
-                        </h:selectOneMenu>
-                        <h:message for="organizationType" class="text-danger"/>
+                    <!-- Поля для ввода атрибутов -->
+                    <div id="attributeCoordinatesFields">
+                        <br/>
+                        <div class="mb-3">
+                            <h:outputLabel for="coordinatesX" value="X Coordinate" class="form-label"/>
+                            <h:inputText id="coordinatesX" value="#{productController.coordinates.x}"
+                                         class="form-control"/>
+                            <h:message for="coordinatesX" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="coordinatesY" value="Y Coordinate" class="form-label"/>
+                            <h:inputText id="coordinatesY" value="#{productController.coordinates.y}"
+                                         class="form-control"/>
+                            <h:message for="coordinatesY" class="text-danger"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow p-4">
+                    <!-- Блок Organization -->
+                    <h:outputText value="Product:Organization" styleClass="section-header"/>
+                    <br/>
+
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="setIdOrganizationCheckbox" class="form-check-input"
+                               onchange="toggleFieldsOrganization()"/>
+                        <label for="setIdOrganizationCheckbox" class="form-check-label">Set ID instead</label>
                     </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="annualTurnover" value="Annual Turnover" class="form-label"/>
-                        <h:inputText id="annualTurnover" value="#{productController.organization.annualTurnover}"
-                                     required="true" class="form-control"/>
-                        <h:message for="annualTurnover" class="text-danger"/>
+                    <!-- Поле для ввода ID -->
+                    <div class="mb-3" id="idOrganizationFiled" style="display: none;">
+                        <h:outputLabel for="organizationId" value="Id" class="form-label"/>
+                        <h:inputText id="organizationId" value="#{productController.coordinatesId}"
+                                     class="form-control"/>
+                        <h:message for="organizationId" class="text-danger"/>
                     </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="employeesCount" value="Employees Count" class="form-label"/>
-                        <h:inputText id="employeesCount" value="#{productController.organization.employeesCount}"
-                                     required="true" class="form-control"/>
-                        <h:message for="employeesCount" class="text-danger"/>
-                    </div>
+                    <div id="attributeOrganizationFields">
+                        <br/>
+                        <div class="mb-3">
+                            <h:outputLabel for="organizationName" value="Organization Name" class="form-label"/>
+                            <h:inputText id="organizationName" value="#{productController.organization.name}"
+                                         required="true"
+                                         class="form-control"/>
+                            <h:message for="organizationName" class="text-danger"/>
+                        </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="fullName" value="Full Name" class="form-label"/>
-                        <h:inputText id="fullName" value="#{productController.organization.fullName}" required="true"
-                                     class="form-control">
-                        </h:inputText>
-                        <h:message for="fullName" class="text-danger"/>
+                        <div class="mb-3">
+                            <h:outputLabel for="organizationType" value="Organization Type" class="form-label"/>
+                            <h:selectOneMenu id="organizationType" value="#{productController.organization.type}"
+                                             class="form-select">
+                                <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
+                                               itemValue="#{orgType}" itemLabel="#{orgType}"/>
+                            </h:selectOneMenu>
+                            <h:message for="organizationType" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="annualTurnover" value="Annual Turnover" class="form-label"/>
+                            <h:inputText id="annualTurnover" value="#{productController.organization.annualTurnover}"
+                                         required="true" class="form-control"/>
+                            <h:message for="annualTurnover" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="employeesCount" value="Employees Count" class="form-label"/>
+                            <h:inputText id="employeesCount" value="#{productController.organization.employeesCount}"
+                                         required="true" class="form-control"/>
+                            <h:message for="employeesCount" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="fullName" value="Full Name" class="form-label"/>
+                            <h:inputText id="fullName" value="#{productController.organization.fullName}"
+                                         required="true"
+                                         class="form-control">
+                            </h:inputText>
+                            <h:message for="fullName" class="text-danger"/>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card shadow p-4">
                     <!-- Блок Address -->
-                    <h:outputText value="Address Details" styleClass="section-header"/>
+                    <h:outputText value="Product:Organization:Address" styleClass="section-header"/>
                     <br/>
-                    <div class="mb-3">
-                        <h:outputLabel for="street" value="Street" class="form-label"/>
-                        <h:inputText id="street" value="#{productController.address.street}" required="true"
-                                     class="form-control"/>
-                        <h:message for="street" class="text-danger"/>
+
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="setIdAddressCheckbox" class="form-check-input"
+                               onchange="toggleFieldsAddress()"/>
+                        <label for="setIdAddressCheckbox" class="form-check-label">Set ID instead</label>
                     </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="zipCode" value="Zip Code" class="form-label"/>
-                        <h:inputText id="zipCode" value="#{productController.address.zipCode}" required="true"
-                                     class="form-control"/>
-                        <h:message for="zipCode" class="text-danger"/>
+                    <!-- Поле для ввода ID -->
+                    <div class="mb-3" id="idAddressField" style="display: none;">
+                        <h:outputLabel for="addressId" value="Id" class="form-label"/>
+                        <h:inputText id="addressId" value="#{productController.addressId}" class="form-control"/>
+                        <h:message for="addressId" class="text-danger"/>
+                    </div>
+
+                    <div id="attributeAddressFields">
+                        <br/>
+                        <div class="mb-3">
+                            <h:outputLabel for="street" value="Street" class="form-label"/>
+                            <h:inputText id="street" value="#{productController.address.street}" required="true"
+                                         class="form-control"/>
+                            <h:message for="street" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="zipCode" value="Zip Code" class="form-label"/>
+                            <h:inputText id="zipCode" value="#{productController.address.zipCode}" required="true"
+                                         class="form-control"/>
+                            <h:message for="zipCode" class="text-danger"/>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card shadow p-4">
                     <!-- Блок Person (Owner) -->
-                    <h:outputText value="Owner Details" styleClass="section-header"/>
+                    <h:outputText value="Product:Owner" styleClass="section-header"/>
                     <br/>
-                    <div class="mb-3">
-                        <h:outputLabel for="ownerName" value="Owner Name" class="form-label"/>
-                        <h:inputText id="ownerName" value="#{productController.owner.name}" required="true"
-                                     class="form-control"/>
-                        <h:message for="ownerName" class="text-danger"/>
+
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="setIdOwnerCheckbox" class="form-check-input"
+                               onchange="toggleFieldsOwner()"/>
+                        <label for="setIdOwnerCheckbox" class="form-check-label">Set ID instead</label>
                     </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="eyeColor" value="Owner's Eye Color" class="form-label"/>
-                        <h:selectOneMenu id="eyeColor" value="#{productController.owner.eyeColor}" class="form-select">
-                            <f:selectItems value="#{productController.colorValues}" var="color"
-                                           itemValue="#{color}" itemLabel="#{color}"/>
-                        </h:selectOneMenu>
-                        <h:message for="eyeColor" class="text-danger"/>
+                    <!-- Поле для ввода ID -->
+                    <div class="mb-3" id="idOwnerField" style="display: none;">
+                        <h:outputLabel for="ownerId" value="Id" class="form-label"/>
+                        <h:inputText id="ownerId" value="#{productController.ownerId}" class="form-control"/>
+                        <h:message for="ownerId" class="text-danger"/>
                     </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="hairColor" value="Owner's Hair Color" class="form-label"/>
-                        <h:selectOneMenu id="hairColor" value="#{productController.owner.hairColor}"
-                                         class="form-select">
-                            <f:selectItems value="#{productController.colorValues}" var="color"
-                                           itemValue="#{color}" itemLabel="#{color}"/>
-                        </h:selectOneMenu>
-                        <h:message for="hairColor" class="text-danger"/>
-                    </div>
+                    <div id="attributeOwnerFields">
+                        <br/>
+                        <div class="mb-3">
+                            <h:outputLabel for="ownerName" value="Owner Name" class="form-label"/>
+                            <h:inputText id="ownerName" value="#{productController.owner.name}" required="true"
+                                         class="form-control"/>
+                            <h:message for="ownerName" class="text-danger"/>
+                        </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="nationality" value="Owner's Nationality" class="form-label"/>
-                        <h:selectOneMenu id="nationality" value="#{productController.owner.nationality}"
-                                         class="form-select">
-                            <f:selectItems value="#{productController.countryValues}" var="country"
-                                           itemValue="#{country}" itemLabel="#{country}"/>
-                        </h:selectOneMenu>
-                        <h:message for="nationality" class="text-danger"/>
-                    </div>
+                        <div class="mb-3">
+                            <h:outputLabel for="eyeColor" value="Owner's Eye Color" class="form-label"/>
+                            <h:selectOneMenu id="eyeColor" value="#{productController.owner.eyeColor}"
+                                             class="form-select">
+                                <f:selectItems value="#{productController.colorValues}" var="color"
+                                               itemValue="#{color}" itemLabel="#{color}"/>
+                            </h:selectOneMenu>
+                            <h:message for="eyeColor" class="text-danger"/>
+                        </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="weight" value="Owner's Weight" class="form-label"/>
-                        <h:inputText id="weight" value="#{productController.owner.weight}" required="true"
-                                     class="form-control"/>
-                        <h:message for="weight" class="text-danger"/>
+                        <div class="mb-3">
+                            <h:outputLabel for="hairColor" value="Owner's Hair Color" class="form-label"/>
+                            <h:selectOneMenu id="hairColor" value="#{productController.owner.hairColor}"
+                                             class="form-select">
+                                <f:selectItems value="#{productController.colorValues}" var="color"
+                                               itemValue="#{color}" itemLabel="#{color}"/>
+                            </h:selectOneMenu>
+                            <h:message for="hairColor" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="nationality" value="Owner's Nationality" class="form-label"/>
+                            <h:selectOneMenu id="nationality" value="#{productController.owner.nationality}"
+                                             class="form-select">
+                                <f:selectItems value="#{productController.countryValues}" var="country"
+                                               itemValue="#{country}" itemLabel="#{country}"/>
+                            </h:selectOneMenu>
+                            <h:message for="nationality" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="weight" value="Owner's Weight" class="form-label"/>
+                            <h:inputText id="weight" value="#{productController.owner.weight}" required="true"
+                                         class="form-control"/>
+                            <h:message for="weight" class="text-danger"/>
+                        </div>
                     </div>
                 </div>
 
                 <div class="card shadow p-4">
                     <!-- Блок Location -->
-                    <h:outputText value="Owner's Location" styleClass="section-header"/>
+                    <h:outputText value="Product:Owner:Location" styleClass="section-header"/>
                     <br/>
-                    <div class="mb-3">
-                        <h:outputLabel for="locationX" value="X" class="form-label"/>
-                        <h:inputText id="locationX" value="#{productController.location.x}" required="true"
-                                     class="form-control"/>
-                        <h:message for="locationX" class="text-danger"/>
+
+                    <div class="form-check mb-3">
+                        <input type="checkbox" id="setIdLocationCheckbox" class="form-check-input"
+                               onchange="toggleFieldsLocation()"/>
+                        <label for="setIdLocationCheckbox" class="form-check-label">Set ID instead</label>
                     </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="locationY" value="Y" class="form-label"/>
-                        <h:inputText id="locationY" value="#{productController.location.y}" required="true"
-                                     class="form-control"/>
-                        <h:message for="locationY" class="text-danger"/>
+                    <!-- Поле для ввода ID -->
+                    <div class="mb-3" id="idLocationField" style="display: none;">
+                        <h:outputLabel for="locationId" value="Id" class="form-label"/>
+                        <h:inputText id="locationId" value="#{productController.locationId}" class="form-control"/>
+                        <h:message for="locationId" class="text-danger"/>
                     </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="locationZ" value="Z" class="form-label"/>
-                        <h:inputText id="locationZ" value="#{productController.location.z}" required="true"
-                                     class="form-control"/>
-                        <h:message for="locationZ" class="text-danger"/>
-                    </div>
+                    <div id="attributeLocationFields">
+                        <br/>
+                        <div class="mb-3">
+                            <h:outputLabel for="locationX" value="X" class="form-label"/>
+                            <h:inputText id="locationX" value="#{productController.location.x}" required="true"
+                                         class="form-control"/>
+                            <h:message for="locationX" class="text-danger"/>
+                        </div>
 
-                    <div class="mb-3">
-                        <h:outputLabel for="locationName" value="Location Name" class="form-label"/>
-                        <h:inputText id="locationName" value="#{productController.location.name}" class="form-control"/>
-                        <h:message for="locationName" class="text-danger"/>
+                        <div class="mb-3">
+                            <h:outputLabel for="locationY" value="Y" class="form-label"/>
+                            <h:inputText id="locationY" value="#{productController.location.y}" required="true"
+                                         class="form-control"/>
+                            <h:message for="locationY" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="locationZ" value="Z" class="form-label"/>
+                            <h:inputText id="locationZ" value="#{productController.location.z}" required="true"
+                                         class="form-control"/>
+                            <h:message for="locationZ" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="locationName" value="Location Name" class="form-label"/>
+                            <h:inputText id="locationName" value="#{productController.location.name}"
+                                         class="form-control"/>
+                            <h:message for="locationName" class="text-danger"/>
+                        </div>
                     </div>
                 </div>
 
                 <h:commandButton value="Save Product" action="#{productController.saveProduct}" class="btn btn-dark"/>
             </div>
+
+            <script>
+                function toggleFieldsCoordinates() {
+                    const setIdCheckbox = document.getElementById('setIdCoordinatesCheckbox');
+                    const idField = document.getElementById('idCoordinatesFiled');
+                    const attributeFields = document.getElementById('attributeCoordinatesFields');
+
+                    if (setIdCheckbox.checked) {
+                        idField.style.display = 'block'; // Показываем поле ID
+                        attributeFields.style.display = 'none'; // Скрываем поля атрибутов
+                    } else {
+                        idField.style.display = 'none'; // Скрываем поле ID
+                        attributeFields.style.display = 'block'; // Показываем поля атрибутов
+                    }
+                }
+
+                function toggleFieldsOrganization() {
+                    const setIdCheckbox = document.getElementById('setIdOrganizationCheckbox');
+                    const idField = document.getElementById('idOrganizationFiled');
+                    const attributeFields = document.getElementById('attributeOrganizationFields');
+
+                    if (setIdCheckbox.checked) {
+                        idField.style.display = 'block'; // Показываем поле ID
+                        attributeFields.style.display = 'none'; // Скрываем поля атрибутов
+                    } else {
+                        idField.style.display = 'none'; // Скрываем поле ID
+                        attributeFields.style.display = 'block'; // Показываем поля атрибутов
+                    }
+                }
+
+                function toggleFieldsAddress() {
+                    const setIdCheckbox = document.getElementById('setIdAddressCheckbox');
+                    const idField = document.getElementById('idAddressField');
+                    const attributeFields = document.getElementById('attributeAddressFields');
+
+                    if (setIdCheckbox.checked) {
+                        idField.style.display = 'block'; // Показываем поле ID
+                        attributeFields.style.display = 'none'; // Скрываем поля атрибутов
+                    } else {
+                        idField.style.display = 'none'; // Скрываем поле ID
+                        attributeFields.style.display = 'block'; // Показываем поля атрибутов
+                    }
+                }
+
+                function toggleFieldsOwner() {
+                    const setIdCheckbox = document.getElementById('setIdOwnerCheckbox');
+                    const idField = document.getElementById('idOwnerField');
+                    const attributeFields = document.getElementById('attributeOwnerFields');
+
+                    if (setIdCheckbox.checked) {
+                        idField.style.display = 'block'; // Показываем поле ID
+                        attributeFields.style.display = 'none'; // Скрываем поля атрибутов
+                    } else {
+                        idField.style.display = 'none'; // Скрываем поле ID
+                        attributeFields.style.display = 'block'; // Показываем поля атрибутов
+                    }
+                }
+
+                function toggleFieldsLocation() {
+                    const setIdCheckbox = document.getElementById('setIdLocationCheckbox');
+                    const idField = document.getElementById('idLocationField');
+                    const attributeFields = document.getElementById('attributeLocationFields');
+
+                    if (setIdCheckbox.checked) {
+                        idField.style.display = 'block'; // Показываем поле ID
+                        attributeFields.style.display = 'none'; // Скрываем поля атрибутов
+                    } else {
+                        idField.style.display = 'none'; // Скрываем поле ID
+                        attributeFields.style.display = 'block'; // Показываем поля атрибутов
+                    }
+                }
+            </script>
         </h:form>
 
     </div>
