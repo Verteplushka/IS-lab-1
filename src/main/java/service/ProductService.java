@@ -144,6 +144,42 @@ public class ProductService {
         return person;
     }
 
+    public Organization findManufacturerById(Long manufacturerId) {
+        Organization manufacturer = entityManager.find(Organization.class, manufacturerId);
+        if (manufacturer == null) {
+            throw new IllegalArgumentException(
+                    "Manufacturer with ID " + manufacturerId + " not found.");
+        }
+        return manufacturer;
+    }
+
+    public Person findOwnerById(Long ownerId) {
+        Person owner = entityManager.find(Person.class, ownerId);
+        if (owner == null) {
+            throw new IllegalArgumentException(
+                    "Owner with ID " + ownerId + " not found.");
+        }
+        return owner;
+    }
+
+    public Address findAddressById(Long addressId) {
+        Address address = entityManager.find(Address.class, addressId);
+        if (address == null) {
+            throw new IllegalArgumentException(
+                    "Owner with ID " + addressId + " not found.");
+        }
+        return address;
+    }
+
+    public Location findLocationById(Long locationId) {
+        Location location = entityManager.find(Location.class, locationId);
+        if (location == null) {
+            throw new IllegalArgumentException(
+                    "Owner with ID " + location + " not found.");
+        }
+        return location;
+    }
+
     @Transactional
     public Product getProductWithMinName() {
         return entityManager.createQuery("SELECT p FROM Product p ORDER BY LENGTH(p.name) ASC", Product.class).setMaxResults(1).getSingleResult();

@@ -83,7 +83,7 @@
             <!-- Data Table -->
             <p:dataTable value="#{productBean.products}" var="product" paginator="true" rows="10"
                          rowsPerPageTemplate="5,10,15" editable="true" styleClass="table table-bordered table-hover"
-                         style="table-layout: auto">
+                         style="table-layout: auto" paginatorPosition="bottom">
 
                 <!-- Колонки с атрибутами сущности Product -->
                 <p:column headerText="ID" sortBy="#{product.id}" filterBy="#{product.id}">
@@ -101,8 +101,12 @@
                 <p:column headerText="Unit of Measure" sortBy="#{product.unitOfMeasure}">
                     #{product.unitOfMeasure}
                 </p:column>
-                <p:column headerText="Manufacturer" sortBy="#{product.manufacturer.name}">
-                    #{product.manufacturer.name}
+                <p:column headerText="Manufacturer ID">
+                        <h:commandLink value="#{product.manufacturer.id}" action="#{productBean.loadManufacturer}">
+                            <f:setPropertyActionListener target="#{productBean.manufacturerId}"
+                                                         value="#{product.manufacturer.id}"/>
+                            <f:ajax execute="@form" render="manufactureTable addressTable" update="manufactureTable addressTable"/>
+                        </h:commandLink>
                 </p:column>
                 <p:column headerText="Price" sortBy="#{product.price}">
                     #{product.price}
@@ -116,8 +120,12 @@
                 <p:column headerText="Part Number" sortBy="#{product.partNumber}" filterBy="#{product.partNumber}">
                     #{product.partNumber}
                 </p:column>
-                <p:column headerText="Owner" sortBy="#{product.owner.name}">
-                    #{product.owner.name}
+                <p:column headerText="OwnerId" sortBy="#{product.owner.id}">
+                        <h:commandLink value="#{product.owner.id}" action="#{productBean.loadOwner()}">
+                            <f:setPropertyActionListener target="#{productBean.ownerId}"
+                                                         value="#{product.owner.id}"/>
+                            <f:ajax execute="@form" render="ownerTable locationTable" update="ownerTable locationTable"/>
+                        </h:commandLink>
                 </p:column>
                 <p:column headerText="CreatedBy">
                     #{product.user.login}
@@ -143,6 +151,96 @@
 
                     </h:form>
                 </p:column>
+            </p:dataTable>
+        </div>
+
+        <div class="container">
+
+            <p>Manufacturer</p>
+            <p:dataTable id="manufactureTable" value="#{productBean.manufacturer}" var="manufacturerDetails"
+                         styleClass="table table-bordered table-hover">
+                <p:column headerText="Id">
+                    <h:outputText value="#{manufacturerDetails.id}"/>
+                </p:column>
+                <p:column headerText="Name">
+                    <h:outputText value="#{manufacturerDetails.name}"/>
+                </p:column>
+                <p:column headerText="OfficialAddressId">
+                    <h:outputText value="#{manufacturerDetails.officialAddress.id}"/>
+                </p:column>
+                <p:column headerText="AnnualTurnover">
+                    <h:outputText value="#{manufacturerDetails.annualTurnover}"/>
+                </p:column>
+                <p:column headerText="EmployeesCount">
+                    <h:outputText value="#{manufacturerDetails.employeesCount}"/>
+                </p:column>
+                <p:column headerText="FullName">
+                    <h:outputText value="#{manufacturerDetails.fullName}"/>
+                </p:column>
+                <p:column headerText="Type">
+                    <h:outputText value="#{manufacturerDetails.type}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p>Manufacturer:Address</p>
+            <p:dataTable id="addressTable" value="#{productBean.address}" var="addressDetails"
+                         styleClass="table table-bordered table-hover">
+                <p:column headerText="Id">
+                    <h:outputText value="#{addressDetails.id}"/>
+                </p:column>
+                <p:column headerText="Street">
+                    <h:outputText value="#{addressDetails.street}"/>
+                </p:column>
+                <p:column headerText="ZipCode">
+                    <h:outputText value="#{addressDetails.zipCode}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p>Owner</p>
+            <p:dataTable id="ownerTable" value="#{productBean.owner}" var="ownerDetails"
+                         styleClass="table table-bordered table-hover">
+                <p:column headerText="Id">
+                    <h:outputText value="#{ownerDetails.id}"/>
+                </p:column>
+                <p:column headerText="Name">
+                    <h:outputText value="#{ownerDetails.name}"/>
+                </p:column>
+                <p:column headerText="EyeColor">
+                    <h:outputText value="#{ownerDetails.eyeColor}"/>
+                </p:column>
+                <p:column headerText="HairColor">
+                    <h:outputText value="#{ownerDetails.hairColor}"/>
+                </p:column>
+                <p:column headerText="LocationId">
+                    <h:outputText value="#{ownerDetails.location.id}"/>
+                </p:column>
+                <p:column headerText="Weight">
+                    <h:outputText value="#{ownerDetails.weight}"/>
+                </p:column>
+                <p:column headerText="Nationality">
+                    <h:outputText value="#{ownerDetails.nationality}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p>Owner:Location</p>
+            <p:dataTable id="locationTable" value="#{productBean.location}" var="locationDetails"
+                         styleClass="table table-bordered table-hover">
+                <p:column headerText="Id">
+                    <h:outputText value="#{locationDetails.id}"/>
+                </p:column>
+                <p:column headerText="X">
+                    <h:outputText value="#{locationDetails.x}"/>
+                </p:column>
+                <p:column headerText="Y">
+                    <h:outputText value="#{locationDetails.y}"/>
+                </p:column>
+                <p:column headerText="Z">
+                    <h:outputText value="#{locationDetails.z}"/>
+                </p:column>
+                <p:column headerText="Name">
+                    <h:outputText value="#{locationDetails.name}"/>
+                </p:column>
+
             </p:dataTable>
         </div>
     </div>

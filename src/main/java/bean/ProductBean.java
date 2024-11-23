@@ -25,6 +25,19 @@ public class ProductBean implements Serializable {
     private Product product = new Product(); // Текущий продукт для создания/редактирования
     private Long idToDelete;
 
+    private Object selectedEntity;
+    private Organization manufacturer;
+    private Person owner;
+    private Address address;
+    private Location location;
+    private Long manufacturerId;
+    private Long ownerId;
+    private Long addressId;
+    private Long locationId;
+    private boolean renderManufacture;
+    private boolean renderOwner;
+
+
     public List<Product> getProducts() {
         return productService.findAll();
     }
@@ -37,4 +50,27 @@ public class ProductBean implements Serializable {
     public void delete() {
         productService.delete(idToDelete);
     }
+
+    public void loadManufacturer() {
+        renderManufacture = true;
+        renderOwner = false;
+        manufacturer = productService.findManufacturerById(manufacturerId);
+        loadAddress();
+    }
+
+    public void loadOwner() {
+        renderOwner = true;
+        renderManufacture = false;
+        owner = productService.findOwnerById(ownerId);
+        loadLocation();
+    }
+
+    public void loadAddress() {
+        address = productService.findAddressById(manufacturer.getOfficialAddress().getId());
+    }
+
+    public void loadLocation() {
+        location = productService.findLocationById(owner.getLocation().getId());
+    }
+
 }
