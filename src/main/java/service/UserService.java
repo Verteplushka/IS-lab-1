@@ -7,6 +7,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import util.JPAFactory;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RequestScoped
@@ -41,6 +44,11 @@ public class UserService {
     // Добавить нового пользователя или обновить существующего
     @Transactional
     public void save(User user) {
+        // Хешируем пароль перед сохранением
+        if (user.getPassword() != null) {
+            user.setPassword(hashPassword(user.getPassword()));
+        }
+
         if (user.getId() == null) {
             entityManager.persist(user);
         } else {
@@ -50,11 +58,12 @@ public class UserService {
 
     @Transactional
     public void update(User user) {
-        if (user.getId() == null) {
-            entityManager.persist(user);
-        } else {
-            entityManager.merge(user);
+        // Хешируем пароль, только если он обновляется
+        if (user.getPassword() != null) {
+            user.setPassword(hashPassword(user.getPassword()));
         }
+
+        entityManager.merge(user);
     }
 
     // Удалить пользователя по ID
@@ -74,19 +83,20 @@ public class UserService {
         }
 
         // Поиск пользователя по логину
-        User found_user = entityManager.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
+        User foundUser = entityManager.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
                 .setParameter("login", user.getLogin())
                 .getResultStream()
                 .findFirst()
                 .orElse(null);
 
-        if (found_user == null) {
+        if (foundUser == null) {
             return null; // Пользователь не найден
         }
 
-        // Сравниваем введенный пароль с сохраненным (например, предполагаем, что пароли хранятся в зашифрованном виде)
-        if (found_user.getPassword().equals(user.getPassword())) {
-            return found_user; // Успешная аутентификация
+        // Сравниваем хэш введенного пароля с хранимым паролем
+        String hashedInputPassword = hashPassword(user.getPassword());
+        if (foundUser.getPassword().equals(hashedInputPassword)) {
+            return foundUser; // Успешная аутентификация
         } else {
             return null; // Неверный пароль
         }
@@ -97,11 +107,35 @@ public class UserService {
         return entityManager.createQuery("SELECT u FROM User u WHERE u.requestAdminRights = true", User.class)
                 .getResultList();
     }
+
     @Transactional
     public void assignAdminRole(User user) {
         user.setRole(User.Role.ADMIN); // Предполагается, что Role — это Enum
         user.setRequestAdminRights(false); // Удалить запрос после назначения
         entityManager.merge(user); // Обновление в базе данных
     }
-}
 
+    // Метод для хеширования пароля
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-384");
+            byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            return bytesToHex(hashBytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Ошибка алгоритма хеширования", e);
+        }
+    }
+
+    // Конвертация байтов в шестнадцатеричный вид
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+}
