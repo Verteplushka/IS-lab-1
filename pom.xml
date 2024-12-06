@@ -92,6 +92,16 @@
             <artifactId>primefaces</artifactId>
             <version>10.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.websocket</groupId>
+            <artifactId>jakarta.websocket-api</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-runtime</artifactId>
+            <version>2.7.3</version>
+        </dependency>
 
 
     </dependencies>

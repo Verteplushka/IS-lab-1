@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import util.JPAFactory;
+import util.WebSocketEndpoint;
 
 import java.util.List;
 
@@ -27,33 +28,33 @@ public class ProductService {
 
     @Transactional
     public void save(Product product, Coordinates inputCoordinates, Organization inputOrganization, Person inputPerson, Address inputAddress, Location inputLocation, User user) {
-
-        // Сохранение координат
+        // Сохранение данных
         Coordinates coordinates = findOrCreateCoordinates(inputCoordinates);
         product.setCoordinates(coordinates);
 
-        // Сохранение адреса
         Address officialAddress = findOrCreateAddress(inputAddress);
         inputOrganization.setOfficialAddress(officialAddress);
 
-        // Сохранение организации
         Organization manufacturer = findOrCreateOrganization(inputOrganization);
         product.setManufacturer(manufacturer);
 
         Location location = findOrCreateLocation(inputLocation);
         inputPerson.setLocation(location);
 
-        // Сохранение владельца
         Person owner = findOrCreatePerson(inputPerson);
         product.setOwner(owner);
 
         product.setUser(user);
-        // Сохранение самого продукта
+
+        // Сохранение продукта
         if (product.getId() == null) {
             entityManager.persist(product);
         } else {
             entityManager.merge(product);
         }
+
+        // Отправка обновлений через WebSocket
+        WebSocketEndpoint.sendUpdateToAllClients("Product added/updated: " + product.getName());
     }
 
     @Transactional
@@ -61,6 +62,8 @@ public class ProductService {
         Product existingProduct = findById(product.getId());
         if (existingProduct != null) {
             entityManager.merge(product);
+            // Отправка уведомления об изменении
+            WebSocketEndpoint.sendUpdateToAllClients("Product updated: " + product.getName());
         } else {
             throw new IllegalArgumentException("Product with id " + product.getId() + " not found");
         }
@@ -71,6 +74,8 @@ public class ProductService {
         Product product = findById(id);
         if (product != null) {
             entityManager.remove(product);
+            // Отправка уведомления об удалении
+            WebSocketEndpoint.sendUpdateToAllClients("Product deleted: " + product.getName());
         }
     }
 

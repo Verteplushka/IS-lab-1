@@ -244,5 +244,52 @@
             </p:dataTable>
         </div>
     </div>
+
+    <script>
+        const socket = new WebSocket("ws://localhost:32001/lab1/updates");
+
+        socket.onopen = function() {
+            console.log("Connected to WebSocket server");
+        };
+
+        socket.onmessage = function(event) {
+            console.log("Message from server: " + event.data);
+            // Обновить данные на странице (например, перезагрузить таблицу)
+            refreshProductTable();
+        };
+
+        socket.onclose = function() {
+            console.log("Disconnected from WebSocket server");
+        };
+
+        socket.onerror = function(error) {
+            console.error("WebSocket error: " + error);
+        };
+
+        // Функция для обновления таблицы
+        function refreshProductTable() {
+            // Получить обновленные данные с сервера, например, перезагрузив список продуктов
+            // fetch('/yourApp/products')
+            //     .then(response => response.json())
+            //     .then(products => {
+            //         // Перерисовать таблицу с новыми данными
+            //         const tableBody = document.getElementById("product-table-body");
+            //         tableBody.innerHTML = ""; // Очистить таблицу
+            //         products.forEach(product => {
+            //             const row = document.createElement("tr");
+            //             row.innerHTML = `
+            //         <td>${product.name}</td>
+            //         <td>${product.price}</td>
+            //         <td>${product.manufacturer}</td>
+            //         <td>${product.owner}</td>
+            //     `;
+            //             tableBody.appendChild(row);
+            //         });
+            //     });
+            console.log("refreshTableFunc")
+            location.reload();
+        }
+
+    </script>
 </h:body>
 </html>
