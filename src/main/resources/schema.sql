@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS organization CASCADE;
 DROP TABLE IF EXISTS person CASCADE;
 DROP TABLE IF EXISTS address CASCADE;
 DROP TABLE IF EXISTS location CASCADE;
+DROP TABLE IF EXISTS users_is CASCADE;
+
 
 CREATE TABLE Coordinates
 (
@@ -51,6 +53,16 @@ CREATE TABLE Person
     nationality VARCHAR(40)      NOT NULL
 );
 
+-- Создание таблицы users_is
+CREATE TABLE users_is
+(
+    id       SERIAL PRIMARY KEY,                    -- Автоинкрементируемый идентификатор
+    login    VARCHAR(255) NOT NULL UNIQUE,          -- Уникальный логин
+    password VARCHAR(255) NOT NULL UNIQUE,          -- Пароль
+    role     VARCHAR(40)  NOT NULL,
+    request_admin_rights BOOLEAN DEFAULT FALSE      -- Флаг запроса админских прав
+);
+
 CREATE TABLE Product
 (
     id               BIGSERIAL PRIMARY KEY,
@@ -65,15 +77,4 @@ CREATE TABLE Product
     part_number      VARCHAR(44) CHECK (length(part_number) >= 25 AND length(part_number) <= 44),
     owner_id         INTEGER   NOT NULL REFERENCES Person (id),
     user_id          BIGINT    NOT NULL REFERENCES users_is (id) -- Внешний ключ для пользователя
-);
-
-
--- Создание таблицы users_is
-CREATE TABLE users_is
-(
-    id       SERIAL PRIMARY KEY,                    -- Автоинкрементируемый идентификатор
-    login    VARCHAR(255) NOT NULL UNIQUE,          -- Уникальный логин
-    password VARCHAR(255) NOT NULL UNIQUE,          -- Пароль
-    role     VARCHAR(40)  NOT NULL,
-    request_admin_rights BOOLEAN DEFAULT FALSE      -- Флаг запроса админских прав
 );
