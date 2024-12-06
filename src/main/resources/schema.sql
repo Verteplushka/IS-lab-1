@@ -58,7 +58,7 @@ CREATE TABLE users_is
 (
     id       SERIAL PRIMARY KEY,                    -- Автоинкрементируемый идентификатор
     login    VARCHAR(255) NOT NULL UNIQUE,          -- Уникальный логин
-    password VARCHAR(255) NOT NULL UNIQUE,          -- Пароль
+    password VARCHAR(255) NOT NULL,                 -- Пароль
     role     VARCHAR(40)  NOT NULL,
     request_admin_rights BOOLEAN DEFAULT FALSE      -- Флаг запроса админских прав
 );
