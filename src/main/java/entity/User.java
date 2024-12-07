@@ -21,7 +21,7 @@ public class User {
 
     @NotNull
     @NotEmpty
-    @Size(max = 10, message = "Password mustn't be longer 10 chars ")  // Ограничение на длину пароля
+//    @Size(max = 10, message = "Password mustn't be longer 10 chars ")  // Ограничение на длину пароля
     private String password;
 
     @NotNull

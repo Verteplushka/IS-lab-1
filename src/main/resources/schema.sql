@@ -78,3 +78,12 @@ CREATE TABLE Product
     owner_id         INTEGER   NOT NULL REFERENCES Person (id),
     user_id          BIGINT    NOT NULL REFERENCES users_is (id) -- Внешний ключ для пользователя
 );
+
+CREATE TABLE change_log (
+                            id SERIAL PRIMARY KEY, -- Уникальный идентификатор записи
+                            change_date TIMESTAMP NOT NULL,       -- Дата и время изменения
+                            change_type VARCHAR(20) NOT NULL,     -- Тип изменения: "CREATE", "UPDATE", "DELETE"
+                            entity_id BIGINT NOT NULL,            -- ID измененной сущности
+                            table_name VARCHAR(255) NOT NULL,     -- Имя таблицы, где произошли изменения
+                            user_id BIGINT NOT NULL               -- ID пользователя, сделавшего изменение
+);

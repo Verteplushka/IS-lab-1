@@ -45,8 +45,9 @@ public class UserService {
     @Transactional
     public void save(User user) {
         // Хешируем пароль перед сохранением
-        if (user.getPassword() != null) {
-            user.setPassword(hashPassword(user.getPassword()));
+        String originalPassword = user.getPassword();
+        if (originalPassword != null) {
+            user.setPassword(hashPassword(originalPassword));
         }
 
         if (user.getId() == null) {

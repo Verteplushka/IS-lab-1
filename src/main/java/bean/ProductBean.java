@@ -22,6 +22,9 @@ public class ProductBean implements Serializable {
     @Inject
     private ProductService productService;
 
+    @Inject
+    private UserBean userBean;
+
     private Product product = new Product(); // Текущий продукт для создания/редактирования
     private Long idToDelete;
 
@@ -48,7 +51,7 @@ public class ProductBean implements Serializable {
     }
 
     public void delete() {
-        productService.delete(idToDelete);
+        productService.delete(idToDelete, userBean.getUser());
     }
 
     public void loadManufacturer() {

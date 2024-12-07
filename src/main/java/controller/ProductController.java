@@ -7,6 +7,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import service.ChangeLogService;
 import service.ProductService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;

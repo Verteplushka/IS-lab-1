@@ -14,6 +14,9 @@ import java.util.List;
 public class ProductService {
     private final EntityManager entityManager;
 
+    @Inject
+    ChangeLogService changeLogService;
+
     public ProductService() {
         this.entityManager = JPAFactory.getFactory().createEntityManager();
     }
@@ -49,8 +52,10 @@ public class ProductService {
         // Сохранение продукта
         if (product.getId() == null) {
             entityManager.persist(product);
+            changeLogService.logProductChange(product.getId(), "SAVE", user.getId());
         } else {
             entityManager.merge(product);
+            changeLogService.logProductChange(product.getId(), "UPDATE", user.getId());
         }
 
         // Отправка обновлений через WebSocket
@@ -70,13 +75,15 @@ public class ProductService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, User user) {
         Product product = findById(id);
         if (product != null) {
             entityManager.remove(product);
             // Отправка уведомления об удалении
             WebSocketEndpoint.sendUpdateToAllClients("Product deleted: " + product.getName());
         }
+
+        changeLogService.logProductChange(id, "DELETE", user.getId());
     }
 
     public Product findProductById(Long id) {

@@ -11,7 +11,6 @@
         <class>entity.Person</class>
         <class>entity.Address</class>
         <class>entity.Location</class>
-        <!-- Параметры конфигурации EclipseLink -->
         <properties>
             <!-- Параметры подключения -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
@@ -19,11 +18,11 @@
             <property name="javax.persistence.jdbc.user" value="s367300"/>
             <property name="javax.persistence.jdbc.password" value="megyePWEPkK7nYIG"/>
 
-            <!-- EclipseLink настройки -->
-            <property name="eclipselink.jpa.platform" value="org.eclipse.persistence.platform.database.PostgreSQLPlatform" />
-            <property name="eclipselink.logging.level" value="FINE" />
-            <property name="eclipselink.ddl-generation" value="create-tables" />
-            <property name="eclipselink.ddl-generation.output-mode" value="database" />
+            <!-- Hibernate настройки -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

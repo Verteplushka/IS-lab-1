@@ -77,7 +77,9 @@
                 <div class="mb-3">
                     <h:outputLabel for="password" value="Password" class="form-label"/>
                     <h:inputSecret id="password" value="#{userController.user.password}" required="true"
-                                   requiredMessage="Password is required" class="form-control"/>
+                                   requiredMessage="Password is required" class="form-control">
+                        <f:validator validatorId="passwordValidator" />
+                    </h:inputSecret>
                     <h:message for="password" class="text-danger small"/>
                 </div>
 
