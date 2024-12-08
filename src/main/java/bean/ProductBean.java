@@ -12,7 +12,10 @@ import lombok.Setter;
 import service.ProductService;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Named
 @SessionScoped
@@ -40,9 +43,42 @@ public class ProductBean implements Serializable {
     private boolean renderManufacture;
     private boolean renderOwner;
 
+    private String nameFilter;
+
+
+    private Comparator<Product> comparator = Comparator.comparing(Product::getId); // Метод сравнения по умолчанию
+
 
     public List<Product> getProducts() {
-        return productService.findAll();
+        return productService.findAll().stream()
+                .filter(product -> nameFilter == null || product.getName().equalsIgnoreCase(nameFilter)) // Фильтруем по имени, если nameFilter задан
+                .sorted(comparator) // Применяем текущий метод сравнения
+                .collect(Collectors.toList());
+    }
+
+
+    public void sortByName() {
+        comparator = Comparator.comparing(Product::getName);
+    }
+
+    public void sortByDate() {
+        comparator = Comparator.comparing(Product::getCreationDate);
+    }
+
+    public void sortByPrice() {
+        comparator = Comparator.comparing(Product::getPrice);
+    }
+
+    public void sortByManufactureCost() {
+        comparator = Comparator.comparing(Product::getManufactureCost);
+    }
+
+    public void sortByRating() {
+        comparator = Comparator.comparing(Product::getRating);
+    }
+
+    public void sortById() {
+        comparator = Comparator.comparing(Product::getId);
     }
 
     public void save() {
