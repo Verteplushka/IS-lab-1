@@ -27,9 +27,12 @@ public class OperationsBean {
     private List<Product> objectsByPartNumberSubstring;
     private List<Product> objectsByPriceRange;
     private boolean priceUpdated;
+    private boolean isNotRegistered;
 
     @Inject
     private ProductService productService;
+    @Inject
+    private UserBean userBean;
 
     public Product getMinNameObject() {
         minNameObject = productService.getProductWithMinName();
@@ -52,8 +55,12 @@ public class OperationsBean {
     }
 
     public void increasePriceByPercentage() {
-        productService.increasePrices(percentage);
-        priceUpdated = true;
+        if(userBean.getUser() != null){
+            productService.increasePrices(percentage, userBean.getUser());
+            priceUpdated = true;
+        }else{
+            isNotRegistered = true;
+        }
     }
 }
 

@@ -238,10 +238,14 @@ public class ProductService {
     }
 
     @Transactional
-    public void increasePrices(Double percentage) {
+    public void increasePrices(Double percentage, User user) {
         entityManager.createQuery(
-                        "UPDATE Product p SET p.price = FUNCTION('ROUND', p.price * (1 + :percentage / 100.0))")
+                        "UPDATE Product p " +
+                                "SET p.price = FUNCTION('ROUND', p.price * (1 + :percentage / 100.0)) " +
+                                "WHERE p.user = :user")
                 .setParameter("percentage", percentage)
+                .setParameter("user", user)
                 .executeUpdate();
     }
+
 }

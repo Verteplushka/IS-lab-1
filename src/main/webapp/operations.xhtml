@@ -5,7 +5,9 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
 
 <h:head>
     <title>Operations</title>
@@ -67,7 +69,7 @@
             <h:form class="card shadow p-4">
                 <!-- Operation 1: Get Object with Min Name -->
                 <div class="mb-3">
-                    <label class="form-label">Object with Minimum Name:</label>
+                    <label class="form-label">Object with minimum Name's value:</label>
                     <h:dataTable value="#{operationsBean.minNameObject}" var="obj"
                                  rendered="#{not empty operationsBean.minNameObject}"
                                  styleClass="table mt-3">
@@ -88,10 +90,11 @@
 
                 <!-- Operation 2: Count Objects by Part Number -->
                 <div class="mb-3">
-                    <label for="partNumber" class="form-label">Enter Part Number:</label>
+                    <label for="partNumber" class="form-label">Get count of objects with Part Number:</label>
                     <div class="d-flex">
                         <h:inputText id="partNumber" value="#{operationsBean.partNumber}"
-                                     styleClass="form-control me-3"/>
+                                     styleClass="form-control me-3"
+                                     a:placeholder="full part number"/>
                         <h:commandButton value="Get Count" action="#{operationsBean.countObjectsByPartNumber}"
                                          styleClass="btn btn-dark"/>
                     </div>
@@ -102,9 +105,11 @@
 
                 <!-- Operation 3: Search by Substring in Part Number -->
                 <div class="mb-3">
-                    <label for="substring" class="form-label">Part Number Substring:</label>
+                    <label for="substring" class="form-label">Find objects with Part Number containing a substring:</label>
                     <div class="d-flex">
-                        <h:inputText id="substring" value="#{operationsBean.substring}" styleClass="form-control me-3"/>
+                        <h:inputText id="substring" value="#{operationsBean.substring}"
+                                     a:placeholder="substring part number"
+                                     styleClass="form-control me-3"/>
                         <h:commandButton value="Search" action="#{operationsBean.getObjectsByPartNumberSubstring}"
                                          styleClass="btn btn-dark"/>
                     </div>
@@ -134,14 +139,14 @@
 
                 <!-- Operation 4: Get Objects by Price Range -->
                 <div class="mb-3">
-                    <label for="minPrice" class="form-label">Price Range:</label>
+                    <label for="minPrice" class="form-label">Find objects by Price range:</label>
                     <div class="d-flex">
                         <h:inputText id="minPrice" value="#{operationsBean.minPrice}"
                                      styleClass="form-control me-2"
-                                     placeholder="Min Price"/>
+                                     a:placeholder="min price"/>
                         <h:inputText id="maxPrice" value="#{operationsBean.maxPrice}"
                                      styleClass="form-control me-2"
-                                     placeholder="Max Price"/>
+                                     a:placeholder="max price"/>
                         <h:commandButton value="Find" action="#{operationsBean.getObjectsByPriceRange}"
                                          styleClass="btn btn-dark"/>
                     </div>
@@ -168,20 +173,21 @@
                     </h:dataTable>
                 </div>
 
-                <!-- Operation 5: Increase Price by Percentage -->
-                <div class="mb-3">
-                    <label for="percentage" class="form-label">Increase Prices by (%):</label>
-                    <div class="d-flex">
-                        <h:inputText id="percentage" value="#{operationsBean.percentage}"
-                                     styleClass="form-control me-3"
-                                     placeholder="Percentage"/>
-                        <h:commandButton value="Apply" action="#{operationsBean.increasePriceByPercentage}"
-                                         styleClass="btn btn-success"/>
+                <h:panelGroup rendered="#{userBean.loggedIn}">
+                    <div class="mb-3">
+                        <label for="percentage" class="form-label">Increase Prices of your objects by (%):</label>
+                        <div class="d-flex">
+                            <h:inputText id="percentage" value="#{operationsBean.percentage}"
+                                         styleClass="form-control me-3"
+                                         a:placeholder="percentage"/>
+                            <h:commandButton value="Apply" action="#{operationsBean.increasePriceByPercentage}"
+                                             styleClass="btn btn-success"/>
+                        </div>
+                        <h:outputText value="Prices updated successfully"
+                                      styleClass="text-success mt-2 d-block"
+                                      rendered="#{operationsBean.priceUpdated}"/>
                     </div>
-                    <h:outputText value="Prices updated successfully."
-                                  styleClass="text-success mt-2 d-block"
-                                  rendered="#{operationsBean.priceUpdated}"/>
-                </div>
+                </h:panelGroup>
             </h:form>
         </div>
 
