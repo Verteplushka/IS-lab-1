@@ -45,9 +45,14 @@ public class ProductBean implements Serializable {
 
     private String nameFilter;
 
+    private boolean sortOrderName = true;
+    private boolean sortOrderDate = true;
+    private boolean sortOrderPrice = true;
+    private boolean sortOrderManufactureCost = true;
+    private boolean sortOrderRating = true;
+    private boolean sortOrderId = true;
 
     private Comparator<Product> comparator = Comparator.comparing(Product::getId); // Метод сравнения по умолчанию
-
 
     public List<Product> getProducts() {
         return productService.findAll().stream()
@@ -56,29 +61,73 @@ public class ProductBean implements Serializable {
                 .collect(Collectors.toList());
     }
 
+    private void resetSortOrders(String currentSort) {
+        if (!"name".equals(currentSort)) {
+            sortOrderName = true;
+        }
+        if (!"date".equals(currentSort)) {
+            sortOrderDate = true;
+        }
+        if (!"price".equals(currentSort)) {
+            sortOrderPrice = true;
+        }
+        if (!"manufactureCost".equals(currentSort)) {
+            sortOrderManufactureCost = true;
+        }
+        if (!"rating".equals(currentSort)) {
+            sortOrderRating = true;
+        }
+        if (!"id".equals(currentSort)) {
+            sortOrderId = true;
+        }
+    }
 
     public void sortByName() {
-        comparator = Comparator.comparing(Product::getName);
+        resetSortOrders("name");
+        comparator = sortOrderName
+                ? Comparator.comparing(Product::getName)
+                : Comparator.comparing(Product::getName).reversed();
+        sortOrderName = !sortOrderName; // Переключаем порядок сортировки
     }
 
     public void sortByDate() {
-        comparator = Comparator.comparing(Product::getCreationDate);
+        resetSortOrders("date");
+        comparator = sortOrderDate
+                ? Comparator.comparing(Product::getCreationDate)
+                : Comparator.comparing(Product::getCreationDate).reversed();
+        sortOrderDate = !sortOrderDate;
     }
 
     public void sortByPrice() {
-        comparator = Comparator.comparing(Product::getPrice);
+        resetSortOrders("price");
+        comparator = sortOrderPrice
+                ? Comparator.comparing(Product::getPrice)
+                : Comparator.comparing(Product::getPrice).reversed();
+        sortOrderPrice = !sortOrderPrice;
     }
 
     public void sortByManufactureCost() {
-        comparator = Comparator.comparing(Product::getManufactureCost);
+        resetSortOrders("manufactureCost");
+        comparator = sortOrderManufactureCost
+                ? Comparator.comparing(Product::getManufactureCost)
+                : Comparator.comparing(Product::getManufactureCost).reversed();
+        sortOrderManufactureCost = !sortOrderManufactureCost;
     }
 
     public void sortByRating() {
-        comparator = Comparator.comparing(Product::getRating);
+        resetSortOrders("rating");
+        comparator = sortOrderRating
+                ? Comparator.comparing(Product::getRating)
+                : Comparator.comparing(Product::getRating).reversed();
+        sortOrderRating = !sortOrderRating;
     }
 
     public void sortById() {
-        comparator = Comparator.comparing(Product::getId);
+        resetSortOrders("id");
+        comparator = sortOrderId
+                ? Comparator.comparing(Product::getId)
+                : Comparator.comparing(Product::getId).reversed();
+        sortOrderId = !sortOrderId;
     }
 
     public void save() {
