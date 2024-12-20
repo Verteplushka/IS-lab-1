@@ -44,9 +44,12 @@
                         <h:button value="Do operations" outcome="operations.xhtml" styleClass="btn btn-dark btn-sm"/>
                     </h:form>
                     <h:form styleClass="mx-2">
-                        <h:button value="Add Product" outcome="product-form.xhtml" styleClass="btn btn-dark btn-sm"
-                                  rendered="#{userBean.user != null}"/>
+                        <h:commandButton value="Add Product"
+                                         action="#{productController.resetFields}"
+                                         styleClass="btn btn-dark btn-sm"
+                                         rendered="#{userBean.user != null}"/>
                     </h:form>
+
 
                     <!-- Отображение кнопки только если у пользователя нет роли ADMIN -->
                     <h:form styleClass="mx-2">
