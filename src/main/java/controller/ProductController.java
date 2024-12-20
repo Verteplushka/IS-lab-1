@@ -45,6 +45,9 @@ public class ProductController implements Serializable {
 
     private boolean setIdMode;
 
+    private boolean setIdCoordinates;
+
+
     public String saveProduct() {
         coordinates.setId(coordinatesId);
         organization.setId(organizationId);

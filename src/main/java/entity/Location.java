@@ -21,6 +21,6 @@ public class Location {
 
     private int z;
 
-    @Size(min = 1)
+    @NotEmpty(message = "Location Name is required")
     private String name;
 }

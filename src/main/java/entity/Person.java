@@ -32,7 +32,7 @@ public class Person {
     private Location location;
 
     @NotNull
-    @Positive
+    @Positive(message = "Weight must be positive")
     private Double weight;
 
     @NotNull

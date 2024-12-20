@@ -26,15 +26,15 @@ public class Organization {
     private Address officialAddress;
 
     @NotNull
-    @Positive
+    @Positive(message = "Annual Turnover must be positive")
     @Column(name = "annual_turnover")
     private Float annualTurnover;
 
-    @Positive
+    @Positive(message = "Employees Count must be positive")
     @Column(name = "employees_count")
     private int employeesCount;
 
-    @Size(max = 1668)
+    @Size(max = 1668, message = "Full Name's length mustn't be greater 1668")
     @NotNull
     @Column(name = "full_name", unique = true)
     private String fullName;

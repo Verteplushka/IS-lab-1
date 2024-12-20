@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@Table(name="product")
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,16 +44,16 @@ public class Product {
     private Organization manufacturer;
 
     @NotNull
-    @Positive
+    @Positive(message = "Price must be positive")
     private Long price;
 
     @Column(name = "manufacture_cost")
     private int manufactureCost;
 
-    @Positive
+    @Positive(message = "Rating must be positive")
     private long rating;
 
-    @Size(min = 25, max = 44)
+    @Size(min = 25, max = 44, message = "Part Number's length must be between 25 and 44")
     @NotEmpty
     @Column(name = "part_number")
     private String partNumber;

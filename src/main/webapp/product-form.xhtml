@@ -69,35 +69,38 @@
                     <div class="mb-3">
                         <h:outputLabel for="name" value="Product Name" class="form-label"/>
                         <h:inputText id="name" value="#{productController.product.name}" required="true"
-                                     class="form-control"/>
+                                     requiredMessage="Name is required" class="form-control"/>
                         <h:message for="name" class="text-danger"/>
                     </div>
 
                     <div class="mb-3">
                         <h:outputLabel for="price" value="Price" class="form-label"/>
                         <h:inputText id="price" value="#{productController.product.price}" required="true"
-                                     class="form-control"/>
+                                     requiredMessage="Price is required" class="form-control"
+                                     converterMessage="Price must be an integer number"/>
                         <h:message for="price" class="text-danger"/>
                     </div>
 
                     <div class="mb-3">
                         <h:outputLabel for="manufactureCost" value="Manufacture Cost" class="form-label"/>
                         <h:inputText id="manufactureCost" value="#{productController.product.manufactureCost}"
-                                     class="form-control"/>
+                                     requiredMessage="Manufacture Cost is required" class="form-control"
+                                     converterMessage="Manufacture Cost must be an integer number"/>
                         <h:message for="manufactureCost" class="text-danger"/>
                     </div>
 
                     <div class="mb-3">
                         <h:outputLabel for="rating" value="Rating" class="form-label"/>
                         <h:inputText id="rating" value="#{productController.product.rating}" required="true"
-                                     class="form-control"/>
+                                     requiredMessage="Rating is required" class="form-control"
+                                     converterMessage="Rating must be an integer number"/>
                         <h:message for="rating" class="text-danger"/>
                     </div>
 
                     <div class="mb-3">
                         <h:outputLabel for="partNumber" value="Part Number" class="form-label"/>
                         <h:inputText id="partNumber" value="#{productController.product.partNumber}" required="true"
-                                     class="form-control"/>
+                                     requiredMessage="Part Number is required" class="form-control"/>
                         <h:message for="partNumber" class="text-danger"/>
                     </div>
 
@@ -132,20 +135,21 @@
                         <h:message for="coordinatesId" class="text-danger"/>
                     </div>
 
-                    <!-- Поля для ввода атрибутов -->
                     <div id="attributeCoordinatesFields">
                         <br/>
                         <div class="mb-3">
                             <h:outputLabel for="coordinatesX" value="X Coordinate" class="form-label"/>
                             <h:inputText id="coordinatesX" value="#{productController.coordinates.x}"
-                                         class="form-control"/>
+                                         class="form-control" requiredMessage="X is required"
+                                         converterMessage="X must be an integer number"/>
                             <h:message for="coordinatesX" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="coordinatesY" value="Y Coordinate" class="form-label"/>
                             <h:inputText id="coordinatesY" value="#{productController.coordinates.y}"
-                                         class="form-control"/>
+                                         class="form-control" requiredMessage="Y is required"
+                                         converterMessage="Y must be an valid number"/>
                             <h:message for="coordinatesY" class="text-danger"/>
                         </div>
                     </div>
@@ -166,7 +170,7 @@
                     <div class="mb-3" id="idOrganizationFiled" style="display: none;">
                         <h:outputLabel for="organizationId" value="Id" class="form-label"/>
                         <h:inputText id="organizationId" value="#{productController.coordinatesId}"
-                                     class="form-control"/>
+                                     class="form-control" requiredMessage="Organization ID is required"/>
                         <h:message for="organizationId" class="text-danger"/>
                     </div>
 
@@ -175,9 +179,37 @@
                         <div class="mb-3">
                             <h:outputLabel for="organizationName" value="Organization Name" class="form-label"/>
                             <h:inputText id="organizationName" value="#{productController.organization.name}"
-                                         required="true"
-                                         class="form-control"/>
+                                         required="true" class="form-control"
+                                         requiredMessage="Organization Name is required"/>
                             <h:message for="organizationName" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="annualTurnover" value="Annual Turnover" class="form-label"/>
+                            <h:inputText id="annualTurnover"
+                                         value="#{productController.organization.annualTurnover}"
+                                         required="true" class="form-control"
+                                         requiredMessage="Annual Turnover is required"
+                                         converterMessage="Annual Turnover must be a valid number"/>
+                            <h:message for="annualTurnover" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="employeesCount" value="Employees Count" class="form-label"/>
+                            <h:inputText id="employeesCount"
+                                         value="#{productController.organization.employeesCount}"
+                                         required="true" class="form-control"
+                                         requiredMessage="Employees Count is required"
+                                         converterMessage="Employees Count must be an integer number"/>
+                            <h:message for="employeesCount" class="text-danger"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <h:outputLabel for="fullName" value="Full Name" class="form-label"/>
+                            <h:inputText id="fullName" value="#{productController.organization.fullName}"
+                                         required="true" class="form-control"
+                                         requiredMessage="Full Name is required"/>
+                            <h:message for="fullName" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
@@ -188,29 +220,6 @@
                                                itemValue="#{orgType}" itemLabel="#{orgType}"/>
                             </h:selectOneMenu>
                             <h:message for="organizationType" class="text-danger"/>
-                        </div>
-
-                        <div class="mb-3">
-                            <h:outputLabel for="annualTurnover" value="Annual Turnover" class="form-label"/>
-                            <h:inputText id="annualTurnover" value="#{productController.organization.annualTurnover}"
-                                         required="true" class="form-control"/>
-                            <h:message for="annualTurnover" class="text-danger"/>
-                        </div>
-
-                        <div class="mb-3">
-                            <h:outputLabel for="employeesCount" value="Employees Count" class="form-label"/>
-                            <h:inputText id="employeesCount" value="#{productController.organization.employeesCount}"
-                                         required="true" class="form-control"/>
-                            <h:message for="employeesCount" class="text-danger"/>
-                        </div>
-
-                        <div class="mb-3">
-                            <h:outputLabel for="fullName" value="Full Name" class="form-label"/>
-                            <h:inputText id="fullName" value="#{productController.organization.fullName}"
-                                         required="true"
-                                         class="form-control">
-                            </h:inputText>
-                            <h:message for="fullName" class="text-danger"/>
                         </div>
                     </div>
                 </div>
@@ -229,7 +238,8 @@
                     <!-- Поле для ввода ID -->
                     <div class="mb-3" id="idAddressField" style="display: none;">
                         <h:outputLabel for="addressId" value="Id" class="form-label"/>
-                        <h:inputText id="addressId" value="#{productController.addressId}" class="form-control"/>
+                        <h:inputText id="addressId" value="#{productController.addressId}"
+                                     class="form-control" requiredMessage="Address ID is required"/>
                         <h:message for="addressId" class="text-danger"/>
                     </div>
 
@@ -238,19 +248,20 @@
                         <div class="mb-3">
                             <h:outputLabel for="street" value="Street" class="form-label"/>
                             <h:inputText id="street" value="#{productController.address.street}" required="true"
-                                         class="form-control"/>
+                                         class="form-control" requiredMessage="Street is required"/>
                             <h:message for="street" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="zipCode" value="Zip Code" class="form-label"/>
                             <h:inputText id="zipCode" value="#{productController.address.zipCode}" required="true"
-                                         class="form-control"/>
+                                         class="form-control" requiredMessage="Zip Code is required"/>
                             <h:message for="zipCode" class="text-danger"/>
                         </div>
                     </div>
                 </div>
 
+                <!-- Поля для ввода атрибутов -->
                 <div class="card shadow p-4">
                     <!-- Блок Person (Owner) -->
                     <h:outputText value="Product:Owner" styleClass="section-header"/>
@@ -265,7 +276,8 @@
                     <!-- Поле для ввода ID -->
                     <div class="mb-3" id="idOwnerField" style="display: none;">
                         <h:outputLabel for="ownerId" value="Id" class="form-label"/>
-                        <h:inputText id="ownerId" value="#{productController.ownerId}" class="form-control"/>
+                        <h:inputText id="ownerId" value="#{productController.ownerId}"
+                                     class="form-control" requiredMessage="Owner ID is required"/>
                         <h:message for="ownerId" class="text-danger"/>
                     </div>
 
@@ -274,7 +286,7 @@
                         <div class="mb-3">
                             <h:outputLabel for="ownerName" value="Owner Name" class="form-label"/>
                             <h:inputText id="ownerName" value="#{productController.owner.name}" required="true"
-                                         class="form-control"/>
+                                         class="form-control" requiredMessage="Name is required"/>
                             <h:message for="ownerName" class="text-danger"/>
                         </div>
 
@@ -311,7 +323,8 @@
                         <div class="mb-3">
                             <h:outputLabel for="weight" value="Owner's Weight" class="form-label"/>
                             <h:inputText id="weight" value="#{productController.owner.weight}" required="true"
-                                         class="form-control"/>
+                                         class="form-control" requiredMessage="Weight is required"
+                                         converterMessage="Weight must be a valid number"/>
                             <h:message for="weight" class="text-danger"/>
                         </div>
                     </div>
@@ -331,7 +344,8 @@
                     <!-- Поле для ввода ID -->
                     <div class="mb-3" id="idLocationField" style="display: none;">
                         <h:outputLabel for="locationId" value="Id" class="form-label"/>
-                        <h:inputText id="locationId" value="#{productController.locationId}" class="form-control"/>
+                        <h:inputText id="locationId" value="#{productController.locationId}"
+                                     class="form-control" requiredMessage="Location ID is required"/>
                         <h:message for="locationId" class="text-danger"/>
                     </div>
 
@@ -340,34 +354,41 @@
                         <div class="mb-3">
                             <h:outputLabel for="locationX" value="X" class="form-label"/>
                             <h:inputText id="locationX" value="#{productController.location.x}" required="true"
-                                         class="form-control"/>
+                                         class="form-control"
+                                         requiredMessage="Location X Coordinate is required"/>
                             <h:message for="locationX" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="locationY" value="Y" class="form-label"/>
                             <h:inputText id="locationY" value="#{productController.location.y}" required="true"
-                                         class="form-control"/>
+                                         class="form-control"
+                                         requiredMessage="Location Y Coordinate is required"/>
                             <h:message for="locationY" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="locationZ" value="Z" class="form-label"/>
                             <h:inputText id="locationZ" value="#{productController.location.z}" required="true"
-                                         class="form-control"/>
+                                         class="form-control"
+                                         requiredMessage="Location Z Coordinate is required"/>
                             <h:message for="locationZ" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="locationName" value="Location Name" class="form-label"/>
                             <h:inputText id="locationName" value="#{productController.location.name}"
-                                         class="form-control"/>
+                                         class="form-control" requiredMessage="Location Name is required"/>
                             <h:message for="locationName" class="text-danger"/>
                         </div>
                     </div>
                 </div>
 
-                <h:commandButton value="Save Product" action="#{productController.saveProduct}" class="btn btn-dark"/>
+
+                <h:commandButton value="Save Product" action="#{productController.saveProduct}"
+                                 class="btn btn-dark"/>
+
+
             </div>
 
             <script>

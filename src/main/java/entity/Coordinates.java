@@ -14,9 +14,9 @@ public class Coordinates {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "X is required")
     private Integer x;
 
-    @Max(327)
+    @Max(value = 327, message = "Y Coordinate mustn't be greater 327")
     private float y;
 }

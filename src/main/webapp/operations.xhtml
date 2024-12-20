@@ -94,7 +94,9 @@
                     <div class="d-flex">
                         <h:inputText id="partNumber" value="#{operationsBean.partNumber}"
                                      styleClass="form-control me-3"
-                                     a:placeholder="full part number"/>
+                                     a:placeholder="full part number"
+                                     required="true"
+                                     requiredMessage="Part Number is required"/>
                         <h:commandButton value="Get Count" action="#{operationsBean.countObjectsByPartNumber}"
                                          styleClass="btn btn-dark"/>
                     </div>
