@@ -2,6 +2,8 @@ package service;
 
 import entity.*;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -99,7 +101,11 @@ public class ProductService {
             return entityManager.find(Coordinates.class, coordinates.getId());
         }
 
-        Coordinates existing = entityManager.createQuery("SELECT c FROM Coordinates c WHERE c.x = :x AND c.y = :y", Coordinates.class).setParameter("x", coordinates.getX()).setParameter("y", coordinates.getY()).getResultStream().findFirst().orElse(null);
+        Coordinates existing = entityManager.createQuery("SELECT c FROM Coordinates c WHERE c.x = :x " +
+                        "AND c.y = :y", Coordinates.class)
+                .setParameter("x", coordinates.getX())
+                .setParameter("y", coordinates.getY())
+                .getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -118,7 +124,11 @@ public class ProductService {
             return entityManager.find(Address.class, address.getId());
         }
 
-        Address existing = entityManager.createQuery("SELECT a FROM Address a WHERE a.street = :street AND a.zipCode = :zipCode", Address.class).setParameter("street", address.getStreet()).setParameter("zipCode", address.getZipCode()).getResultStream().findFirst().orElse(null);
+        Address existing = entityManager.createQuery("SELECT a FROM Address a WHERE a.street = :street " +
+                        "AND a.zipCode = :zipCode", Address.class)
+                .setParameter("street", address.getStreet())
+                .setParameter("zipCode", address.getZipCode())
+                .getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -136,11 +146,21 @@ public class ProductService {
             return entityManager.find(Organization.class, organization.getId());
         }
 
-        Organization existing = entityManager.createQuery("SELECT o FROM Organization o WHERE o.name = :name AND o.fullName = :fullName", Organization.class).setParameter("name", organization.getName()).setParameter("fullName", organization.getFullName()).getResultStream().findFirst().orElse(null);
+        Organization existing = entityManager.createQuery("SELECT o FROM Organization o WHERE o.name = :name " +
+                        "AND o.annualTurnover = :annualTurnover AND o.employeesCount = :employeesCount AND o.type = :type " +
+                        "AND o.fullName = :fullName AND o.officialAddress = :officialAddress", Organization.class)
+                .setParameter("name", organization.getName())
+                .setParameter("officialAddress", organization.getOfficialAddress())
+                .setParameter("annualTurnover", organization.getAnnualTurnover())
+                .setParameter("employeesCount", organization.getEmployeesCount())
+                .setParameter("fullName", organization.getFullName())
+                .setParameter("type", organization.getType())
+                .getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
         }
+
         entityManager.persist(organization); // Сохраняем новую запись
         return organization;
     }
@@ -154,7 +174,13 @@ public class ProductService {
             return entityManager.find(Location.class, location.getId());
         }
 
-        Location existing = entityManager.createQuery("SELECT l FROM Location l WHERE l.x = :x AND l.y = :y AND l.z = :z AND l.name = :name", Location.class).setParameter("x", location.getX()).setParameter("y", location.getY()).setParameter("z", location.getZ()).setParameter("name", location.getName()).getResultStream().findFirst().orElse(null);
+        Location existing = entityManager.createQuery("SELECT l FROM Location l WHERE l.x = :x AND l.y = :y " +
+                        "AND l.z = :z AND l.name = :name", Location.class)
+                .setParameter("x", location.getX())
+                .setParameter("y", location.getY())
+                .setParameter("z", location.getZ())
+                .setParameter("name", location.getName())
+                .getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -172,7 +198,16 @@ public class ProductService {
             return entityManager.find(Person.class, person.getId());
         }
 
-        Person existing = entityManager.createQuery("SELECT p FROM Person p WHERE p.name = :name AND p.eyeColor = :eyeColor AND p.nationality = :nationality", Person.class).setParameter("name", person.getName()).setParameter("eyeColor", person.getEyeColor()).setParameter("nationality", person.getNationality()).getResultStream().findFirst().orElse(null);
+        Person existing = entityManager.createQuery("SELECT p FROM Person p WHERE p.name = :name " +
+                        "AND p.eyeColor = :eyeColor AND p.hairColor = :hairColor AND p.location = :location " +
+                        "AND p.weight = :weight AND p.nationality = :nationality", Person.class)
+                .setParameter("name", person.getName())
+                .setParameter("eyeColor", person.getEyeColor())
+                .setParameter("hairColor", person.getHairColor())
+                .setParameter("location", person.getLocation())
+                .setParameter("weight", person.getWeight())
+                .setParameter("nationality", person.getNationality())
+                .getResultStream().findFirst().orElse(null);
 
         if (existing != null) {
             return existing; // Возвращаем существующую запись
@@ -286,5 +321,52 @@ public class ProductService {
                 .getResultList();
 
         return ids.toArray(new Long[0]);
+    }
+
+    @Transactional
+    public boolean checkUniqueFullName(String fullName) {
+        Long count = entityManager.createQuery("SELECT COUNT(o) FROM Organization o WHERE o.fullName = :fullName", Long.class)
+                .setParameter("fullName", fullName)
+                .getSingleResult();
+        return count == 0;
+    }
+
+    public Long findOrganizationId(Organization organization) {
+        if (organization == null) {
+            return null;
+        }
+
+        Address existing = new Address();
+
+        if (organization.getOfficialAddress().getId() != null) {
+            existing = entityManager.find(Address.class, organization.getOfficialAddress().getId());
+        } else{
+            existing = entityManager.createQuery("SELECT a FROM Address a WHERE a.street = :street " +
+                            "AND a.zipCode = :zipCode", Address.class)
+                    .setParameter("street", organization.getOfficialAddress().getStreet())
+                    .setParameter("zipCode", organization.getOfficialAddress().getZipCode())
+                    .getResultStream().findFirst().orElse(null);
+        }
+
+        if(existing == null){
+            return null;
+        }
+
+        organization.setOfficialAddress(existing);
+
+        return entityManager.createQuery("SELECT o.id FROM Organization o WHERE o.name = :name " +
+                        "AND o.annualTurnover = :annualTurnover AND o.employeesCount = :employeesCount AND o.type = :type " +
+                        "AND o.fullName = :fullName AND o.officialAddress = :officialAddress", Long.class)
+                .setParameter("name", organization.getName())
+                .setParameter("officialAddress", organization.getOfficialAddress())
+                .setParameter("annualTurnover", organization.getAnnualTurnover())
+                .setParameter("employeesCount", organization.getEmployeesCount())
+                .setParameter("fullName", organization.getFullName())
+                .setParameter("type", organization.getType())
+                .getResultStream()
+                .findFirst()
+                .orElse(null); // Возвращаем id, если запись найдена, иначе null
+
+
     }
 }

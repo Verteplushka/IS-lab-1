@@ -4,6 +4,7 @@ import bean.ProductBean;
 import bean.UserBean;
 import entity.*;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 @Named
 @SessionScoped
@@ -50,22 +52,32 @@ public class ProductController implements Serializable {
     private boolean idModeLocation;
 
 
-
-
     public String saveProduct() {
-        if(idModeCoordinates){
+        if (idModeCoordinates) {
             coordinates.setId(coordinatesId);
         }
-        if(idModeOrganization){
-            organization.setId(organizationId);
-        }
-        if(idModeOwner){
-            owner.setId(ownerId);
-        }
-        if(idModeAddress){
+        if (idModeAddress) {
             address.setId(addressId);
         }
-        if(idModeLocation){
+        if (idModeOrganization) {
+            organization.setId(organizationId);
+        } else {
+            organization.setOfficialAddress(address);
+            Long id = productService.findOrganizationId(organization);
+            if (id == null) {
+                if (!productService.checkUniqueFullName(organization.getFullName())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Organization with this Full Name already exists", "Organization with this Full Name already exists"));
+                    return null;
+                }
+            } else {
+                organization.setId(id);
+            }
+        }
+        if (idModeOwner) {
+            owner.setId(ownerId);
+        }
+        if (idModeLocation) {
             location.setId(locationId);
         }
         productService.save(product, coordinates, organization, owner, address, location, userBean.getUser());
@@ -111,7 +123,31 @@ public class ProductController implements Serializable {
         return "product-form.xhtml?faces-redirect=true";
     }
 
-    // Динамические списки для enum
+    public String resetFields() {
+        product = new Product();
+        coordinates = new Coordinates();
+        organization = new Organization();
+        owner = new Person();
+        address = new Address();
+        location = new Location();
+
+        coordinatesId = null;
+        organizationId = null;
+        ownerId = null;
+        addressId = null;
+        locationId = null;
+
+        idToDelete = null;
+
+        idModeCoordinates = false;
+        idModeOrganization = false;
+        idModeAddress = false;
+        idModeOwner = false;
+        idModeLocation = false;
+
+        return "product-form.xhtml?faces-redirect=true";
+    }
+
     public UnitOfMeasure[] getUnitOfMeasureValues() {
         return UnitOfMeasure.values();
     }
@@ -128,17 +164,25 @@ public class ProductController implements Serializable {
         return Country.values();
     }
 
-    public Long[] getExistingCoordinatesIds(){ return productService.getCoordinatesIds();}
+    public Long[] getExistingCoordinatesIds() {
+        return productService.getCoordinatesIds();
+    }
 
-    public Long[] getExistingOrganizationIds(){ return productService.getOrganizationIds();}
+    public Long[] getExistingOrganizationIds() {
+        return productService.getOrganizationIds();
+    }
 
-    public Long[] getExistingAddressIds(){ return productService.getAddressIds();}
+    public Long[] getExistingAddressIds() {
+        return productService.getAddressIds();
+    }
 
-    public Long[] getExistingOwnerIds(){ return productService.getPersonIds();}
+    public Long[] getExistingOwnerIds() {
+        return productService.getPersonIds();
+    }
 
-    public Long[] getExistingLocationIds(){ return productService.getLocationIds();}
-
-
+    public Long[] getExistingLocationIds() {
+        return productService.getLocationIds();
+    }
 
 
 }

@@ -134,8 +134,7 @@
                             <h:outputLabel for="coordinatesId" value="Id" class="form-label"/>
 
                             <!-- Выпадающий список -->
-                            <h:selectOneMenu id="coordinatesId" value="#{productController.coordinatesId}"
-                                             disabled="#{productController.idModeCoordinates}">
+                            <h:selectOneMenu id="coordinatesId" value="#{productController.coordinatesId}">
                                 <f:selectItems value="#{productController.existingCoordinatesIds}"/>
                             </h:selectOneMenu>
 
@@ -172,7 +171,8 @@
                         <!-- Подпись для чекбокса -->
                         <div class="col-6">
                             <h:outputLabel for="setIdOrganizationCheckbox" value="Set ID instead" class="form-label"/>
-                            <h:selectBooleanCheckbox id="setIdOrganizationCheckbox" value="#{productController.idModeOrganization}"
+                            <h:selectBooleanCheckbox id="setIdOrganizationCheckbox"
+                                                     value="#{productController.idModeOrganization}"
                                                      class="form-check-input"/>
                         </div>
 
@@ -181,8 +181,7 @@
                             <h:outputLabel for="organizationId" value="Id" class="form-label"/>
 
                             <!-- Выпадающий список для ID -->
-                            <h:selectOneMenu id="organizationId" value="#{productController.organizationId}"
-                                             disabled="#{productController.idModeOrganization}">
+                            <h:selectOneMenu id="organizationId" value="#{productController.organizationId}">
                                 <f:selectItems value="#{productController.existingOrganizationIds}" var="orgId"
                                                itemValue="#{orgId}" itemLabel="#{orgId}"/>
                             </h:selectOneMenu>
@@ -199,14 +198,16 @@
                         <div class="mb-3">
                             <h:outputLabel for="organizationName" value="Organization Name" class="form-label"/>
                             <h:inputText id="organizationName" value="#{productController.organization.name}"
-                                         required="true" class="form-control" requiredMessage="Organization Name is required"/>
+                                         required="true" class="form-control"
+                                         requiredMessage="Organization Name is required"/>
                             <h:message for="organizationName" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="annualTurnover" value="Annual Turnover" class="form-label"/>
                             <h:inputText id="annualTurnover" value="#{productController.organization.annualTurnover}"
-                                         required="true" class="form-control" requiredMessage="Annual Turnover is required"
+                                         required="true" class="form-control"
+                                         requiredMessage="Annual Turnover is required"
                                          converterMessage="Annual Turnover must be a valid number"/>
                             <h:message for="annualTurnover" class="text-danger"/>
                         </div>
@@ -214,7 +215,8 @@
                         <div class="mb-3">
                             <h:outputLabel for="employeesCount" value="Employees Count" class="form-label"/>
                             <h:inputText id="employeesCount" value="#{productController.organization.employeesCount}"
-                                         required="true" class="form-control" requiredMessage="Employees Count is required"
+                                         required="true" class="form-control"
+                                         requiredMessage="Employees Count is required"
                                          converterMessage="Employees Count must be an integer number"/>
                             <h:message for="employeesCount" class="text-danger"/>
                         </div>
@@ -226,9 +228,13 @@
                             <h:message for="fullName" class="text-danger"/>
                         </div>
 
+                        <!-- Сообщения об ошибках -->
+                        <h:messages globalOnly="true" styleClass="text-danger mb-3"/>
+
                         <div class="mb-3">
                             <h:outputLabel for="organizationType" value="Organization Type" class="form-label"/>
-                            <h:selectOneMenu id="organizationType" value="#{productController.organization.type}" class="form-select">
+                            <h:selectOneMenu id="organizationType" value="#{productController.organization.type}"
+                                             class="form-select">
                                 <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
                                                itemValue="#{orgType}" itemLabel="#{orgType}"/>
                             </h:selectOneMenu>
@@ -247,7 +253,8 @@
                         <!-- Подпись для чекбокса -->
                         <div class="col-6">
                             <h:outputLabel for="setIdAddressCheckbox" value="Set ID instead" class="form-label"/>
-                            <h:selectBooleanCheckbox id="setIdAddressCheckbox" value="#{productController.idModeAddress}"
+                            <h:selectBooleanCheckbox id="setIdAddressCheckbox"
+                                                     value="#{productController.idModeAddress}"
                                                      class="form-check-input"/>
                         </div>
 
@@ -256,8 +263,7 @@
                             <h:outputLabel for="addressId" value="Id" class="form-label"/>
 
                             <!-- Выпадающий список для ID -->
-                            <h:selectOneMenu id="addressId" value="#{productController.addressId}"
-                                             disabled="#{productController.idModeAddress}">
+                            <h:selectOneMenu id="addressId" value="#{productController.addressId}">
                                 <f:selectItems value="#{productController.existingAddressIds}" var="addressId"
                                                itemValue="#{addressId}" itemLabel="#{addressId}"/>
                             </h:selectOneMenu>
@@ -307,8 +313,7 @@
                             <h:outputLabel for="ownerId" value="Id" class="form-label"/>
 
                             <!-- Выпадающий список для ID -->
-                            <h:selectOneMenu id="ownerId" value="#{productController.ownerId}"
-                                             disabled="#{productController.idModeOwner}">
+                            <h:selectOneMenu id="ownerId" value="#{productController.ownerId}">
                                 <f:selectItems value="#{productController.existingOwnerIds}" var="ownerId"
                                                itemValue="#{ownerId}" itemLabel="#{ownerId}"/>
                             </h:selectOneMenu>
@@ -376,7 +381,8 @@
                         <!-- Подпись для чекбокса -->
                         <div class="col-6">
                             <h:outputLabel for="setIdLocationCheckbox" value="Set ID instead" class="form-label"/>
-                            <h:selectBooleanCheckbox id="setIdLocationCheckbox" value="#{productController.idModeLocation}"
+                            <h:selectBooleanCheckbox id="setIdLocationCheckbox"
+                                                     value="#{productController.idModeLocation}"
                                                      class="form-check-input"/>
                         </div>
 
@@ -385,8 +391,7 @@
                             <h:outputLabel for="locationId" value="Id" class="form-label"/>
 
                             <!-- Выпадающий список для ID -->
-                            <h:selectOneMenu id="locationId" value="#{productController.locationId}"
-                                             disabled="#{productController.idModeLocation}">
+                            <h:selectOneMenu id="locationId" value="#{productController.locationId}">
                                 <f:selectItems value="#{productController.existingLocationIds}" var="locationId"
                                                itemValue="#{locationId}" itemLabel="#{locationId}"/>
                             </h:selectOneMenu>
