@@ -43,17 +43,31 @@ public class ProductController implements Serializable {
 
     private Long idToDelete;
 
-    private boolean setIdMode;
+    private boolean idModeCoordinates;
+    private boolean idModeOrganization;
+    private boolean idModeAddress;
+    private boolean idModeOwner;
+    private boolean idModeLocation;
 
-    private boolean setIdCoordinates;
+
 
 
     public String saveProduct() {
-        coordinates.setId(coordinatesId);
-        organization.setId(organizationId);
-        owner.setId(ownerId);
-        address.setId(addressId);
-        location.setId(locationId);
+        if(idModeCoordinates){
+            coordinates.setId(coordinatesId);
+        }
+        if(idModeOrganization){
+            organization.setId(organizationId);
+        }
+        if(idModeOwner){
+            owner.setId(ownerId);
+        }
+        if(idModeAddress){
+            address.setId(addressId);
+        }
+        if(idModeLocation){
+            location.setId(locationId);
+        }
         productService.save(product, coordinates, organization, owner, address, location, userBean.getUser());
         return "main_page.xhtml?faces-redirect=true"; // Перенаправление на страницу с перечнем продуктов
     }
@@ -63,8 +77,6 @@ public class ProductController implements Serializable {
         // Загрузка продукта по ID
         product = productService.findProductById(id);
 
-        // Предположим, что ProductService возвращает объект с уже загруженными связями,
-        // если нужно, вы можете загружать связанные сущности вручную.
         if (product != null) {
             coordinates = product.getCoordinates(); // Обновляем атрибуты
             organization = product.getManufacturer();
@@ -99,13 +111,6 @@ public class ProductController implements Serializable {
         return "product-form.xhtml?faces-redirect=true";
     }
 
-    public void onCheckboxToggle() {
-        if (!setIdMode) {
-            // Если чекбокс снят, сбрасываем значение coordinatesId
-            coordinatesId = null;
-        }
-    }
-
     // Динамические списки для enum
     public UnitOfMeasure[] getUnitOfMeasureValues() {
         return UnitOfMeasure.values();
@@ -122,4 +127,18 @@ public class ProductController implements Serializable {
     public Country[] getCountryValues() {
         return Country.values();
     }
+
+    public Long[] getExistingCoordinatesIds(){ return productService.getCoordinatesIds();}
+
+    public Long[] getExistingOrganizationIds(){ return productService.getOrganizationIds();}
+
+    public Long[] getExistingAddressIds(){ return productService.getAddressIds();}
+
+    public Long[] getExistingOwnerIds(){ return productService.getPersonIds();}
+
+    public Long[] getExistingLocationIds(){ return productService.getLocationIds();}
+
+
+
+
 }

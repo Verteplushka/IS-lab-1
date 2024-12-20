@@ -95,7 +95,7 @@ public class ProductService {
             throw new IllegalArgumentException("Coordinates cannot be null");
         }
 
-        if(coordinates.getId() != null){
+        if (coordinates.getId() != null) {
             return entityManager.find(Coordinates.class, coordinates.getId());
         }
 
@@ -114,7 +114,7 @@ public class ProductService {
             throw new IllegalArgumentException("Address cannot be null");
         }
 
-        if(address.getId() != null){
+        if (address.getId() != null) {
             return entityManager.find(Address.class, address.getId());
         }
 
@@ -132,7 +132,7 @@ public class ProductService {
             return null; // Организация может быть null
         }
 
-        if(organization.getId() != null){
+        if (organization.getId() != null) {
             return entityManager.find(Organization.class, organization.getId());
         }
 
@@ -150,7 +150,7 @@ public class ProductService {
             throw new IllegalArgumentException("Location cannot be null");
         }
 
-        if(location.getId() != null){
+        if (location.getId() != null) {
             return entityManager.find(Location.class, location.getId());
         }
 
@@ -168,7 +168,7 @@ public class ProductService {
             throw new IllegalArgumentException("Person cannot be null");
         }
 
-        if(person.getId() != null){
+        if (person.getId() != null) {
             return entityManager.find(Person.class, person.getId());
         }
 
@@ -248,4 +248,43 @@ public class ProductService {
                 .executeUpdate();
     }
 
+    @Transactional
+    public Long[] getCoordinatesIds() {
+        List<Long> ids = entityManager.createQuery("SELECT c.id FROM Coordinates c", Long.class)
+                .getResultList();
+
+        return ids.toArray(new Long[0]);
+    }
+
+    @Transactional
+    public Long[] getOrganizationIds() {
+        List<Long> ids = entityManager.createQuery("SELECT o.id FROM Organization o", Long.class)
+                .getResultList();
+
+        return ids.toArray(new Long[0]);
+    }
+
+    @Transactional
+    public Long[] getAddressIds() {
+        List<Long> ids = entityManager.createQuery("SELECT a.id FROM Address a", Long.class)
+                .getResultList();
+
+        return ids.toArray(new Long[0]);
+    }
+
+    @Transactional
+    public Long[] getPersonIds() {
+        List<Long> ids = entityManager.createQuery("SELECT p.id FROM Person p", Long.class)
+                .getResultList();
+
+        return ids.toArray(new Long[0]);
+    }
+
+    @Transactional
+    public Long[] getLocationIds() {
+        List<Long> ids = entityManager.createQuery("SELECT l.id FROM Location l", Long.class)
+                .getResultList();
+
+        return ids.toArray(new Long[0]);
+    }
 }

@@ -117,89 +117,104 @@
 
                 <div class="card shadow p-4">
                     <!-- Блок Coordinates -->
-                    <h:outputText value="Product:Coordinates" styleClass="section-header"/>
+                    <h:outputText value="Product: Coordinates" styleClass="section-header"/>
                     <br/>
 
-                    <!-- Чекбокс для переключения режима -->
-                    <div class="form-check mb-3">
-                        <input type="checkbox" id="setIdCoordinatesCheckbox" class="form-check-input"
-                               onchange="toggleFieldsCoordinates()"/>
-                        <label for="setIdCoordinatesCheckbox" class="form-check-label">Set ID instead</label>
-                    </div>
-
-                    <!-- Поле для ввода ID -->
-                    <div class="mb-3" id="idCoordinatesFiled" style="display: none;">
-                        <h:outputLabel for="coordinatesId" value="Id" class="form-label"/>
-                        <h:inputText id="coordinatesId" value="#{productController.coordinatesId}"
-                                     class="form-control"/>
-                        <h:message for="coordinatesId" class="text-danger"/>
-                    </div>
-
-                    <div id="attributeCoordinatesFields">
-                        <br/>
-                        <div class="mb-3">
-                            <h:outputLabel for="coordinatesX" value="X Coordinate" class="form-label"/>
-                            <h:inputText id="coordinatesX" value="#{productController.coordinates.x}"
-                                         class="form-control" requiredMessage="X is required"
-                                         converterMessage="X must be an integer number"/>
-                            <h:message for="coordinatesX" class="text-danger"/>
+                    <div class="row">
+                        <!-- Подпись для чекбокса -->
+                        <div class="col-6">
+                            <h:outputLabel for="setIdCoordinatesCheckbox" value="Set ID instead" class="form-label"/>
+                            <h:selectBooleanCheckbox id="setIdCoordinatesCheckbox"
+                                                     value="#{productController.idModeCoordinates}"
+                                                     class="form-check-input"/>
                         </div>
 
-                        <div class="mb-3">
-                            <h:outputLabel for="coordinatesY" value="Y Coordinate" class="form-label"/>
-                            <h:inputText id="coordinatesY" value="#{productController.coordinates.y}"
-                                         class="form-control" requiredMessage="Y is required"
-                                         converterMessage="Y must be an valid number"/>
-                            <h:message for="coordinatesY" class="text-danger"/>
+                        <!-- Поле для выбора ID -->
+                        <div class="col-6">
+                            <h:outputLabel for="coordinatesId" value="Id" class="form-label"/>
+
+                            <!-- Выпадающий список -->
+                            <h:selectOneMenu id="coordinatesId" value="#{productController.coordinatesId}"
+                                             disabled="#{productController.idModeCoordinates}">
+                                <f:selectItems value="#{productController.existingCoordinatesIds}"/>
+                            </h:selectOneMenu>
+
+                            <h:message for="coordinatesId" class="text-danger"/>
                         </div>
+                    </div>
+                    <br/>
+
+                    <!-- Атрибуты объекта -->
+                    <div class="mb-3">
+                        <h:outputLabel for="coordinatesX" value="X Coordinate" class="form-label"/>
+                        <h:inputText id="coordinatesX" value="#{productController.coordinates.x}"
+                                     class="form-control" required="true" requiredMessage="X is required"
+                                     converterMessage="X must be an integer number"/>
+                        <h:message for="coordinatesX" class="text-danger"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="coordinatesY" value="Y Coordinate" class="form-label"/>
+                        <h:inputText id="coordinatesY" value="#{productController.coordinates.y}"
+                                     class="form-control" required="true" requiredMessage="Y is required"
+                                     converterMessage="Y must be a valid number"/>
+                        <h:message for="coordinatesY" class="text-danger"/>
                     </div>
                 </div>
 
+
                 <div class="card shadow p-4">
                     <!-- Блок Organization -->
-                    <h:outputText value="Product:Organization" styleClass="section-header"/>
+                    <h:outputText value="Product: Organization" styleClass="section-header"/>
                     <br/>
 
-                    <div class="form-check mb-3">
-                        <input type="checkbox" id="setIdOrganizationCheckbox" class="form-check-input"
-                               onchange="toggleFieldsOrganization()"/>
-                        <label for="setIdOrganizationCheckbox" class="form-check-label">Set ID instead</label>
-                    </div>
+                    <div class="row">
+                        <!-- Подпись для чекбокса -->
+                        <div class="col-6">
+                            <h:outputLabel for="setIdOrganizationCheckbox" value="Set ID instead" class="form-label"/>
+                            <h:selectBooleanCheckbox id="setIdOrganizationCheckbox" value="#{productController.idModeOrganization}"
+                                                     class="form-check-input"/>
+                        </div>
 
-                    <!-- Поле для ввода ID -->
-                    <div class="mb-3" id="idOrganizationFiled" style="display: none;">
-                        <h:outputLabel for="organizationId" value="Id" class="form-label"/>
-                        <h:inputText id="organizationId" value="#{productController.coordinatesId}"
-                                     class="form-control" requiredMessage="Organization ID is required"/>
-                        <h:message for="organizationId" class="text-danger"/>
+                        <!-- Поле для выбора ID организации -->
+                        <div class="col-6">
+                            <h:outputLabel for="organizationId" value="Id" class="form-label"/>
+
+                            <!-- Выпадающий список для ID -->
+                            <h:selectOneMenu id="organizationId" value="#{productController.organizationId}"
+                                             disabled="#{productController.idModeOrganization}">
+                                <f:selectItems value="#{productController.existingOrganizationIds}" var="orgId"
+                                               itemValue="#{orgId}" itemLabel="#{orgId}"/>
+                            </h:selectOneMenu>
+
+                            <h:message for="organizationId" class="text-danger"/>
+                        </div>
                     </div>
+                    <br/>
+
 
                     <div id="attributeOrganizationFields">
                         <br/>
+                        <!-- Поля для ввода данных об организации -->
                         <div class="mb-3">
                             <h:outputLabel for="organizationName" value="Organization Name" class="form-label"/>
                             <h:inputText id="organizationName" value="#{productController.organization.name}"
-                                         required="true" class="form-control"
-                                         requiredMessage="Organization Name is required"/>
+                                         required="true" class="form-control" requiredMessage="Organization Name is required"/>
                             <h:message for="organizationName" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="annualTurnover" value="Annual Turnover" class="form-label"/>
-                            <h:inputText id="annualTurnover"
-                                         value="#{productController.organization.annualTurnover}"
-                                         required="true" class="form-control"
-                                         requiredMessage="Annual Turnover is required"
+                            <h:inputText id="annualTurnover" value="#{productController.organization.annualTurnover}"
+                                         required="true" class="form-control" requiredMessage="Annual Turnover is required"
                                          converterMessage="Annual Turnover must be a valid number"/>
                             <h:message for="annualTurnover" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="employeesCount" value="Employees Count" class="form-label"/>
-                            <h:inputText id="employeesCount"
-                                         value="#{productController.organization.employeesCount}"
-                                         required="true" class="form-control"
-                                         requiredMessage="Employees Count is required"
+                            <h:inputText id="employeesCount" value="#{productController.organization.employeesCount}"
+                                         required="true" class="form-control" requiredMessage="Employees Count is required"
                                          converterMessage="Employees Count must be an integer number"/>
                             <h:message for="employeesCount" class="text-danger"/>
                         </div>
@@ -207,15 +222,13 @@
                         <div class="mb-3">
                             <h:outputLabel for="fullName" value="Full Name" class="form-label"/>
                             <h:inputText id="fullName" value="#{productController.organization.fullName}"
-                                         required="true" class="form-control"
-                                         requiredMessage="Full Name is required"/>
+                                         required="true" class="form-control" requiredMessage="Full Name is required"/>
                             <h:message for="fullName" class="text-danger"/>
                         </div>
 
                         <div class="mb-3">
                             <h:outputLabel for="organizationType" value="Organization Type" class="form-label"/>
-                            <h:selectOneMenu id="organizationType" value="#{productController.organization.type}"
-                                             class="form-select">
+                            <h:selectOneMenu id="organizationType" value="#{productController.organization.type}" class="form-select">
                                 <f:selectItems value="#{productController.organizationTypeValues}" var="orgType"
                                                itemValue="#{orgType}" itemLabel="#{orgType}"/>
                             </h:selectOneMenu>
@@ -224,27 +237,40 @@
                     </div>
                 </div>
 
+
                 <div class="card shadow p-4">
                     <!-- Блок Address -->
-                    <h:outputText value="Product:Organization:Address" styleClass="section-header"/>
+                    <h:outputText value="Product: Organization: Address" styleClass="section-header"/>
                     <br/>
 
-                    <div class="form-check mb-3">
-                        <input type="checkbox" id="setIdAddressCheckbox" class="form-check-input"
-                               onchange="toggleFieldsAddress()"/>
-                        <label for="setIdAddressCheckbox" class="form-check-label">Set ID instead</label>
-                    </div>
+                    <div class="row">
+                        <!-- Подпись для чекбокса -->
+                        <div class="col-6">
+                            <h:outputLabel for="setIdAddressCheckbox" value="Set ID instead" class="form-label"/>
+                            <h:selectBooleanCheckbox id="setIdAddressCheckbox" value="#{productController.idModeAddress}"
+                                                     class="form-check-input"/>
+                        </div>
 
-                    <!-- Поле для ввода ID -->
-                    <div class="mb-3" id="idAddressField" style="display: none;">
-                        <h:outputLabel for="addressId" value="Id" class="form-label"/>
-                        <h:inputText id="addressId" value="#{productController.addressId}"
-                                     class="form-control" requiredMessage="Address ID is required"/>
-                        <h:message for="addressId" class="text-danger"/>
+                        <!-- Поле для выбора ID адреса -->
+                        <div class="col-6">
+                            <h:outputLabel for="addressId" value="Id" class="form-label"/>
+
+                            <!-- Выпадающий список для ID -->
+                            <h:selectOneMenu id="addressId" value="#{productController.addressId}"
+                                             disabled="#{productController.idModeAddress}">
+                                <f:selectItems value="#{productController.existingAddressIds}" var="addressId"
+                                               itemValue="#{addressId}" itemLabel="#{addressId}"/>
+                            </h:selectOneMenu>
+
+                            <h:message for="addressId" class="text-danger"/>
+                        </div>
                     </div>
+                    <br/>
+
 
                     <div id="attributeAddressFields">
                         <br/>
+                        <!-- Поля для ввода данных об адресе -->
                         <div class="mb-3">
                             <h:outputLabel for="street" value="Street" class="form-label"/>
                             <h:inputText id="street" value="#{productController.address.street}" required="true"
@@ -261,25 +287,36 @@
                     </div>
                 </div>
 
+
                 <!-- Поля для ввода атрибутов -->
                 <div class="card shadow p-4">
                     <!-- Блок Person (Owner) -->
                     <h:outputText value="Product:Owner" styleClass="section-header"/>
                     <br/>
 
-                    <div class="form-check mb-3">
-                        <input type="checkbox" id="setIdOwnerCheckbox" class="form-check-input"
-                               onchange="toggleFieldsOwner()"/>
-                        <label for="setIdOwnerCheckbox" class="form-check-label">Set ID instead</label>
-                    </div>
+                    <div class="row">
+                        <!-- Подпись для чекбокса -->
+                        <div class="col-6">
+                            <h:outputLabel for="setIdOwnerCheckbox" value="Set ID instead" class="form-label"/>
+                            <h:selectBooleanCheckbox id="setIdOwnerCheckbox" value="#{productController.idModeOwner}"
+                                                     class="form-check-input"/>
+                        </div>
 
-                    <!-- Поле для ввода ID -->
-                    <div class="mb-3" id="idOwnerField" style="display: none;">
-                        <h:outputLabel for="ownerId" value="Id" class="form-label"/>
-                        <h:inputText id="ownerId" value="#{productController.ownerId}"
-                                     class="form-control" requiredMessage="Owner ID is required"/>
-                        <h:message for="ownerId" class="text-danger"/>
+                        <!-- Поле для выбора ID владельца -->
+                        <div class="col-6">
+                            <h:outputLabel for="ownerId" value="Id" class="form-label"/>
+
+                            <!-- Выпадающий список для ID -->
+                            <h:selectOneMenu id="ownerId" value="#{productController.ownerId}"
+                                             disabled="#{productController.idModeOwner}">
+                                <f:selectItems value="#{productController.existingOwnerIds}" var="ownerId"
+                                               itemValue="#{ownerId}" itemLabel="#{ownerId}"/>
+                            </h:selectOneMenu>
+
+                            <h:message for="ownerId" class="text-danger"/>
+                        </div>
                     </div>
+                    <br/>
 
                     <div id="attributeOwnerFields">
                         <br/>
@@ -335,19 +372,29 @@
                     <h:outputText value="Product:Owner:Location" styleClass="section-header"/>
                     <br/>
 
-                    <div class="form-check mb-3">
-                        <input type="checkbox" id="setIdLocationCheckbox" class="form-check-input"
-                               onchange="toggleFieldsLocation()"/>
-                        <label for="setIdLocationCheckbox" class="form-check-label">Set ID instead</label>
-                    </div>
+                    <div class="row">
+                        <!-- Подпись для чекбокса -->
+                        <div class="col-6">
+                            <h:outputLabel for="setIdLocationCheckbox" value="Set ID instead" class="form-label"/>
+                            <h:selectBooleanCheckbox id="setIdLocationCheckbox" value="#{productController.idModeLocation}"
+                                                     class="form-check-input"/>
+                        </div>
 
-                    <!-- Поле для ввода ID -->
-                    <div class="mb-3" id="idLocationField" style="display: none;">
-                        <h:outputLabel for="locationId" value="Id" class="form-label"/>
-                        <h:inputText id="locationId" value="#{productController.locationId}"
-                                     class="form-control" requiredMessage="Location ID is required"/>
-                        <h:message for="locationId" class="text-danger"/>
+                        <!-- Поле для выбора ID локации -->
+                        <div class="col-6">
+                            <h:outputLabel for="locationId" value="Id" class="form-label"/>
+
+                            <!-- Выпадающий список для ID -->
+                            <h:selectOneMenu id="locationId" value="#{productController.locationId}"
+                                             disabled="#{productController.idModeLocation}">
+                                <f:selectItems value="#{productController.existingLocationIds}" var="locationId"
+                                               itemValue="#{locationId}" itemLabel="#{locationId}"/>
+                            </h:selectOneMenu>
+
+                            <h:message for="locationId" class="text-danger"/>
+                        </div>
                     </div>
+                    <br/>
 
                     <div id="attributeLocationFields">
                         <br/>
