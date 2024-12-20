@@ -5,7 +5,9 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
 <h:head>
     <title>Product List</title>
     <!-- Bootstrap -->
@@ -83,6 +85,13 @@
             </header>
         </div>
 
+        <h:form id="filterForm">
+            <h:inputText id="nameFilter" value="#{productBean.nameFilter}" a:placeholder="Name filter"
+                         style="width: 6%; margin-left: 5%">
+                <f:ajax event="keyup" execute="@this" render="dataTableId"/>
+            </h:inputText>
+        </h:form>
+
         <div class="table shadow-sm">
             <!-- Data Table -->
             <p:dataTable id="dataTableId" value="#{productBean.products}" var="product" paginator="true" rows="10"
@@ -93,25 +102,20 @@
                 <p:column style="width: 2%">
                     <f:facet name="header">
                         Id
-                        <h:commandButton value="#{productBean.sortOrderId ? '↓' : '↑'}" action="#{productBean.sortById}">
+                        <h:commandButton value="#{productBean.sortOrderId ? '↓' : '↑'}"
+                                         action="#{productBean.sortById}">
                             <f:ajax execute="@form" render="dataTableId"/>
                         </h:commandButton>
                     </f:facet>
                     #{product.id}
                 </p:column>
 
-                <!--                        <p>-->
-                <!--                            <p:inputText value="#{productBean.nameFilter}" placeholder="Filter"-->
-                <!--                                         style="width: 100%">-->
-                <!--                                <p:ajax event="keyup" update="dataTableId nameColumn"/>-->
-                <!--                            </p:inputText>-->
-                <!--                        </p>-->
-
                 <p:column style="width: 4%">
                     <f:facet name="header">
                         Name
-                        <h:commandButton value="#{productBean.sortOrderName ? '↓' : '↑'}" action="#{productBean.sortByName}">
-                            <f:ajax execute="@form" render="dataTableId" />
+                        <h:commandButton value="#{productBean.sortOrderName ? '↓' : '↑'}"
+                                         action="#{productBean.sortByName}">
+                            <f:ajax execute="@form" render="dataTableId"/>
                         </h:commandButton>
                     </f:facet>
                     #{product.name}
@@ -124,8 +128,9 @@
                 <p:column style="width: 8%">
                     <f:facet name="header">
                         Creation Date
-                        <h:commandButton value="#{productBean.sortOrderDate ? '↓' : '↑'}" action="#{productBean.sortByDate}">
-                            <f:ajax execute="@form" render="dataTableId" />
+                        <h:commandButton value="#{productBean.sortOrderDate ? '↓' : '↑'}"
+                                         action="#{productBean.sortByDate}">
+                            <f:ajax execute="@form" render="dataTableId"/>
                         </h:commandButton>
                     </f:facet>
                     #{product.creationDate}
@@ -147,8 +152,9 @@
                 <p:column style="width: 4%">
                     <f:facet name="header">
                         Price
-                        <h:commandButton value="#{productBean.sortOrderPrice ? '↓' : '↑'}" action="#{productBean.sortByPrice}">
-                            <f:ajax execute="@form" render="dataTableId" />
+                        <h:commandButton value="#{productBean.sortOrderPrice ? '↓' : '↑'}"
+                                         action="#{productBean.sortByPrice}">
+                            <f:ajax execute="@form" render="dataTableId"/>
                         </h:commandButton>
                     </f:facet>
                     #{product.price}
@@ -157,8 +163,9 @@
                 <p:column style="width: 10%">
                     <f:facet name="header">
                         Manufacture Cost
-                        <h:commandButton value="#{productBean.sortOrderManufactureCost ? '↓' : '↑'}" action="#{productBean.sortByManufactureCost}">
-                            <f:ajax execute="@form" render="dataTableId" />
+                        <h:commandButton value="#{productBean.sortOrderManufactureCost ? '↓' : '↑'}"
+                                         action="#{productBean.sortByManufactureCost}">
+                            <f:ajax execute="@form" render="dataTableId"/>
                         </h:commandButton>
                     </f:facet>
                     #{product.manufactureCost}
@@ -167,8 +174,9 @@
                 <p:column style="width: 5%">
                     <f:facet name="header">
                         Rating
-                        <h:commandButton value="#{productBean.sortOrderRating ? '↓' : '↑'}" action="#{productBean.sortByRating}">
-                            <f:ajax execute="@form" render="dataTableId" />
+                        <h:commandButton value="#{productBean.sortOrderRating ? '↓' : '↑'}"
+                                         action="#{productBean.sortByRating}">
+                            <f:ajax execute="@form" render="dataTableId"/>
                         </h:commandButton>
                     </f:facet>
                     #{product.rating}

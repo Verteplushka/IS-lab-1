@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Named
@@ -54,10 +55,13 @@ public class ProductBean implements Serializable {
 
     private Comparator<Product> comparator = Comparator.comparing(Product::getId); // Метод сравнения по умолчанию
 
+    private static final Logger logger = Logger.getLogger(ProductBean.class.getName());
+
+
     public List<Product> getProducts() {
         return productService.findAll().stream()
-                .filter(product -> nameFilter == null || product.getName().equalsIgnoreCase(nameFilter)) // Фильтруем по имени, если nameFilter задан
-                .sorted(comparator) // Применяем текущий метод сравнения
+                .filter(product -> nameFilter == null || nameFilter.isEmpty() || product.getName().equalsIgnoreCase(nameFilter)) // Фильтруем по имени, если nameFilter задан
+                .sorted(comparator)
                 .collect(Collectors.toList());
     }
 
