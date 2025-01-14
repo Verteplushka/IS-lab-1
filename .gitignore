@@ -2,11 +2,12 @@ target/
 /.mvn/
 mvnw
 mvnw.cmd
-*Информационные системы*
-P3316 Колбасин ИС Лаб1*
-to fucking do list.txt
 !**/src/main/**/target/
 !**/src/test/**/target/
+*Информационные системы*
+*.pdf
+*.docx
+to fucking do list.txt
 
 ### IntelliJ IDEA ###
 .idea/
