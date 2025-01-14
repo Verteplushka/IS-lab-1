@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.LazyDataModel;
 import service.ProductService;
 
 import java.io.Serializable;
@@ -45,6 +46,7 @@ public class ProductBean implements Serializable {
     private boolean renderOwner;
 
     private String nameFilter;
+    private String partNumberFilter;
 
     private boolean sortOrderName = true;
     private boolean sortOrderDate = true;
@@ -57,10 +59,19 @@ public class ProductBean implements Serializable {
 
     private static final Logger logger = Logger.getLogger(ProductBean.class.getName());
 
+    private List<Product> products;
+
+
+//    @PostConstruct
+//    public void init() {
+//        products = productService.findAll();
+//    }
 
     public List<Product> getProducts() {
-        return productService.findAll().stream()
+        products = productService.findAll();
+        return products.stream()
                 .filter(product -> nameFilter == null || nameFilter.isEmpty() || product.getName().equalsIgnoreCase(nameFilter)) // Фильтруем по имени, если nameFilter задан
+                .filter(product -> partNumberFilter == null || partNumberFilter.isEmpty() || product.getPartNumber().equalsIgnoreCase(partNumberFilter))
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }

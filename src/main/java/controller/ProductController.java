@@ -145,6 +145,23 @@ public class ProductController implements Serializable {
         idModeOwner = false;
         idModeLocation = false;
 
+        coordinates.setX(0);
+        coordinates.setY(0);
+
+        address.setStreet(" ");
+        address.setZipCode(" ");
+
+        organization.setName(" ");
+        organization.setAnnualTurnover((float)1);
+        organization.setEmployeesCount(1);
+        organization.setFullName(" ");
+
+        owner.setName(" ");
+        owner.setWeight(1.0);
+
+        location.setY((float)0);
+        location.setName(" ");
+
         return "product-form.xhtml?faces-redirect=true";
     }
 

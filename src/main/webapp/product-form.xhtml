@@ -126,7 +126,7 @@
                         <!-- Подпись для чекбокса -->
                         <div class="col-6">
                             <h:outputLabel for="setIdCoordinatesCheckbox" value="Set ID instead" class="form-label"/>
-                            <h:selectBooleanCheckbox id="setIdCoordinatesCheckbox"
+                            <h:selectBooleanCheckbox  id="setIdCoordinatesCheckbox"
                                                      value="#{productController.idModeCoordinates}"
                                                      class="form-check-input"/>
                         </div>
@@ -149,16 +149,20 @@
                     <div class="mb-3">
                         <h:outputLabel for="coordinatesX" value="X Coordinate" class="form-label"/>
                         <h:inputText id="coordinatesX" value="#{productController.coordinates.x}"
-                                     class="form-control" required="true" requiredMessage="X is required"
-                                     converterMessage="X must be an integer number"/>
+                                     class="form-control"
+                                     required="true" requiredMessage="X is required"
+                                     converterMessage="X must be an integer number">
+                        </h:inputText>
                         <h:message for="coordinatesX" class="text-danger"/>
                     </div>
 
                     <div class="mb-3">
                         <h:outputLabel for="coordinatesY" value="Y Coordinate" class="form-label"/>
                         <h:inputText id="coordinatesY" value="#{productController.coordinates.y}"
-                                     class="form-control" required="true" requiredMessage="Y is required"
-                                     converterMessage="Y must be a valid number"/>
+                                     class="form-control"
+                                     required="true" requiredMessage="Y is required"
+                                     converterMessage="Y must be a valid number">
+                        </h:inputText>
                         <h:message for="coordinatesY" class="text-danger"/>
                     </div>
                 </div>
