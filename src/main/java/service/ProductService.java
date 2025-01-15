@@ -2,10 +2,9 @@ package service;
 
 import entity.*;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import util.JPAFactory;
 import util.WebSocketEndpoint;
@@ -14,8 +13,9 @@ import java.util.List;
 
 @RequestScoped
 public class ProductService {
-    private final EntityManager entityManager;
-
+    @Inject
+    @PersistenceContext
+    private EntityManager entityManager;
     @Inject
     ChangeLogService changeLogService;
 
@@ -33,7 +33,6 @@ public class ProductService {
 
     @Transactional
     public void save(Product product, Coordinates inputCoordinates, Organization inputOrganization, Person inputPerson, Address inputAddress, Location inputLocation, User user) {
-        // Сохранение данных
         Coordinates coordinates = findOrCreateCoordinates(inputCoordinates);
         product.setCoordinates(coordinates);
 
@@ -51,15 +50,43 @@ public class ProductService {
 
         product.setUser(user);
 
+        saveProduct(product);
+    }
+
+    @Transactional(rollbackOn = RuntimeException.class)
+    public void saveAll(List<Product> products, User user) {
+        for (Product product : products) {
+            Coordinates coordinates = findOrCreateCoordinates(product.getCoordinates());
+            product.setCoordinates(coordinates);
+
+            Address officialAddress = findOrCreateAddress(product.getManufacturer().getOfficialAddress());
+            product.getManufacturer().setOfficialAddress(officialAddress);
+
+            Organization manufacturer = findOrCreateOrganization(product.getManufacturer());
+            product.setManufacturer(manufacturer);
+
+            Location location = findOrCreateLocation(product.getOwner().getLocation());
+            product.getOwner().setLocation(location);
+
+            Person owner = findOrCreatePerson(product.getOwner());
+            product.setOwner(owner);
+
+            product.setUser(user);
+
+            saveProduct(product);
+        }
+    }
+
+    private void saveProduct(Product product) {
+        checkOrganizationIdAndPartNumber(product);
         // Сохранение продукта
         if (product.getId() == null) {
             entityManager.persist(product);
-            changeLogService.logProductChange(product.getId(), "SAVE", user.getId());
+            changeLogService.logProductChange(product.getId(), "SAVE", product.getUser().getId());
         } else {
             entityManager.merge(product);
-            changeLogService.logProductChange(product.getId(), "UPDATE", user.getId());
+            changeLogService.logProductChange(product.getId(), "UPDATE", product.getUser().getId());
         }
-
         // Отправка обновлений через WebSocket
         WebSocketEndpoint.sendUpdateToAllClients("Product added/updated: " + product.getName());
     }
@@ -345,7 +372,7 @@ public class ProductService {
 
         if (organization.getOfficialAddress().getId() != null) {
             existing = entityManager.find(Address.class, organization.getOfficialAddress().getId());
-        } else{
+        } else {
             existing = entityManager.createQuery("SELECT a FROM Address a WHERE a.street = :street " +
                             "AND a.zipCode = :zipCode", Address.class)
                     .setParameter("street", organization.getOfficialAddress().getStreet())
@@ -353,7 +380,7 @@ public class ProductService {
                     .getResultStream().findFirst().orElse(null);
         }
 
-        if(existing == null){
+        if (existing == null) {
             return null;
         }
 
@@ -374,4 +401,20 @@ public class ProductService {
 
 
     }
+
+    private void checkOrganizationIdAndPartNumber(Product product) {
+        boolean existsInDB = entityManager.createQuery(
+                        "SELECT COUNT(p) > 0 FROM Product p WHERE p.manufacturer.id = :organizationId AND p.partNumber = :partNumber", Boolean.class)
+                .setParameter("organizationId", product.getManufacturer().getId())
+                .setParameter("partNumber", product.getPartNumber())
+                .getSingleResult();
+
+        if (existsInDB) {
+            throw new RuntimeException("Pair organizationId: " + product.getManufacturer().getId() +
+                    " and partNumber: " + product.getPartNumber() + " already exists");
+        }
+    }
+
+
+
 }

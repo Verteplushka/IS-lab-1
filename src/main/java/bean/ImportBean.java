@@ -14,7 +14,6 @@ import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 import service.ImportHistoryService;
-import service.ProductFileService;
 import service.ProductService;
 import util.CsvParser;
 
@@ -30,7 +29,7 @@ public class ImportBean implements Serializable {
     @Inject
     private ImportHistoryService importHistoryService;
     @Inject
-    private ProductFileService productFileService;
+    private ProductService productService;
     @Inject
     private UserBean userBean;
 
@@ -81,7 +80,9 @@ public class ImportBean implements Serializable {
 
             System.out.println(products.size());
 
-            productFileService.save(products, userBean.getUser());
+            productService.saveAll(products, userBean.getUser());
+
+            importHistoryService.save(new ImportHistory(OperationStatus.SUCCESS, userBean.getUser().getLogin(), products.size()));
 
             // Вывод информации о результатах парсинга
             System.out.println("Parsed Products Count: " + products.size());
@@ -103,7 +104,7 @@ public class ImportBean implements Serializable {
         } catch (Exception e) {
             importHistoryService.save(new ImportHistory(OperationStatus.FAILED, userBean.getUser().getLogin(), null));
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + e.getMessage(), "2Error occurred: " + e.getMessage()));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + e.getMessage(), "Error occurred: " + e.getMessage()));
             System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
         }
 
