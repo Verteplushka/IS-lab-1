@@ -1,6 +1,7 @@
 package bean;
 
 import entity.*;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 import service.ImportHistoryService;
+import service.ProductFileService;
 import service.ProductService;
 import util.CsvParser;
 
@@ -20,7 +22,7 @@ import java.io.*;
 import java.util.List;
 
 @Named
-@SessionScoped
+@RequestScoped
 @Getter
 @Setter
 public class ImportBean implements Serializable {
@@ -28,7 +30,7 @@ public class ImportBean implements Serializable {
     @Inject
     private ImportHistoryService importHistoryService;
     @Inject
-    private ProductService productService;
+    private ProductFileService productFileService;
     @Inject
     private UserBean userBean;
 
@@ -79,13 +81,7 @@ public class ImportBean implements Serializable {
 
             System.out.println(products.size());
 
-            for (Product product : products) {
-                product.setUser(userBean.getUser());
-                productService.save(product, product.getCoordinates(), product.getManufacturer(), product.getOwner(), product.getManufacturer().getOfficialAddress(), product.getOwner().getLocation(), userBean.getUser());
-            }
-
-            importHistoryService.save(new ImportHistory(OperationStatus.SUCCESS, userBean.getUser().getLogin(), products.size()));
-
+            productFileService.save(products, userBean.getUser());
 
             // Вывод информации о результатах парсинга
             System.out.println("Parsed Products Count: " + products.size());
@@ -108,7 +104,7 @@ public class ImportBean implements Serializable {
             importHistoryService.save(new ImportHistory(OperationStatus.FAILED, userBean.getUser().getLogin(), null));
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + e.getMessage(), "2Error occurred: " + e.getMessage()));
-            System.out.println("Error occurred: " + e.getMessage()  + " class: " + e.getClass());
+            System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
         }
 
     }

@@ -157,7 +157,7 @@
                         <h:commandLink value="#{product.manufacturer.id}" action="#{productBean.loadManufacturer}">
                             <f:setPropertyActionListener target="#{productBean.manufacturerId}"
                                                          value="#{product.manufacturer.id}"/>
-                            <f:ajax execute="@form" render="manufactureTable addressTable"
+                            <p:ajax execute="@form" render="manufactureTable addressTable"
                                     update="manufactureTable addressTable"/>
                         </h:commandLink>
                     </p:column>

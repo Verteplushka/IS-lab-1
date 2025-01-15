@@ -64,11 +64,6 @@ public class ProductService {
         WebSocketEndpoint.sendUpdateToAllClients("Product added/updated: " + product.getName());
     }
 
-    public void saveProduct(Product product, User user) {
-        entityManager.persist(product);
-        changeLogService.logProductChange(product.getId(), "SAVE", user.getId());
-    }
-
     @Transactional
     public void update(Product product) {
         Product existingProduct = findById(product.getId());
@@ -97,6 +92,7 @@ public class ProductService {
         return entityManager.find(Product.class, id);
     }
 
+    @Transactional
     private Coordinates findOrCreateCoordinates(Coordinates coordinates) {
         if (coordinates == null) {
             throw new IllegalArgumentException("Coordinates cannot be null");
@@ -120,6 +116,7 @@ public class ProductService {
         return coordinates;
     }
 
+    @Transactional
     private Address findOrCreateAddress(Address address) {
         if (address == null) {
             throw new IllegalArgumentException("Address cannot be null");
@@ -142,6 +139,7 @@ public class ProductService {
         return address;
     }
 
+    @Transactional
     private Organization findOrCreateOrganization(Organization organization) {
         if (organization == null) {
             return null; // Организация может быть null
@@ -170,6 +168,7 @@ public class ProductService {
         return organization;
     }
 
+    @Transactional
     private Location findOrCreateLocation(Location location) {
         if (location == null) {
             throw new IllegalArgumentException("Location cannot be null");
@@ -194,6 +193,7 @@ public class ProductService {
         return location;
     }
 
+    @Transactional
     private Person findOrCreatePerson(Person person) {
         if (person == null) {
             throw new IllegalArgumentException("Person cannot be null");
