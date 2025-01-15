@@ -19,6 +19,7 @@ import util.CsvParser;
 
 import java.io.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Named
 @RequestScoped
@@ -33,19 +34,12 @@ public class ImportBean implements Serializable {
     @Inject
     private UserBean userBean;
 
-    private DataModel<ImportHistory> importHistory;
-    private String username;
-
-    public List<ImportHistory> getImportHistory() {
-        List<ImportHistory> history = importHistoryService.getImportHistoryForUser(username);  // Получаем историю для пользователя
-        importHistory = new ListDataModel<>(history);
-        return history;
-    }
 
     public List<ImportHistory> getAllImportHistory() {
-        List<ImportHistory> history = importHistoryService.getAllImportHistory();  // Получаем всю историю для админа
-        importHistory = new ListDataModel<>(history);
-        return history;
+        List<ImportHistory> history = importHistoryService.getAllImportHistory();
+        return history.stream()
+                .filter(each_history -> each_history.getUser().equals(userBean.getUser().getLogin()))
+                .collect(Collectors.toList());
     }
 
     private Part file;
