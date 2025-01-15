@@ -87,3 +87,12 @@ CREATE TABLE change_log (
                             table_name VARCHAR(255) NOT NULL,     -- Имя таблицы, где произошли изменения
                             user_id BIGINT NOT NULL               -- ID пользователя, сделавшего изменение
 );
+
+CREATE TABLE import_history (
+                                id SERIAL PRIMARY KEY,
+                                status VARCHAR(255) NOT NULL,
+                                users_is VARCHAR(255) NOT NULL,
+                                objects_added INT,
+                                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+

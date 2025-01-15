@@ -17,6 +17,7 @@
 <h:body class="bg-light">
     <div class="mt-4">
 
+        <!-- Header Section -->
         <div class="container">
             <header class="d-flex justify-content-between align-items-center mb-4">
                 <h:link outcome="main_page.xhtml" class="text-dark">
@@ -24,9 +25,11 @@
                 </h:link>
                 <!-- Centered Buttons -->
                 <div class="d-flex justify-content-center flex-grow-1">
+                    <h:form styleClass="mx-2" rendered="#{userBean.user != null}">
+                        <h:button value="Import file" outcome="import-file.xhtml" styleClass="btn btn-dark btn-sm"/>
+                    </h:form>
                     <h:form styleClass="mx-2">
-                        <h:button value="Do operations" outcome="operations.xhtml"
-                                  styleClass="btn btn-dark btn-sm"/>
+                        <h:button value="Do operations" outcome="operations.xhtml" styleClass="btn btn-dark btn-sm"/>
                     </h:form>
                     <h:form styleClass="mx-2">
                         <h:commandButton value="Add Product"

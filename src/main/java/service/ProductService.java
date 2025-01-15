@@ -64,6 +64,11 @@ public class ProductService {
         WebSocketEndpoint.sendUpdateToAllClients("Product added/updated: " + product.getName());
     }
 
+    public void saveProduct(Product product, User user) {
+        entityManager.persist(product);
+        changeLogService.logProductChange(product.getId(), "SAVE", user.getId());
+    }
+
     @Transactional
     public void update(Product product) {
         Product existingProduct = findById(product.getId());
