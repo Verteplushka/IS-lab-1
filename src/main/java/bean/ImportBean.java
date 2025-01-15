@@ -2,11 +2,14 @@ package bean;
 
 import entity.*;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.model.DataModel;
 import jakarta.faces.model.ListDataModel;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 import service.ImportHistoryService;
@@ -81,6 +84,9 @@ public class ImportBean implements Serializable {
                 productService.save(product, product.getCoordinates(), product.getManufacturer(), product.getOwner(), product.getManufacturer().getOfficialAddress(), product.getOwner().getLocation(), userBean.getUser());
             }
 
+            importHistoryService.save(new ImportHistory(OperationStatus.SUCCESS, userBean.getUser().getLogin(), products.size()));
+
+
             // Вывод информации о результатах парсинга
             System.out.println("Parsed Products Count: " + products.size());
             System.out.println("First Product Details:");
@@ -99,11 +105,13 @@ public class ImportBean implements Serializable {
                 System.out.println("No products parsed.");
             }
         } catch (Exception e) {
-            System.out.println("Error occurred: " + e.getMessage());
+            importHistoryService.save(new ImportHistory(OperationStatus.FAILED, userBean.getUser().getLogin(), null));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + e.getMessage(), "2Error occurred: " + e.getMessage()));
+            System.out.println("Error occurred: " + e.getMessage()  + " class: " + e.getClass());
         }
+
     }
-
-
 
 }
 

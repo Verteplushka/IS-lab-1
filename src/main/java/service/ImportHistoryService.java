@@ -2,6 +2,7 @@ package service;
 
 import entity.ImportHistory;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ public class ImportHistoryService implements Serializable {
     private EntityManager entityManager;
 
     // Сохранение записи в историю импорта
+    @Transactional
     public void save(ImportHistory history) {
         entityManager.persist(history);
     }

@@ -73,8 +73,10 @@
             <br/>
 
             <h:form enctype="multipart/form-data">
-                <h:inputFile value="#{importBean.file}" />
+                <h:inputFile id="inputFile" value="#{importBean.file}" />
                 <h:commandButton value="Import" action="#{importBean.importProducts}" />
+                <br/>
+                <h:messages id="messages" styleClass="message" class="text-danger"/>
             </h:form>
 
             <br/>
@@ -82,36 +84,29 @@
             <!-- Table of Requests -->
             <div class="table-container shadow-sm">
                 <h:form>
-                    <!-- Фильтрация по имени пользователя (для администратора) -->
-                    <h:panelGroup>
-                        <h:outputLabel for="username">Username: </h:outputLabel>
-                        <h:inputText id="username" value="#{importBean.username}" />
-                        <h:commandButton value="Show History" action="#{importBean.getImportHistory}" />
-                    </h:panelGroup>
-
                     <!-- Таблица с историей импорта -->
-                    <h:dataTable value="#{importBean.allImportHistory}" var="history" border="1">
-                        <h:column>
+                    <p:dataTable value="#{importBean.allImportHistory}" var="history" border="1">
+                        <p:column>
                             <f:facet name="header">ID</f:facet>
                             #{history.id}
-                        </h:column>
-                        <h:column>
+                        </p:column>
+                        <p:column>
                             <f:facet name="header">Status</f:facet>
                             #{history.status}
-                        </h:column>
-                        <h:column>
+                        </p:column>
+                        <p:column>
                             <f:facet name="header">User</f:facet>
                             #{history.user}
-                        </h:column>
-                        <h:column>
+                        </p:column>
+                        <p:column>
                             <f:facet name="header">Objects Added</f:facet>
                             #{history.objectsAdded}
-                        </h:column>
-                        <h:column>
+                        </p:column>
+                        <p:column>
                             <f:facet name="header">Timestamp</f:facet>
                             #{history.timestamp}
-                        </h:column>
-                    </h:dataTable>
+                        </p:column>
+                    </p:dataTable>
                 </h:form>
 
             </div>
