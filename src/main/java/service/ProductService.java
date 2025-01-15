@@ -79,6 +79,8 @@ public class ProductService {
 
     private void saveProduct(Product product) {
         checkOrganizationIdAndPartNumber(product);
+        checkUniqueCoordinatesAndName(product.getOwner().getLocation());
+        checkUniqueProductNamePriceAndManufacturer(product);
         // Сохранение продукта
         if (product.getId() == null) {
             entityManager.persist(product);
@@ -415,6 +417,38 @@ public class ProductService {
         }
     }
 
+    public void checkUniqueCoordinatesAndName(Location location) {
+        String query = "SELECT l FROM Location l WHERE l.x = :x AND l.y = :y AND l.z = :z";
+        Location existingLocation = entityManager.createQuery(query, Location.class)
+                .setParameter("x", location.getX())
+                .setParameter("y", location.getY())
+                .setParameter("z", location.getZ())
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        if (existingLocation != null && !existingLocation.getName().equals(location.getName())) {
+            throw new RuntimeException("Location with coordinates (" + location.getX() + ", " + location.getY() + ", " + location.getZ() + ") already exists, but the names do not match");
+        }
+    }
+
+    public void checkUniqueProductNamePriceAndManufacturer(Product product) {
+        String query = "SELECT p FROM Product p WHERE p.name = :name AND p.price = :price AND p.manufacturer.id = :manufacturerId";
+        Product existingProduct = entityManager.createQuery(query, Product.class)
+                .setParameter("name", product.getName())
+                .setParameter("price", product.getPrice())
+                .setParameter("manufacturerId", product.getManufacturer().getId())
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        if (existingProduct != null && !existingProduct.getId().equals(product.getId())) {
+            throw new RuntimeException("Product with name '" + product.getName() + "', price " + product.getPrice() +
+                    " and manufacturer id " + product.getManufacturer().getId() + " already exists, but it is not the same product");
+        }
+    }
 
 
 }
