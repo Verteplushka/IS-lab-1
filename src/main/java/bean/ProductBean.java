@@ -62,18 +62,54 @@ public class ProductBean implements Serializable {
     private List<Product> products;
 
 
-//    @PostConstruct
-//    public void init() {
-//        products = productService.findAll();
-//    }
+    private List<Product> paginatedProducts; // Продукты на текущей странице
+    private int currentPage = 1; // Текущая страница
+    private int rowsPerPage = 5; // Количество строк на страницу
+    private int totalRows; // Общее количество строк
 
-    public List<Product> getProducts() {
-        products = productService.findAll();
-        return products.stream()
-                .filter(product -> nameFilter == null || nameFilter.isEmpty() || product.getName().equalsIgnoreCase(nameFilter)) // Фильтруем по имени, если nameFilter задан
+    public List<Product> getPaginatedProducts() {
+        loadProducts(); // Загружаем свежие данные из БД
+        return paginatedProducts;
+    }
+
+
+    @PostConstruct
+    public void init() {
+        loadProducts();
+    }
+
+    public void loadProducts() {
+        products = productService.findAll().stream()
+                .filter(product -> nameFilter == null || nameFilter.isEmpty() || product.getName().equalsIgnoreCase(nameFilter))
                 .filter(product -> partNumberFilter == null || partNumberFilter.isEmpty() || product.getPartNumber().equalsIgnoreCase(partNumberFilter))
                 .sorted(comparator)
                 .collect(Collectors.toList());
+        totalRows = products.size();
+        updatePaginatedProducts();
+    }
+
+    private void updatePaginatedProducts() {
+        int fromIndex = (currentPage - 1) * rowsPerPage;
+        int toIndex = Math.min(fromIndex + rowsPerPage, totalRows);
+        paginatedProducts = products.subList(fromIndex, toIndex);
+    }
+
+    public void nextPage() {
+        if (currentPage < getTotalPages()) {
+            currentPage++;
+            updatePaginatedProducts();
+        }
+    }
+
+    public void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updatePaginatedProducts();
+        }
+    }
+
+    public int getTotalPages() {
+        return (int) Math.ceil((double) totalRows / rowsPerPage);
     }
 
     private void resetSortOrders(String currentSort) {
@@ -103,6 +139,7 @@ public class ProductBean implements Serializable {
                 ? Comparator.comparing(Product::getName)
                 : Comparator.comparing(Product::getName).reversed();
         sortOrderName = !sortOrderName; // Переключаем порядок сортировки
+        loadProducts();
     }
 
     public void sortByDate() {
@@ -111,6 +148,7 @@ public class ProductBean implements Serializable {
                 ? Comparator.comparing(Product::getCreationDate)
                 : Comparator.comparing(Product::getCreationDate).reversed();
         sortOrderDate = !sortOrderDate;
+        loadProducts();
     }
 
     public void sortByPrice() {
@@ -119,6 +157,7 @@ public class ProductBean implements Serializable {
                 ? Comparator.comparing(Product::getPrice)
                 : Comparator.comparing(Product::getPrice).reversed();
         sortOrderPrice = !sortOrderPrice;
+        loadProducts();
     }
 
     public void sortByManufactureCost() {
@@ -127,6 +166,7 @@ public class ProductBean implements Serializable {
                 ? Comparator.comparing(Product::getManufactureCost)
                 : Comparator.comparing(Product::getManufactureCost).reversed();
         sortOrderManufactureCost = !sortOrderManufactureCost;
+        loadProducts();
     }
 
     public void sortByRating() {
@@ -135,6 +175,7 @@ public class ProductBean implements Serializable {
                 ? Comparator.comparing(Product::getRating)
                 : Comparator.comparing(Product::getRating).reversed();
         sortOrderRating = !sortOrderRating;
+        loadProducts();
     }
 
     public void sortById() {
@@ -143,15 +184,7 @@ public class ProductBean implements Serializable {
                 ? Comparator.comparing(Product::getId)
                 : Comparator.comparing(Product::getId).reversed();
         sortOrderId = !sortOrderId;
-    }
-
-    public void save() {
-//        productService.save(product);
-        product = new Product(); // Сброс объекта после сохранения
-    }
-
-    public void delete() {
-        productService.delete(idToDelete, userBean.getUser());
+        loadProducts();
     }
 
     public void loadManufacturer() {

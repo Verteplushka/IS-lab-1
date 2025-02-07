@@ -106,10 +106,8 @@
         <div class="table shadow-sm">
             <!-- Data Table -->
             <h:form>
-                <p:dataTable id="dataTableId" value="#{productBean.products}" var="product" lazy="true" paginator="true"
-                             rows="5"
-                             rowsPerPageTemplate="5,10,15" editable="true" styleClass="table table-bordered table-hover"
-                             style="table-layout: auto" paginatorPosition="bottom">
+                <p:dataTable id="dataTableId" value="#{productBean.paginatedProducts}" var="product"
+                             styleClass="table table-bordered table-hover" style="table-layout: auto">
 
                     <!-- Колонки с атрибутами сущности Product -->
                     <p:column style="width: 2%">
@@ -154,7 +152,7 @@
                     </p:column>
 
                     <p:column style="width: 7%" headerText="Manufacturer ID">
-                        <h:commandLink value="#{product.manufacturer.id}" action="#{productBean.loadManufacturer}">
+                        <h:commandLink value="#{product.manufacturer.id}" action="#{productBean.loadManufacturer()}">
                             <f:setPropertyActionListener target="#{productBean.manufacturerId}"
                                                          value="#{product.manufacturer.id}"/>
                             <p:ajax execute="@form" render="manufactureTable addressTable"
@@ -213,7 +211,6 @@
 
                     <!-- Actions -->
                     <p:column headerText="Actions">
-                        <h:form>
                             <!-- Удаление доступно только для владельца продукта -->
                             <h:commandButton value="Delete" action="#{productBean.delete}"
                                              styleClass="btn btn-danger btn-sm"
@@ -229,12 +226,34 @@
                                                              value="#{product.id}"/>
                             </h:commandButton>
 
-                        </h:form>
                     </p:column>
                 </p:dataTable>
+
+
+                <div class="d-flex justify-content-center mt-2">
+                    <h:panelGroup id="paginationControls" class="text-center">
+                        <h:commandButton value="Previous" action="#{productBean.previousPage}"
+                                         disabled="#{productBean.currentPage == 1}"
+                                         styleClass="btn btn-dark btn-sm mx-2">
+                            <f:ajax execute="@this" render="dataTableId paginationInfo paginationId paginationControls"/>
+                        </h:commandButton>
+
+                        <span id="paginationInfo" class="mx-2">Page #{productBean.currentPage} of #{productBean.totalPages}</span>
+
+                        <h:commandButton value="Next" action="#{productBean.nextPage}"
+                                         disabled="#{productBean.currentPage == productBean.totalPages}"
+                                         styleClass="btn btn-dark btn-sm mx-2">
+                            <f:ajax execute="@this" render="dataTableId paginationInfo paginationId paginationControls"/>
+                        </h:commandButton>
+                    </h:panelGroup>
+                </div>
+
+
             </h:form>
 
         </div>
+
+
 
         <div class="container">
 
