@@ -187,6 +187,15 @@ public class ProductBean implements Serializable {
         loadProducts();
     }
 
+    public void save() {
+//        productService.save(product);
+        product = new Product(); // Сброс объекта после сохранения
+    }
+
+    public void delete() {
+        productService.delete(idToDelete, userBean.getUser());
+    }
+
     public void loadManufacturer() {
         renderManufacture = true;
         renderOwner = false;
