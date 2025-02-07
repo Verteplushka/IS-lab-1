@@ -24,7 +24,7 @@ public class Product {
     private String name;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Coordinates coordinates;
 
     @NotNull
@@ -40,7 +40,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private UnitOfMeasure unitOfMeasure;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Organization manufacturer;
 
     @NotNull
@@ -59,7 +59,7 @@ public class Product {
     private String partNumber;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Person owner;
 
     @NotNull
