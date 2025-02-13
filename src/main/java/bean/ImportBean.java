@@ -27,10 +27,11 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class ImportBean implements Serializable {
-
+    @Inject
+    private ErrorBean errorBean;
     @Inject
     private ImportHistoryService importHistoryService;
-    @EJB
+    @Inject
     private ProductService productService;
     @Inject
     private UserBean userBean;
@@ -108,6 +109,8 @@ public class ImportBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + errorMessage, "Error occurred: " + errorMessage));
             System.out.println("Error occurred: " + errorMessage + " class: " + e.getClass());
+
+            errorBean.sendError();
         }
 
     }

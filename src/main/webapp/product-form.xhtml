@@ -64,7 +64,7 @@
             </header>
         </div>
 
-        <h:form>
+        <h:form id="productForm">
             <div class="container containerd-flex justify-content-between align-items-center mb-4" style="width: 500px">
 
                 <div class="card shadow p-4">
@@ -450,7 +450,7 @@
                 </div>
 
 
-                <h:commandButton value="Save Product" action="#{productController.saveProduct}"
+                <h:commandButton id="saveButton" value="Save Product" action="#{productController.saveProduct}"
                                  class="btn btn-dark"/>
 
 

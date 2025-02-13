@@ -1,5 +1,6 @@
 package service;
 
+import bean.ErrorBean;
 import entity.*;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
@@ -15,8 +16,10 @@ import jakarta.ejb.Stateless;
 import java.io.Serializable;
 import java.util.List;
 
-@Stateless
+@RequestScoped
 public class ProductService implements Serializable {
+    @Inject
+    private ErrorBean errorBean;
     @Inject
     @PersistenceContext
     private EntityManager entityManager;
@@ -35,7 +38,7 @@ public class ProductService implements Serializable {
         return entityManager.find(Product.class, id);
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional
     public void save(Product product, Coordinates inputCoordinates, Organization inputOrganization, Person inputPerson, Address inputAddress, Location inputLocation, User user) {
         Coordinates coordinates = findOrCreateCoordinates(inputCoordinates);
         product.setCoordinates(coordinates);
@@ -57,7 +60,7 @@ public class ProductService implements Serializable {
         saveProduct(product);
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional
     public void saveAll(List<Product> products, User user) {
         for (Product product : products) {
             Coordinates coordinates = findOrCreateCoordinates(product.getCoordinates());
@@ -98,7 +101,7 @@ public class ProductService implements Serializable {
         WebSocketEndpoint.sendUpdateToAllClients("Product added/updated: " + product.getName());
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional
     public void update(Product product) {
         Product existingProduct = findById(product.getId());
         if (existingProduct != null) {
@@ -110,11 +113,16 @@ public class ProductService implements Serializable {
         }
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional
     public void delete(Long id, User user) {
         Product product = findById(id);
         if (product != null) {
+            System.out.println(id);
+            System.out.println(product.getName());
             entityManager.remove(product);
+        } else{
+            errorBean.sendError();
+            return;
         }
 
         WebSocketEndpoint.sendUpdateToAllClients("Product deleted: " + product.getName());

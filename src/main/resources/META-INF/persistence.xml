@@ -15,8 +15,8 @@
             <!-- Параметры подключения -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/>
-            <property name="javax.persistence.jdbc.user" value="admin"/>
-            <property name="javax.persistence.jdbc.password" value="admin"/>
+            <property name="javax.persistence.jdbc.user" value="s367300"/>
+            <property name="javax.persistence.jdbc.password" value="megyePWEPkK7nYIG"/>
 
             <!-- Hibernate настройки -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>

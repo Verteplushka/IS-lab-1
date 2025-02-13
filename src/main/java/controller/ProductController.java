@@ -1,5 +1,6 @@
 package controller;
 
+import bean.ErrorBean;
 import bean.ProductBean;
 import bean.UserBean;
 import entity.*;
@@ -22,7 +23,8 @@ import java.util.logging.Logger;
 @Getter
 @Setter
 public class ProductController implements Serializable {
-
+    @Inject
+    private ErrorBean errorBean;
     @Inject
     private ProductService productService;
     @Inject
@@ -94,6 +96,9 @@ public class ProductController implements Serializable {
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
+
+            errorBean.sendError();
+
             return null;
         }
     }

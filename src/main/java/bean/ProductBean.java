@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class ProductBean implements Serializable {
-    @EJB
+    @Inject
     private ProductService productService;
 
     @Inject
@@ -194,6 +194,7 @@ public class ProductBean implements Serializable {
     }
 
     public void delete() {
+        System.out.println("delete");
         productService.delete(idToDelete, userBean.getUser());
     }
 
