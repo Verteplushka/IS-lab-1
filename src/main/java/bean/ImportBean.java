@@ -37,6 +37,9 @@ public class ImportBean implements Serializable {
 
     public List<ImportHistory> getAllImportHistory() {
         List<ImportHistory> history = importHistoryService.getAllImportHistory();
+        if(userBean.getUser().getRole() == User.Role.ADMIN){
+            return history;
+        }
         return history.stream()
                 .filter(each_history -> each_history.getUser().equals(userBean.getUser().getLogin()))
                 .collect(Collectors.toList());

@@ -59,11 +59,6 @@ public class UserService {
 
     @Transactional
     public void update(User user) {
-        // Хешируем пароль, только если он обновляется
-        if (user.getPassword() != null) {
-            user.setPassword(hashPassword(user.getPassword()));
-        }
-
         entityManager.merge(user);
     }
 

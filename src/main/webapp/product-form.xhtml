@@ -70,7 +70,11 @@
                 <div class="card shadow p-4">
                     <!-- Блок Product -->
                     <h:outputText value="Product" styleClass="section-header"/>
+
                     <br/>
+                    <h:messages globalOnly="true" styleClass="text-danger mb-3"/>
+                    <br/>
+
                     <div class="mb-3">
                         <h:outputLabel for="name" value="Product Name" class="form-label"/>
                         <h:inputText id="name" value="#{productController.product.name}" required="true"

@@ -53,7 +53,7 @@ public class ProductService {
         saveProduct(product);
     }
 
-    @Transactional(rollbackOn = RuntimeException.class)
+    @Transactional
     public void saveAll(List<Product> products, User user) {
         for (Product product : products) {
             Coordinates coordinates = findOrCreateCoordinates(product.getCoordinates());
@@ -78,6 +78,7 @@ public class ProductService {
     }
 
     private void saveProduct(Product product) {
+
         checkOrganizationIdAndPartNumber(product);
         checkUniqueCoordinatesAndName(product.getOwner().getLocation());
         checkUniqueProductNamePriceAndManufacturer(product);
@@ -110,10 +111,9 @@ public class ProductService {
         Product product = findById(id);
         if (product != null) {
             entityManager.remove(product);
-            // Отправка уведомления об удалении
-            WebSocketEndpoint.sendUpdateToAllClients("Product deleted: " + product.getName());
         }
 
+        WebSocketEndpoint.sendUpdateToAllClients("Product deleted: " + product.getName());
         changeLogService.logProductChange(id, "DELETE", user.getId());
     }
 
@@ -405,15 +405,19 @@ public class ProductService {
     }
 
     private void checkOrganizationIdAndPartNumber(Product product) {
-        boolean existsInDB = entityManager.createQuery(
-                        "SELECT COUNT(p) > 0 FROM Product p WHERE p.manufacturer.id = :organizationId AND p.partNumber = :partNumber", Boolean.class)
+        Product existingProduct = entityManager.createQuery(
+                        "SELECT p FROM Product p WHERE p.manufacturer.id = :organizationId AND p.partNumber = :partNumber", Product.class)
                 .setParameter("organizationId", product.getManufacturer().getId())
                 .setParameter("partNumber", product.getPartNumber())
-                .getSingleResult();
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
 
-        if (existsInDB) {
-            throw new RuntimeException("Pair organizationId: " + product.getManufacturer().getId() +
-                    " and partNumber: " + product.getPartNumber() + " already exists");
+        if (existingProduct != null) {
+            if (product.getId() == null || !product.getId().equals(existingProduct.getId())) {
+                throw new RuntimeException("Pair organizationId: " + product.getManufacturer().getId() +
+                        " and partNumber: " + product.getPartNumber() + " already exists with different id.");
+            }
         }
     }
 

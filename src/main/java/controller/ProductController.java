@@ -80,8 +80,16 @@ public class ProductController implements Serializable {
         if (idModeLocation) {
             location.setId(locationId);
         }
-        productService.save(product, coordinates, organization, owner, address, location, userBean.getUser());
-        return "main_page.xhtml?faces-redirect=true"; // Перенаправление на страницу с перечнем продуктов
+        try {
+            productService.save(product, coordinates, organization, owner, address, location, userBean.getUser());
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Product saved successfully!", null));
+            return "main_page.xhtml?faces-redirect=true"; // Перенаправление на страницу с перечнем продуктов
+        } catch (RuntimeException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            return null;
+        }
     }
 
     // Метод для загрузки продукта по ID из URL
