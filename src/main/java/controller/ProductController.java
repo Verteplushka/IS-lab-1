@@ -86,8 +86,14 @@ public class ProductController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Product saved successfully!", null));
             return "main_page.xhtml?faces-redirect=true"; // Перенаправление на страницу с перечнем продуктов
         } catch (RuntimeException e) {
+            String errorMessage = e.getMessage();
+
+            if (errorMessage.startsWith("java.lang.RuntimeException: ")) {
+                errorMessage = errorMessage.substring("java.lang.RuntimeException: ".length()).trim();
+            }
+
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, null));
             return null;
         }
     }

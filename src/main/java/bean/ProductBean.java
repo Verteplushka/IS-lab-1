@@ -2,6 +2,7 @@ package bean;
 
 import entity.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class ProductBean implements Serializable {
-    @Inject
+    @EJB
     private ProductService productService;
 
     @Inject

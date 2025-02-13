@@ -1,6 +1,8 @@
 package service;
 
 import entity.*;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -8,11 +10,13 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import util.JPAFactory;
 import util.WebSocketEndpoint;
+import jakarta.ejb.Stateless;
 
+import java.io.Serializable;
 import java.util.List;
 
-@RequestScoped
-public class ProductService {
+@Stateless
+public class ProductService implements Serializable {
     @Inject
     @PersistenceContext
     private EntityManager entityManager;
@@ -31,7 +35,7 @@ public class ProductService {
         return entityManager.find(Product.class, id);
     }
 
-    @Transactional
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void save(Product product, Coordinates inputCoordinates, Organization inputOrganization, Person inputPerson, Address inputAddress, Location inputLocation, User user) {
         Coordinates coordinates = findOrCreateCoordinates(inputCoordinates);
         product.setCoordinates(coordinates);
@@ -53,7 +57,7 @@ public class ProductService {
         saveProduct(product);
     }
 
-    @Transactional
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void saveAll(List<Product> products, User user) {
         for (Product product : products) {
             Coordinates coordinates = findOrCreateCoordinates(product.getCoordinates());
@@ -94,7 +98,7 @@ public class ProductService {
         WebSocketEndpoint.sendUpdateToAllClients("Product added/updated: " + product.getName());
     }
 
-    @Transactional
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void update(Product product) {
         Product existingProduct = findById(product.getId());
         if (existingProduct != null) {
@@ -106,7 +110,7 @@ public class ProductService {
         }
     }
 
-    @Transactional
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void delete(Long id, User user) {
         Product product = findById(id);
         if (product != null) {

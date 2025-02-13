@@ -1,6 +1,7 @@
 package bean;
 
 import entity.*;
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
@@ -29,7 +30,7 @@ public class ImportBean implements Serializable {
 
     @Inject
     private ImportHistoryService importHistoryService;
-    @Inject
+    @EJB
     private ProductService productService;
     @Inject
     private UserBean userBean;
@@ -100,9 +101,13 @@ public class ImportBean implements Serializable {
             }
         } catch (Exception e) {
             importHistoryService.save(new ImportHistory(OperationStatus.FAILED, userBean.getUser().getLogin(), null));
+            String errorMessage = e.getMessage();
+            if (errorMessage.startsWith("java.lang.RuntimeException: ")) {
+                errorMessage = errorMessage.substring("java.lang.RuntimeException: ".length()).trim();
+            }
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + e.getMessage(), "Error occurred: " + e.getMessage()));
-            System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + errorMessage, "Error occurred: " + errorMessage));
+            System.out.println("Error occurred: " + errorMessage + " class: " + e.getClass());
         }
 
     }
