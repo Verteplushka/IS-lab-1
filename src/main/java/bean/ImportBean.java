@@ -2,6 +2,7 @@ package bean;
 
 import entity.*;
 import io.minio.*;
+import io.minio.errors.ErrorResponseException;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.ejb.EJB;
@@ -24,6 +25,7 @@ import service.ProductService;
 import util.CsvParser;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,13 +71,16 @@ public class ImportBean implements Serializable {
                 System.out.println("Bucket " + bucketName + " already exists.");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error during checking/creating bucket in MinIO: " + e.getMessage(), e);
+            System.err.println("⚠️ Warning: MinIO is unavailable. Bucket check failed: " + e.getMessage());
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Warning! File storage is not available!", null));
         }
     }
 
+
     public List<ImportHistory> getAllImportHistory() {
         List<ImportHistory> history = importHistoryService.getAllImportHistory();
-        if(userBean.getUser().getRole() == User.Role.ADMIN){
+        if (userBean.getUser().getRole() == User.Role.ADMIN) {
             return history;
         }
         return history.stream()
@@ -110,8 +115,7 @@ public class ImportBean implements Serializable {
 
         CsvParser parser = new CsvParser();
 
-        String fileName = Paths.get(file.getSubmittedFileName()).getFileName().toString();
-//        String objectPath = "imports/" + fileName;
+        ImportHistory savedHistory = importHistoryService.save(new ImportHistory(OperationStatus.FAILED, userBean.getUser().getLogin(), null));
 
         try {
             List<Product> products = parser.parseCSV(file);
@@ -119,8 +123,6 @@ public class ImportBean implements Serializable {
             utx.begin();
 
             productService.saveAll(products, userBean.getUser());
-
-            ImportHistory savedHistory = importHistoryService.save(new ImportHistory(OperationStatus.SUCCESS, userBean.getUser().getLogin(), products.size()));
 
             String objectPath = "imports/" + savedHistory.getId() + ".csv";
 
@@ -137,54 +139,64 @@ public class ImportBean implements Serializable {
 
             utx.commit();
 
+            savedHistory.setStatus(OperationStatus.SUCCESS);
+            savedHistory.setObjectsAdded(products.size());
+            importHistoryService.update(savedHistory);
 
+        } catch (ConnectException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: File storage is not available.", null));
+            System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
         } catch (Exception e) {
-            try {
-                utx.rollback();
-            } catch (Exception rollbackEx) {
-                throw new RuntimeException("Error during transactional rollback", rollbackEx);
-            }
-
-            importHistoryService.save(new ImportHistory(OperationStatus.FAILED, userBean.getUser().getLogin(), null));
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + e.getMessage(), null));
             System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
-
+        } finally {
+            try {
+                utx.rollback();
+            } catch (Exception rollbackEx) {
+                System.err.println("Error during transactional rollback: " + rollbackEx.getMessage());
+            }
             errorBean.sendError();
         }
     }
 
 
-    public void downloadFile(String fileName) {
+    public void downloadFile(Long importId) {
+        String objectPath = "imports/" + importId + ".csv";
+
         try {
-            String bucketName = "import-files"; // Имя вашего бакета
             InputStream fileStream = minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(bucketName)
-                            .object(fileName)
+                            .object(objectPath)
                             .build()
             );
 
-            // Получаем HttpServletResponse для отправки файла
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            HttpServletResponse response =
-                    (HttpServletResponse) facesContext.getExternalContext().getResponse();
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + Paths.get(fileName).getFileName() + "\"");
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
             response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename=" + importId + ".csv");
 
-            OutputStream outputStream = response.getOutputStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = fileStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
+            try (OutputStream out = response.getOutputStream()) {
+                fileStream.transferTo(out);
             }
-            outputStream.flush();
-            outputStream.close();
-            fileStream.close();
-            facesContext.responseComplete();
+
+            FacesContext.getCurrentInstance().responseComplete();
+
+        } catch (ConnectException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error downloading file: File storage is not available.", null));
+            System.out.println("Error downloading file: " + e.getMessage() + " class: " + e.getClass());
+
+        } catch (ErrorResponseException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error downloading file: File with this id does not exist in file storage.", null));
+            System.out.println("Error downloading file: " + e.getMessage() + " class: " + e.getClass());
 
         } catch (Exception e) {
-            throw new RuntimeException("Error during downloading file: " + fileName, e);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error downloading file: " + e.getMessage(), null));
+            System.out.println("Error downloading file: " + e.getMessage() + " class: " + e.getClass());
         }
     }
 

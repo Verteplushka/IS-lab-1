@@ -87,7 +87,11 @@
                     <p:dataTable value="#{importBean.allImportHistory}" var="history" border="1">
                         <p:column>
                             <f:facet name="header">ID</f:facet>
-                            #{history.id}
+                            <h:commandLink value="#{history.id}" action="#{importBean.downloadFile(history.id)}"
+                                           rendered="#{history.status eq 'SUCCESS'}">
+                                <f:param name="importId" value="#{history.id}" />
+                            </h:commandLink>
+                            <h:outputText value="#{history.id}" rendered="#{history.status ne 'SUCCESS'}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Status</f:facet>
