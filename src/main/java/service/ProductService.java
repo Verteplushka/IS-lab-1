@@ -82,6 +82,7 @@ public class ProductService implements Serializable {
 
             saveProduct(product);
         }
+//        throw new RuntimeException("elki");
     }
 
     private void saveProduct(Product product) {

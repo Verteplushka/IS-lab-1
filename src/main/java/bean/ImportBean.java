@@ -116,6 +116,7 @@ public class ImportBean implements Serializable {
         CsvParser parser = new CsvParser();
 
         ImportHistory savedHistory = importHistoryService.save(new ImportHistory(OperationStatus.FAILED, userBean.getUser().getLogin(), null));
+        String objectPath = "imports/" + savedHistory.getId() + ".csv";
 
         try {
             List<Product> products = parser.parseCSV(file);
@@ -123,8 +124,6 @@ public class ImportBean implements Serializable {
             utx.begin();
 
             productService.saveAll(products, userBean.getUser());
-
-            String objectPath = "imports/" + savedHistory.getId() + ".csv";
 
             try (InputStream inputStream = file.getInputStream()) {
                 minioClient.putObject(
