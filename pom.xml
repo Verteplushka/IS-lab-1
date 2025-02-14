@@ -123,6 +123,11 @@
             <artifactId>jakarta.ejb-api</artifactId>
             <version>4.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.5.7</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -137,9 +142,9 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <configuration>
                     <hostname>localhost</hostname>
-                    <port>37650</port>
-                    <username>petya</username>
-                    <password>petya</password>
+                    <port>9990</port>
+                    <username>admin</username>
+                    <password>admin</password>
                     <name>${project.artifactId}.war</name>
                 </configuration>
             </plugin>

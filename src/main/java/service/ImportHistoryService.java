@@ -16,8 +16,14 @@ public class ImportHistoryService implements Serializable {
 
     // Сохранение записи в историю импорта
     @Transactional
-    public void save(ImportHistory history) {
+    public ImportHistory save(ImportHistory history) {
         entityManager.persist(history);
+        return history;
+    }
+
+    @Transactional
+    public void update(ImportHistory history) {
+        entityManager.merge(history);
     }
 
     // Получение истории импорта для текущего пользователя
