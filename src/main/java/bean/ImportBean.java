@@ -143,19 +143,25 @@ public class ImportBean implements Serializable {
             importHistoryService.update(savedHistory);
 
         } catch (ConnectException e) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: File storage is not available.", null));
-            System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + e.getMessage(), null));
-            System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
-        } finally {
             try {
                 utx.rollback();
             } catch (Exception rollbackEx) {
                 System.err.println("Error during transactional rollback: " + rollbackEx.getMessage());
             }
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: File storage is not available.", null));
+            System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
+            errorBean.sendError();
+        } catch (Exception e) {
+            try {
+                utx.rollback();
+            } catch (Exception rollbackEx) {
+                System.err.println("Error during transactional rollback: " + rollbackEx.getMessage());
+            }
+            errorBean.sendError();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occurred: " + e.getMessage(), null));
+            System.out.println("Error occurred: " + e.getMessage() + " class: " + e.getClass());
             errorBean.sendError();
         }
     }

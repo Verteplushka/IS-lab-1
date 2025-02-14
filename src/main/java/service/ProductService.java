@@ -118,8 +118,6 @@ public class ProductService implements Serializable {
     public void delete(Long id, User user) {
         Product product = findById(id);
         if (product != null) {
-            System.out.println(id);
-            System.out.println(product.getName());
             entityManager.remove(product);
         } else{
             errorBean.sendError();
